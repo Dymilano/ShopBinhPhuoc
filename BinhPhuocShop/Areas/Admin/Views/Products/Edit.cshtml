@@ -1,0 +1,133 @@
+@model Product
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Sửa sản phẩm";
+    var extraUrls = new List<string>();
+    if (!string.IsNullOrEmpty(Model.ImageUrls))
+    {
+        try { var arr = JsonSerializer.Deserialize<string[]>(Model.ImageUrls); if (arr != null) extraUrls.AddRange(arr.Where(u => !string.IsNullOrEmpty(u))); } catch { }
+    }
+    var allImages = new List<string>();
+    if (!string.IsNullOrEmpty(Model.ImageUrl)) allImages.Add(Model.ImageUrl);
+    allImages.AddRange(extraUrls);
+}
+<h4 class="mb-4">Sửa sản phẩm</h4>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="card">
+        <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Slug" class="form-label"></label>
+                        <input asp-for="Slug" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ShortDescription" class="form-label"></label>
+                        <textarea asp-for="ShortDescription" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Mô tả (HTML, chèn ảnh bên dưới)</label>
+                        <textarea id="Description" name="Description" class="form-control" rows="6">@Model.Description</textarea>
+                        <div class="mt-2 p-2 border rounded bg-light">
+                            <label class="form-label small mb-1">Chèn ảnh vào mô tả:</label>
+                            <input type="file" id="descImageFile" accept="image/*" class="form-control form-control-sm" />
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="btnUploadDescImage">Tải lên và chèn ảnh</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="text-muted small">Tối đa 5 ảnh. Để trống giữ ảnh hiện tại.</p>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <div class="mb-2">
+                            <label class="form-label">Ảnh @(i + 1) @(i == 0 ? "(chính)" : "")</label>
+                            @if (allImages.Count > i)
+                            {
+                                <div class="mb-1"><img src="@allImages[i]" alt="" style="max-width:80px; height:auto;" /></div>
+                            }
+                            <input type="file" name="@(i == 0 ? "imageFile" : "imageFile" + (i + 1))" accept="image/*" class="form-control" />
+                        </div>
+                    }
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label"></label>
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="BrandId" class="form-label"></label>
+                        <select asp-for="BrandId" asp-items="ViewBag.Brands" class="form-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label"></label>
+                        <input asp-for="Price" type="number" step="1000" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SalePrice" class="form-label"></label>
+                        <input asp-for="SalePrice" type="number" step="1000" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Sku" class="form-label"></label>
+                        <input asp-for="Sku" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Stock" class="form-label"></label>
+                        <input asp-for="Stock" type="number" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DisplayOrder" class="form-label"></label>
+                        <input asp-for="DisplayOrder" type="number" class="form-control" />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input asp-for="IsFeatured" class="form-check-input" />
+                        <label asp-for="IsFeatured" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </div>
+    </div>
+</form>
+@section Scripts {
+<script>
+(function() {
+  var descTa = document.getElementById('Description');
+  var descInput = document.getElementById('descImageFile');
+  var btnUpload = document.getElementById('btnUploadDescImage');
+  if (btnUpload && descInput && descTa) {
+    btnUpload.addEventListener('click', function() {
+      if (!descInput.files || !descInput.files[0]) { alert('Chọn ảnh trước.'); return; }
+      var fd = new FormData();
+      fd.append('file', descInput.files[0]);
+      fd.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]')?.value || '');
+      btnUpload.disabled = true;
+      fetch('/Admin/Upload/ContentImage', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          btnUpload.disabled = false;
+          if (data.ok && data.url) {
+            var img = '<img src="' + data.url + '" alt="" style="max-width:100%; height:auto;" />';
+            var start = descTa.selectionStart, end = descTa.selectionEnd;
+            var text = descTa.value;
+            descTa.value = text.slice(0, start) + img + text.slice(end);
+            descTa.focus();
+            descInput.value = '';
+          } else { alert(data.msg || 'Lỗi tải ảnh'); }
+        })
+        .catch(function() { btnUpload.disabled = false; alert('Lỗi tải ảnh'); });
+    });
+  }
+})();
+</script>
+}

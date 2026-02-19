@@ -1,0 +1,41 @@
+@model Category
+@{
+    ViewData["Title"] = "Thêm danh mục";
+}
+<h4 class="mb-4">Thêm danh mục</h4>
+<form asp-action="Create" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Slug" class="form-label"></label>
+                <input asp-for="Slug" class="form-control" placeholder="Tu dong neu de trong" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ParentId" class="form-label"></label>
+                <select asp-for="ParentId" asp-items="ViewBag.Parents" class="form-select">
+                    <option value="">— Không có —</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DisplayOrder" class="form-label"></label>
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+            </div>
+            <div class="mb-3 form-check">
+                <input asp-for="IsActive" class="form-check-input" checked />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </div>
+    </div>
+</form>

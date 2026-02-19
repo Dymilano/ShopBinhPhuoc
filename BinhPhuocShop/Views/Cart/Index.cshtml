@@ -1,0 +1,195 @@
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = "Giỏ hàng";
+    var items = ViewBag.CartItems as IEnumerable<BinhPhuocShop.Models.CartItem> ?? new List<BinhPhuocShop.Models.CartItem>();
+    var total = (decimal)(ViewBag.CartTotal ?? 0);
+    var store = "/store";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Trang chủ
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+        <span class="stext-109 cl4">Giỏ hàng</span>
+    </div>
+</div>
+
+@if (items.Any())
+{
+    <form class="bg0 p-t-75 p-b-85">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+                    <div class="m-l-25 m-r--38 m-lr-0-xl">
+                        <div class="wrap-table-shopping-cart">
+                            <table class="table-shopping-cart">
+                                <tr class="table_head">
+                                    <th class="column-1">Sản phẩm</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Giá</th>
+                                    <th class="column-4">Số lượng</th>
+                                    <th class="column-5">Thành tiền</th>
+                                    <th class="column-6"></th>
+                                </tr>
+                                @foreach (var item in items)
+                                {
+                                    <tr class="table_row" data-product-id="@item.ProductId" data-size="@(item.Size ?? "")">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.ProductId">
+                                                    <img src="@(item.ImageUrl ?? store + "/images/item-cart-01.jpg")" alt="@item.ProductName">
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="column-2">
+                                            <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.ProductId" class="stext-104 cl3 hov-cl1 trans-04">@item.ProductName</a>
+                                            @if (!string.IsNullOrEmpty(item.Size)) { <span class="stext-107 cl6">Size: @item.Size</span> }
+                                        </td>
+                                        <td class="column-3 cart-price">@item.Price.ToString("N0")₫</td>
+                                        <td class="column-4">
+                                            <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                                <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m qty-btn qty-minus" data-product-id="@item.ProductId" data-size="@(item.Size ?? "")">
+                                                    <i class="fs-16 zmdi zmdi-minus"></i>
+                                                </div>
+                                                <input class="mtext-104 cl3 txt-center num-product cart-qty-input" type="number" value="@item.Quantity" min="1" max="99" readonly>
+                                                <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m qty-btn qty-plus" data-product-id="@item.ProductId" data-size="@(item.Size ?? "")">
+                                                    <i class="fs-16 zmdi zmdi-plus"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="column-5 cart-amount">@item.Amount.ToString("N0")₫</td>
+                                        <td class="column-6">
+                                            <button type="button" class="cart-remove-btn flex-c-m stext-107 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer" data-product-id="@item.ProductId" data-size="@(item.Size ?? "")" title="Xóa">
+                                                <i class="zmdi zmdi-delete"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+                            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                                <i class="fa fa-arrow-left m-r-10"></i> Tiếp tục mua sắm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+                    <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+                        <h4 class="mtext-109 cl2 p-b-30">Tổng giỏ hàng</h4>
+                        <div class="flex-w flex-t p-t-27 p-b-33">
+                            <div class="size-208">
+                                <span class="mtext-101 cl2">Tổng cộng:</span>
+                            </div>
+                            <div class="size-209 p-t-1">
+                                <span class="mtext-110 cl2" id="cart-total-value">@total.ToString("N0")₫</span>
+                            </div>
+                        </div>
+                        <a asp-controller="Checkout" asp-action="Index" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer w-full">
+                            Thanh toán
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <div class="bg0 p-t-75 p-b-85">
+        <div class="container">
+            <div class="flex-col-c-m p-lr-15 p-tb-100">
+                <span class="fs-30 cl5 m-b-20"><i class="zmdi zmdi-shopping-cart"></i></span>
+                <p class="stext-112 cl8 m-b-30">Giỏ hàng của bạn đang trống.</p>
+                <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">Xem sản phẩm</a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script>
+(function() {
+  var csrf = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+  function getToken() {
+    if (csrf) return csrf;
+    var m = document.cookie.match(/__RequestVerificationToken=([^;]+)/);
+    return m ? m[1] : '';
+  }
+  function updateQty(productId, size, quantity) {
+    var fd = new FormData();
+    fd.append('productId', productId);
+    fd.append('size', size);
+    fd.append('quantity', quantity);
+    fd.append('__RequestVerificationToken', getToken());
+    fetch('/Cart/Update', { method: 'POST', body: fd })
+      .then(r => r.json()).then(function(data) {
+        if (data.ok) {
+          document.querySelectorAll('.qty').forEach(function(el) { el.textContent = data.count; });
+          document.querySelectorAll('.icon-header-noti.js-show-cart').forEach(function(el) { el.setAttribute('data-notify', data.count); });
+          var row = document.querySelector('tr[data-product-id="' + productId + '"][data-size="' + size + '"]');
+          if (row && data.count === 0) location.reload();
+          else if (row) {
+            var amt = row.querySelector('.cart-amount');
+            var priceEl = row.querySelector('.cart-price');
+            if (amt && priceEl) {
+              var price = parseFloat(priceEl.textContent.replace(/[^\d]/g, ''));
+              amt.textContent = (price * quantity).toLocaleString('vi-VN') + '₫';
+            }
+            var totalEl = document.getElementById('cart-total-value');
+            if (totalEl) totalEl.textContent = (data.total || 0).toLocaleString('vi-VN') + '₫';
+          }
+        }
+      });
+  }
+  function removeItem(productId, size) {
+    var fd = new FormData();
+    fd.append('productId', productId);
+    fd.append('size', size);
+    fd.append('__RequestVerificationToken', getToken());
+    fetch('/Cart/Remove', { method: 'POST', body: fd })
+      .then(r => r.json()).then(function(data) {
+        if (data.ok) {
+          document.querySelectorAll('.qty').forEach(function(el) { el.textContent = data.count; });
+          document.querySelectorAll('.icon-header-noti.js-show-cart').forEach(function(el) { el.setAttribute('data-notify', data.count); });
+          var row = document.querySelector('tr[data-product-id="' + productId + '"][data-size="' + size + '"]');
+          if (row) row.remove();
+          var totalEl = document.getElementById('cart-total-value');
+          if (totalEl) totalEl.textContent = (data.total || 0).toLocaleString('vi-VN') + '₫';
+          if (data.count === 0) location.reload();
+        }
+      });
+  }
+  document.querySelectorAll('.qty-minus').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var productId = this.dataset.productId, size = this.dataset.size || '';
+      var input = this.parentElement.querySelector('.cart-qty-input');
+      if (!input) return;
+      var q = Math.max(1, parseInt(input.value, 10) - 1);
+      input.value = q;
+      updateQty(productId, size, q);
+    });
+  });
+  document.querySelectorAll('.qty-plus').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var productId = this.dataset.productId, size = this.dataset.size || '';
+      var input = this.parentElement.querySelector('.cart-qty-input');
+      if (!input) return;
+      var q = Math.min(99, parseInt(input.value, 10) + 1);
+      input.value = q;
+      updateQty(productId, size, q);
+    });
+  });
+  document.querySelectorAll('.cart-remove-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (confirm('Xóa sản phẩm này khỏi giỏ hàng?'))
+        removeItem(this.dataset.productId, this.dataset.size || '');
+    });
+  });
+})();
+</script>
+}

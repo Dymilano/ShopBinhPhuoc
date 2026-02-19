@@ -1,0 +1,48 @@
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = "Giới thiệu";
+    var store = "/store";
+}
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('@(store)/images/bg-01.jpg'); background-color: #f5f5f5;">
+    <h2 class="ltext-105 cl0 txt-center">Giới thiệu</h2>
+</section>
+
+<!-- Content -->
+<section class="bg0 p-t-62 p-b-60">
+    <div class="container">
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
+            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            <span class="stext-109 cl4">Giới thiệu</span>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
+                <div class="p-l-20 p-l-0-lg">
+                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
+                    <partial name="_PagesSidebar" />
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-12">
+                <div class="p-r-45 p-r-0-lg">
+                    <h1 class="ltext-103 cl5 p-b-20">Bình Phước Shop – Giày dép chính hãng</h1>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">Hơn ai hết, chúng tôi hiểu giày dép là phần không thể thiếu của phong cách. Ở bất kỳ độ tuổi nào, một đôi giày chất lượng luôn là lựa chọn hoàn hảo, gây ấn tượng đẹp. Không chỉ là phụ kiện hoàn thiện trang phục mà còn là người bạn đồng hành trong những sự kiện quan trọng.</p>
+                    <h2 class="ltext-101 cl5 p-b-16">Thương hiệu ra đời như thế nào?</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">Với niềm say mê và kinh nghiệm tích lũy, Bình Phước Shop ra đời với tinh thần mang đến sản phẩm giày dép chất lượng, thiết kế gọn gàng, đẳng cấp. Mọi sản phẩm đều được chăm chút tỉ mỉ, trải nghiệm mua sắm và dịch vụ hậu mãi luôn hướng tới sự hài lòng của khách hàng.</p>
+                    <p class="stext-117 cl6 p-b-20">Với triết lý "lấy khách hàng làm trung tâm", chúng tôi không ngừng nâng cao chất lượng sản phẩm và dịch vụ.</p>
+                    <h2 class="ltext-101 cl5 p-b-16">Điểm khác biệt</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">Bình Phước Shop tập trung vào giày dép chính hãng, không ngừng tìm tòi để mang đến sản phẩm chất lượng tốt nhất. Giày dép tại đây được chọn lọc kỹ, phù hợp với nhiều phong cách và nhu cầu sử dụng.</p>
+                    <h2 class="ltext-101 cl5 p-b-16">Tầm nhìn</h2>
+                    <p class="stext-117 cl6 p-b-20">Chúng tôi hướng tới trở thành địa chỉ tin cậy về giày dép tại Việt Nam, với chất lượng tốt nhất và phong cách phục vụ chuyên nghiệp.</p>
+                    <h2 class="ltext-101 cl5 p-b-16">Tại sao chọn chúng tôi?</h2>
+                    <p class="stext-117 cl6 p-b-20">✔ Kiểu dáng đa dạng, dễ phối đồ<br />✔ Chất liệu tốt, bền đẹp<br />✔ Đế êm ái, thoải mái khi mang<br />✔ Giá cả hợp lý, chính sách bảo hành rõ ràng</p>
+                    <p class="stext-117 cl6 p-t-20"><strong>Bình Phước Shop – Giày dép chính hãng, chất lượng cao.</strong></p>
+                    <hr class="p-t-20 p-b-20" />
+                    <p class="stext-117 cl6"><strong>Thông tin liên hệ:</strong></p>
+                    <p class="stext-117 cl6">Địa chỉ: @(ViewBag.Address ?? "Hà Nội")</p>
+                    <p class="stext-117 cl6">Hotline: <a href="tel:@(ViewBag.Phone ?? "0984843218")" class="hov-cl1">@(ViewBag.Phone ?? "0984843218")</a></p>
+                    <p class="stext-117 cl6">Email: <a href="mailto:@(ViewBag.Email ?? "contact@binhphuocshop.vn")" class="hov-cl1">@(ViewBag.Email ?? "contact@binhphuocshop.vn")</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

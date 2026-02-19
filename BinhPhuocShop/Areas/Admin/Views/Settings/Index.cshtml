@@ -1,0 +1,41 @@
+@model IEnumerable<SiteSetting>
+@{
+    ViewData["Title"] = "Cài đặt web";
+}
+<h4 class="mb-4">Cài đặt web</h4>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+<form asp-action="Save" method="post">
+    @Html.AntiForgeryToken()
+    <div class="card">
+        <div class="card-body">
+            <p class="text-muted">Các cài đặt hiển thị trên trang chủ và liên hệ. Thêm mới: nhập Key và Value bên dưới rồi Lưu.</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td><code>@s.Key</code></td>
+                            <td><input type="text" name="values[@s.Key]" value="@s.Value" class="form-control" /></td>
+                        </tr>
+                    }
+                    <tr class="table-light">
+                        <td><input type="text" name="newKey" class="form-control" placeholder="Key mới (VD: SiteName)" /></td>
+                        <td><input type="text" name="newValue" class="form-control" placeholder="Value" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Lưu cài đặt</button>
+        </div>
+    </div>
+</form>

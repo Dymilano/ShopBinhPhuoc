@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Đơn hàng";
+    var orders = ViewBag.Orders as IEnumerable<BinhPhuocShop.Models.Order> ?? new List<BinhPhuocShop.Models.Order>();
+    var total = (int)(ViewBag.Total ?? 0);
+    var page = (int)(ViewBag.Page ?? 1);
+    var totalPages = (int)(ViewBag.TotalPages ?? 1);
+    var status = ViewBag.Status as string;
+}
+<div class="card">
+    <div class="card-header flex flex-row justify-between items-center flex-wrap gap-3">
+        <h5 class="text-gray-800 font-semibold m-0">Danh sách đơn hàng</h5>
+        <form method="get" class="flex items-center gap-2">
+            <select name="status" class="border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:border-teal-500 focus:ring-1 focus:ring-teal-500" onchange="this.form.submit()">
+                <option value="">Tất cả trạng thái</option>
+                @if (status == "pending") { <option value="pending" selected>Chờ xử lý</option> } else { <option value="pending">Chờ xử lý</option> }
+                @if (status == "confirmed") { <option value="confirmed" selected>Đã xác nhận</option> } else { <option value="confirmed">Đã xác nhận</option> }
+                @if (status == "shipping") { <option value="shipping" selected>Đang giao</option> } else { <option value="shipping">Đang giao</option> }
+                @if (status == "completed") { <option value="completed" selected>Hoàn thành</option> } else { <option value="completed">Hoàn thành</option> }
+                @if (status == "cancelled") { <option value="cancelled" selected>Đã hủy</option> } else { <option value="cancelled">Đã hủy</option> }
+            </select>
+        </form>
+    </div>
+    <div class="card-body p-0 overflow-x-auto">
+        @if (orders.Any())
+        {
+        <table class="table-auto w-full text-left">
+            <thead>
+                <tr>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Mã đơn</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Khách hàng</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Số điện thoại</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Tổng tiền</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Trạng thái</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Ngày đặt</th>
+                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm"></th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600">
+                @foreach (var o in orders)
+                {
+                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition duration-150">
+                        <td class="px-4 py-3 font-medium text-gray-800">@o.OrderCode</td>
+                        <td class="px-4 py-3">@o.CustomerName</td>
+                        <td class="px-4 py-3">@o.Phone</td>
+                        <td class="px-4 py-3">@o.TotalAmount.ToString("N0")₫</td>
+                        <td class="px-4 py-3">
+                            <span class="text-xs px-2 py-1 rounded @(o.Status == "completed" ? "bg-green-100 text-green-800" : o.Status == "cancelled" ? "bg-red-100 text-red-800" : "bg-yellow-100 text-yellow-800")">
+                                @(o.Status switch { "pending" => "Chờ xử lý", "confirmed" => "Đã xác nhận", "shipping" => "Đang giao", "completed" => "Hoàn thành", "cancelled" => "Đã hủy", _ => o.Status })
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">@o.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="px-4 py-3"><a asp-action="Detail" asp-route-id="@o.Id" class="text-teal-600 hover:text-teal-700 text-sm font-medium">Chi tiết</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+        else
+        {
+            <p class="text-gray-500 text-center py-12">Chưa có đơn hàng nào.</p>
+        }
+    </div>
+    @if (totalPages > 1)
+    {
+        <div class="p-4 border-t border-gray-200 flex flex-wrap gap-2">
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                <a href="?page=@i&status=@status" class="px-3 py-1 rounded text-sm font-medium @(i == page ? "bg-teal-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300") transition duration-150">@i</a>
+            }
+        </div>
+    }
+</div>

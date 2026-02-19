@@ -1,0 +1,46 @@
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = "Đăng ký";
+    var error = ViewBag.Error as string;
+}
+
+<div class="section" style="padding: 60px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card" style="border-radius: 8px; border: 1px solid #e5e5e5;">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">Đăng ký tài khoản</h2>
+                        @if (!string.IsNullOrEmpty(error))
+                        {
+                            <div class="alert alert-danger">@error</div>
+                        }
+                        <form asp-action="Register" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="form-group mb-3">
+                                <label>Họ tên</label>
+                                <input type="text" name="name" class="form-control" required />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" required />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Số điện thoại</label>
+                                <input type="tel" name="phone" class="form-control" />
+                            </div>
+                            <div class="form-group mb-4">
+                                <label>Mật khẩu</label>
+                                <input type="password" name="password" class="form-control" required minlength="6" />
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-block w-100 mb-3">Đăng ký</button>
+                            <p class="text-center mb-0">
+                                Đã có tài khoản? <a asp-action="Login">Đăng nhập</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

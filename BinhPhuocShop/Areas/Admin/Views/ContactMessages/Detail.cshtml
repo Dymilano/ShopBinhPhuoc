@@ -1,0 +1,26 @@
+@model ContactMessage
+@{
+    ViewData["Title"] = "Chi tiết liên hệ";
+}
+<h4 class="mb-4">Chi tiết tin nhắn</h4>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ngày gửi</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-3">Họ tên</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Điện thoại</dt>
+            <dd class="col-sm-9">@(Model.Phone ?? "—")</dd>
+            <dt class="col-sm-3">Tiêu đề</dt>
+            <dd class="col-sm-9">@Model.Subject</dd>
+            <dt class="col-sm-3">Nội dung</dt>
+            <dd class="col-sm-9">@Model.Message</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

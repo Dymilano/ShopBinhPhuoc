@@ -1,0 +1,40 @@
+@model IEnumerable<ContactMessage>
+@{
+    ViewData["Title"] = "Tin nhắn liên hệ";
+}
+<h4 class="mb-4">Tin nhắn liên hệ</h4>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ngày</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Tiêu đề</th>
+                    <th>Đã đọc</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr class="@(m.IsRead ? "" : "table-warning")">
+                        <td>@m.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@m.Name</td>
+                        <td>@m.Email</td>
+                        <td>@m.Subject</td>
+                        <td>@(m.IsRead ? "Đã đọc" : "Chưa đọc")</td>
+                        <td>
+                            <a asp-action="Detail" asp-route-id="@m.Id" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                            <form asp-action="Delete" asp-route-id="@m.Id" method="post" class="d-inline" onsubmit="return confirm('Xóa tin nhắn này?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

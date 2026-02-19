@@ -1,0 +1,46 @@
+# Build
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Rider
+.idea/
+*.sln.iml
+
+# User secrets
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# SQLite DB (optional: remove if you want to track DB)
+# *.db
+# *.db-shm
+# *.db-wal
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET
+ScaffoldingReadMe.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Publish
+[Dd]ebug/
+[Rr]elease/
+publish/

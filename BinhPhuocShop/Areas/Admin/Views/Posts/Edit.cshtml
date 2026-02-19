@@ -1,0 +1,88 @@
+@model Post
+@{
+    ViewData["Title"] = "Sửa bài viết";
+}
+<h4 class="mb-4">Sửa bài viết</h4>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Slug" class="form-label"></label>
+                <input asp-for="Slug" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Summary" class="form-label"></label>
+                <textarea asp-for="Summary" class="form-control" rows="2"></textarea>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-2"><img src="@Model.ImageUrl" alt="" style="max-width:200px;" /></div>
+            }
+            <div class="mb-3">
+                <label class="form-label">Ảnh mới (để trống giữ nguyên)</label>
+                <input type="file" name="imageFile" accept="image/*" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label">Nội dung (HTML, chèn ảnh tùy ý giữa/đầu/cuối bài)</label>
+                <textarea id="Content" name="Content" class="form-control" rows="12">@Model.Content</textarea>
+                <div class="mt-2 p-2 border rounded bg-light">
+                    <label class="form-label small mb-1">Chèn ảnh vào nội dung:</label>
+                    <input type="file" id="contentImageFile" accept="image/*" class="form-control form-control-sm" />
+                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="btnUploadContentImage">Tải lên và chèn ảnh</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PublishedAt" class="form-label"></label>
+                <input asp-for="PublishedAt" type="datetime-local" class="form-control" value="@Model.PublishedAt?.ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+            <div class="mb-3 form-check">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+            <div class="mb-3 form-check">
+                <input asp-for="IsPinned" class="form-check-input" />
+                <label asp-for="IsPinned" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </div>
+    </div>
+</form>
+@section Scripts {
+<script>
+(function() {
+  var ta = document.getElementById('Content');
+  var input = document.getElementById('contentImageFile');
+  var btn = document.getElementById('btnUploadContentImage');
+  if (btn && input && ta) {
+    btn.addEventListener('click', function() {
+      if (!input.files || !input.files[0]) { alert('Chọn ảnh trước.'); return; }
+      var fd = new FormData();
+      fd.append('file', input.files[0]);
+      fd.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]')?.value || '');
+      btn.disabled = true;
+      fetch('/Admin/Upload/ContentImage', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          btn.disabled = false;
+          if (data.ok && data.url) {
+            var img = '<img src="' + data.url + '" alt="" style="max-width:100%; height:auto;" />';
+            var start = ta.selectionStart, end = ta.selectionEnd;
+            ta.value = ta.value.slice(0, start) + img + ta.value.slice(end);
+            ta.focus();
+            input.value = '';
+          } else { alert(data.msg || 'Lỗi tải ảnh'); }
+        })
+        .catch(function() { btn.disabled = false; alert('Lỗi tải ảnh'); });
+    });
+  }
+})();
+</script>
+}

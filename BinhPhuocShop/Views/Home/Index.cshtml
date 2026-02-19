@@ -1,0 +1,201 @@
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = "Trang chủ";
+    var categories = ViewBag.Categories as IEnumerable<dynamic>;
+    var catList = categories?.ToList() ?? new List<dynamic>();
+    var categoryProductCount = ViewBag.CategoryProductCount as Dictionary<int, int>;
+    var productCountAll = (int)(ViewBag.ProductCountAll ?? 0);
+    var featured = ViewBag.FeaturedProducts as IEnumerable<dynamic> ?? new List<dynamic>();
+    var bestSelling = ViewBag.BestSellingProducts as IEnumerable<dynamic> ?? new List<dynamic>();
+    var latest = ViewBag.LatestProducts as IEnumerable<dynamic> ?? new List<dynamic>();
+    var homeBlocks = ViewBag.HomeCategoryBlocks as IEnumerable<BinhPhuocShop.Models.HomeCategoryBlockViewModel> ?? new List<BinhPhuocShop.Models.HomeCategoryBlockViewModel>();
+    var siteName = ViewBag.SiteName ?? "Bình Phước Shop";
+    var siteDesc = ViewBag.SiteDescription ?? "Giày dép chính hãng - Chất lượng cao.";
+    var store = "/store";
+}
+
+<section class="section-slide">
+    <div class="wrap-slick1">
+        <div class="slick1">
+            <div class="item-slick1" style="background-image: url(@(store)/images/slide-01.jpg);">
+                <div class="container h-full">
+                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+                        <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
+                            <span class="ltext-101 cl2 respon2">@siteName</span>
+                        </div>
+                        <div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
+                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">GIÀY DÉP CHÍNH HÃNG</h2>
+                        </div>
+                        <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
+                            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Mua sắm ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="sec-banner bg0 p-t-80 p-b-50">
+    <div class="container">
+        <div class="row">
+            @{
+                var catSlugs = new[] { ("giay-nam", "Giày nam"), ("giay-nu", "Giày nữ"), ("dep-nam", "Dép nam"), ("dep-nu", "Dép nữ"), ("phu-kien", "Phụ kiện") };
+                var idx = 0;
+            }
+            @foreach (var (slug, label) in catSlugs)
+            {
+                if (idx >= 3) { break; }
+                <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
+                    <div class="block1 wrap-pic-w">
+                        <img src="@(store)/images/banner-0@(idx + 1).jpg" alt="@label">
+                        <a asp-controller="Collections" asp-action="Index" asp-route-slug="@slug" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <div class="block1-txt-child1 flex-col-l">
+                                <span class="block1-name ltext-102 trans-04 p-b-8">@label</span>
+                                <span class="block1-info stext-102 trans-04">Xem sản phẩm</span>
+                            </div>
+                            <div class="block1-txt-child2 p-b-4 trans-05">
+                                <div class="block1-link stext-101 cl0 trans-09">Mua ngay</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                idx++;
+            }
+        </div>
+    </div>
+</div>
+
+<section class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <div class="p-b-10">
+            <h3 class="ltext-103 cl5">Sản phẩm nổi bật</h3>
+        </div>
+        @{
+            var showProducts = featured.Any() ? featured : (bestSelling.Any() ? bestSelling : latest);
+        }
+        <div class="row isotope-grid">
+            @if (showProducts != null && showProducts.Any())
+            {
+                @foreach (var p in showProducts.Take(12))
+                {
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
+                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                            </div>
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">@p.Name</a>
+                                    <span class="stext-105 cl3">
+                                        @((p.SalePrice ?? p.Price).ToString("N0"))₫
+                                        @if (p.SalePrice != null && (decimal)p.SalePrice < (decimal)p.Price)
+                                        {
+                                            <del class="stext-106 cl6">@(((decimal)p.Price).ToString("N0"))₫</del>
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @for (var i = 1; i <= 8; i++)
+                {
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="@(store)/images/product-0@(Math.Min(i, 9)).jpg" alt="Sản phẩm @i">
+                                <a asp-controller="Products" asp-action="Index" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem sản phẩm</a>
+                            </div>
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a asp-controller="Products" asp-action="Index" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">Sản phẩm @i</a>
+                                    <span class="stext-105 cl3">Liên hệ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="flex-c-m flex-w w-full p-t-45">
+            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">Xem tất cả sản phẩm</a>
+        </div>
+    </div>
+</section>
+
+@if (homeBlocks != null && homeBlocks.Any())
+{
+    @foreach (var block in homeBlocks)
+    {
+        var cat = block.Category;
+        if (block.Products == null || !block.Products.Any()) { continue; }
+        <section class="bg0 p-t-23 p-b-70">
+            <div class="container">
+                <div class="p-b-10">
+                    <h3 class="ltext-103 cl5">@cat.Name</h3>
+                </div>
+                <div class="row isotope-grid">
+                    @foreach (var p in block.Products.Take(4))
+                    {
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                            <div class="block2">
+                                <div class="block2-pic hov-img0">
+                                    <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                                </div>
+                                <div class="block2-txt flex-w flex-t p-t-14">
+                                    <div class="block2-txt-child1 flex-col-l">
+                                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">@p.Name</a>
+                                        <span class="stext-105 cl3">@((p.SalePrice ?? p.Price).ToString("N0"))₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="flex-c-m flex-w w-full p-t-20">
+                    <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@cat.Id" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">Xem tất cả @cat.Name</a>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+<section class="bg6 p-t-40 p-b-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 p-b-30">
+                <div class="flex-w flex-sb-m">
+                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-truck"></i></span>
+                    <div>
+                        <h5 class="stext-101 cl0">Miễn phí vận chuyển</h5>
+                        <p class="stext-107 cl6">Đơn hàng trên 1.000.000₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 p-b-30">
+                <div class="flex-w flex-sb-m">
+                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-shield"></i></span>
+                    <div>
+                        <h5 class="stext-101 cl0">Chính hãng</h5>
+                        <p class="stext-107 cl6">Bảo hành chất lượng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 p-b-30">
+                <div class="flex-w flex-sb-m">
+                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-refresh"></i></span>
+                    <div>
+                        <h5 class="stext-101 cl0">Đổi trả linh hoạt</h5>
+                        <p class="stext-107 cl6">Theo chính sách cửa hàng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

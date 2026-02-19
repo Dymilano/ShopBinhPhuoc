@@ -1,0 +1,178 @@
+@{
+    var adminBase = "/admin";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] | Bình Phước Shop - Admin</title>
+    <link rel="shortcut icon" href="@(adminBase)/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css">
+    <link rel="stylesheet" type="text/css" href="@(adminBase)/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/css/site-admin.css">
+</head>
+<body class="bg-gray-100">
+@Html.AntiForgeryToken()
+<!-- start navbar (Cleopatra) -->
+<div class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center bg-white p-6 border-b border-gray-300">
+    <div class="flex-none w-56 flex flex-row items-center">
+        <img src="@(adminBase)/img/logo.png" class="w-10 flex-none" alt="Logo">
+        <strong class="capitalize ml-1 flex-1 text-teal-600">Bình Phước Shop</strong>
+        <button id="sliderBtn" class="flex-none text-right text-gray-900 hidden md:block">
+            <i class="fad fa-list-ul"></i>
+        </button>
+    </div>
+    <button id="navbarToggle" class="hidden md:block md:fixed right-0 mr-6">
+        <i class="fad fa-chevron-double-down"></i>
+    </button>
+    <div id="navbar" class="animated md:hidden md:fixed md:top-0 md:w-full md:left-0 md:mt-16 md:border-t md:border-b md:border-gray-200 md:p-10 md:bg-white flex-1 pl-3 flex flex-row flex-wrap justify-between items-center md:flex-col md:items-center">
+        <div class="text-gray-600 md:w-full md:flex md:flex-row md:justify-evenly md:pb-10 md:mb-10 md:border-b md:border-gray-200">
+            <a href="@Url.Action("Index", "Home", new { area = "" })" target="_blank" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Trang chủ"><i class="fad fa-home"></i></a>
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Tổng quan"><i class="fad fa-chart-pie"></i></a>
+            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Đơn hàng"><i class="fad fa-shopping-cart"></i></a>
+        </div>
+        <div class="flex flex-row-reverse items-center">
+            <div class="dropdown relative md:static">
+                <button class="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
+                    <div class="w-8 h-8 overflow-hidden rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center">
+                        <i class="fad fa-user text-teal-600"></i>
+                    </div>
+                    <div class="ml-2 capitalize flex">
+                        <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">Admin</h1>
+                        <i class="fad fa-chevron-down ml-2 text-xs leading-none"></i>
+                    </div>
+                </button>
+                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
+                <div class="text-gray-500 menu hidden md:mt-10 md:w-full rounded bg-white shadow-md absolute z-20 right-0 w-40 mt-5 py-2 animated faster">
+                    <a href="@Url.Action("Index", "Home", new { area = "" })" target="_blank" class="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out">
+                        <i class="fad fa-external-link text-xs mr-1"></i> Xem trang chủ
+                    </a>
+                    <hr>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="p-0 m-0">
+                        <button type="submit" class="px-4 py-2 w-full text-left block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out border-0 cursor-pointer">
+                            <i class="fad fa-user-times text-xs mr-1"></i> Đăng xuất
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="dropdown relative mr-5 md:static">
+                <button class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
+                    <i class="fad fa-bells"></i>
+                </button>
+                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
+                <div class="menu hidden rounded bg-white md:right-0 md:w-full shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster">
+                    <div class="px-4 py-2 flex flex-row justify-between items-center capitalize font-semibold text-sm">
+                        <h1>Thông báo</h1>
+                        <div class="bg-teal-100 border border-teal-200 text-teal-500 text-xs rounded px-1"><strong>0</strong></div>
+                    </div>
+                    <hr>
+                    <div class="px-4 py-6 text-center text-gray-500 text-sm">Chưa có thông báo mới.</div>
+                    <hr>
+                    <div class="px-4 py-2 mt-2">
+                        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="border border-gray-300 block text-center text-xs uppercase rounded p-1 hover:text-teal-500 transition-all ease-in-out duration-500">Xem đơn hàng</a>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown relative mr-5 md:static">
+                <button class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
+                    <i class="fad fa-comments"></i>
+                </button>
+                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
+                <div class="menu hidden md:w-full md:right-0 rounded bg-white shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster">
+                    <div class="px-4 py-2 flex flex-row justify-between items-center capitalize font-semibold text-sm">
+                        <h1>Liên hệ</h1>
+                        <div class="bg-teal-100 border border-teal-200 text-teal-500 text-xs rounded px-1"><strong>0</strong></div>
+                    </div>
+                    <hr>
+                    <div class="px-4 py-6 text-center text-gray-500 text-sm">Tin nhắn mới sẽ hiển thị tại đây.</div>
+                    <hr>
+                    <div class="px-4 py-2 mt-2">
+                        <a asp-area="Admin" asp-controller="ContactMessages" asp-action="Index" class="border border-gray-300 block text-center text-xs uppercase rounded p-1 hover:text-teal-500 transition-all ease-in-out duration-500">Xem tất cả</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end navbar -->
+
+<div class="min-h-screen flex flex-row flex-wrap">
+    <!-- start sidebar (Cleopatra) -->
+    <div id="sideBar" class="relative flex flex-col flex-wrap bg-white border-r border-gray-300 p-4 flex-none w-52 md:-ml-52 md:fixed md:top-0 md:z-30 md:h-screen md:shadow-xl animated faster">
+        <div class="flex flex-col">
+            <div class="text-right hidden md:block mb-2">
+                <button id="sideBarHideBtn" class="text-gray-500 hover:text-gray-700"><i class="fad fa-times-circle text-sm"></i></button>
+            </div>
+            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-1 tracking-wider">Trang chủ</p>
+            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-chart-pie text-xs mr-2 w-4"></i> Tổng quan
+            </a>
+            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Sản phẩm</p>
+            <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-shopping-bag text-xs mr-2 w-4"></i> Danh sách
+            </a>
+            <a asp-area="Admin" asp-controller="Products" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm SP
+            </a>
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-folder text-xs mr-2 w-4"></i> Danh mục
+            </a>
+            <a asp-area="Admin" asp-controller="Brands" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-award text-xs mr-2 w-4"></i> Thương hiệu
+            </a>
+            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Nội dung</p>
+            <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-file-text text-xs mr-2 w-4"></i> Bài viết
+            </a>
+            <a asp-area="Admin" asp-controller="Posts" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-plus text-xs mr-2 w-4"></i> Thêm bài viết
+            </a>
+            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Bán hàng</p>
+            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-shopping-cart text-xs mr-2 w-4"></i> Đơn hàng
+            </a>
+            <a asp-area="Admin" asp-controller="ContactMessages" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-mail text-xs mr-2 w-4"></i> Liên hệ
+            </a>
+            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-cog text-xs mr-2 w-4"></i> Cài đặt
+            </a>
+        </div>
+    </div>
+    <!-- end sidebar -->
+
+    <!-- start content -->
+    <div class="bg-gray-100 flex-1 p-6 md:mt-16 md:pl-8 md:pr-8">
+        <div class="mb-6 flex flex-row flex-wrap justify-between items-center">
+            <div>
+                <h5 class="text-gray-800 font-semibold mb-1">@ViewData["Title"]</h5>
+                <ul class="flex text-sm text-gray-500">
+                    <li><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="hover:text-teal-600 transition duration-200">Bình Phước Shop</a></li>
+                    <li class="mx-1">/</li>
+                    <li>@ViewData["Title"]</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content max-w-full">
+            @RenderBody()
+        </div>
+        <!-- footer (Cleopatra) -->
+        <div class="mt-10 pt-4 border-t border-gray-200 text-center text-xs text-gray-600">
+            © <span id="tw-current-year"></span> <strong>Bình Phước Shop</strong>. All rights reserved.
+        </div>
+    </div>
+    <!-- end content -->
+</div>
+
+<script src="@(adminBase)/js/scripts.js"></script>
+<script>
+  (function () {
+    var el = document.getElementById('tw-current-year');
+    if (el) el.textContent = new Date().getFullYear();
+  })();
+</script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

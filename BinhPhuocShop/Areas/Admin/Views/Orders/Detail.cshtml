@@ -1,0 +1,77 @@
+@model BinhPhuocShop.Models.Order
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng " + Model.OrderCode;
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header"><h5 class="mb-0">Thông tin khách hàng</h5></div>
+            <div class="card-body">
+                <p><strong>Họ tên:</strong> @Model.CustomerName</p>
+                <p><strong>Số điện thoại:</strong> <a href="tel:@Model.Phone">@Model.Phone</a></p>
+                <p><strong>Email:</strong> @(Model.Email ?? "-")</p>
+                <p><strong>Địa chỉ:</strong> @Model.Address</p>
+                @if (!string.IsNullOrEmpty(Model.Note)) { <p><strong>Ghi chú:</strong> @Model.Note</p> }
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Sản phẩm</h5></div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Size</th>
+                            <th>Đơn giá</th>
+                            <th>SL</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@item.ProductId">@item.ProductName</a>
+                                </td>
+                                <td>@(item.Size ?? "-")</td>
+                                <td>@item.Price.ToString("N0")₫</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Amount.ToString("N0")₫</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><h5 class="mb-0">Cập nhật trạng thái</h5></div>
+            <div class="card-body">
+                <p><strong>Tổng cộng:</strong> <span class="text-danger fs-5">@Model.TotalAmount.ToString("N0")₫</span></p>
+                <p><strong>Ngày đặt:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                <form asp-action="UpdateStatus" method="post" class="mt-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-2">
+                        <label class="form-label">Trạng thái</label>
+                        <select name="status" class="form-select">
+                            <option value="pending" selected="@(Model.Status == "pending")">Chờ xử lý</option>
+                            <option value="confirmed" selected="@(Model.Status == "confirmed")">Đã xác nhận</option>
+                            <option value="shipping" selected="@(Model.Status == "shipping")">Đang giao</option>
+                            <option value="completed" selected="@(Model.Status == "completed")">Hoàn thành</option>
+                            <option value="cancelled" selected="@(Model.Status == "cancelled")">Đã hủy</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+                <a asp-action="Index" class="btn btn-outline-secondary mt-2">← Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = "Đặt hàng thành công";
+    var orderCode = ViewBag.OrderCode as string;
+}
+
+<div class="section section-success-mulgati">
+    <div class="container">
+        <div class="success-card bp-reveal">
+            <div class="success-icon"><i class="fa fa-check-circle"></i></div>
+            <h1 class="success-title">Đặt hàng thành công!</h1>
+            <p class="success-desc">Cảm ơn bạn đã mua sắm tại @(ViewBag.SiteName ?? "Bình Phước Shop").</p>
+            @if (!string.IsNullOrEmpty(orderCode))
+            {
+                <p class="success-code">Mã đơn hàng: <strong>@orderCode</strong></p>
+                <p class="success-note">Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận đơn hàng.</p>
+            }
+            <div class="success-actions mt-4">
+                <a asp-controller="Products" asp-action="Index" class="btn-mulgati btn-mulgati-primary">
+                    <i class="fa fa-shopping-bag"></i> Tiếp tục mua sắm
+                </a>
+                <a asp-controller="Home" asp-action="Index" class="btn-mulgati btn-mulgati-outline">
+                    <i class="fa fa-home"></i> Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+@{
+    Layout = "_StoreLayout";
+    var currentCategory = ViewBag.CurrentCategory as BinhPhuocShop.Models.Category;
+    ViewData["Title"] = currentCategory != null ? currentCategory.Name : "Sản phẩm";
+    var store = "/store";
+}
+
+<div class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            <a asp-controller="Products" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Sản phẩm<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            @if (currentCategory != null)
+            {
+                <span class="stext-109 cl4">@currentCategory.Name</span>
+            }
+            else
+            {
+                <span class="stext-109 cl4">Sản phẩm</span>
+            }
+        </div>
+        <div class="flex-w flex-sb-m p-b-52 p-t-30">
+            <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                <a asp-controller="Products" asp-action="Index" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 @(currentCategory == null ? "how-active1" : "")">Tất cả</a>
+                @if (ViewBag.Categories != null)
+                {
+                    @foreach (var c in (IEnumerable<dynamic>)ViewBag.Categories)
+                    {
+                        <a asp-controller="Collections" asp-action="Index" asp-route-slug="@(c.Slug ?? "")" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 @(currentCategory?.Id == c.Id ? "how-active1" : "")">@c.Name</a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="row isotope-grid">
+            @if (ViewBag.Products != null && ((IEnumerable<dynamic>)ViewBag.Products).Any())
+            {
+                @foreach (var p in (IEnumerable<dynamic>)ViewBag.Products)
+                {
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
+                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                            </div>
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">@p.Name</a>
+                                    <span class="stext-105 cl3">
+                                        @((p.SalePrice ?? p.Price).ToString("N0"))₫
+                                        @if (p.SalePrice != null && (decimal)p.SalePrice < (decimal)p.Price)
+                                        {
+                                            <del class="stext-106 cl6">@(((decimal)p.Price).ToString("N0"))₫</del>
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <p class="stext-107 cl6 text-center p-t-60">Chưa có sản phẩm nào trong danh mục này.</p>
+                </div>
+            }
+        </div>
+        @if (ViewBag.TotalPages != null && (int)ViewBag.TotalPages > 1)
+        {
+            var slug = ViewBag.CategorySlug as string ?? "";
+            <div class="flex-l-m flex-w w-full p-t-45">
+                <ul class="flex-w flex-c-m">
+                    @for (var i = 1; i <= (int)ViewBag.TotalPages; i++)
+                    {
+                        <li class="p-b-10">
+                            <a asp-controller="Collections" asp-action="Index" asp-route-slug="@slug" asp-route-page="@i" asp-route-brandId="@ViewBag.BrandId" asp-route-q="@ViewBag.Q" asp-route-sort="@ViewBag.Sort" class="flex-c-m stext-101 cl2 size-107 bg2 bor1 hov-btn1 p-lr-15 trans-04 m-r-2 @(i == (int)ViewBag.Page ? "bg3" : "")">@i</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,259 @@
+@model Product
+@using System.Text.Json
+@{
+    Layout = "_StoreLayout";
+    var imageUrls = new List<string>();
+    if (!string.IsNullOrEmpty(Model.ImageUrl)) imageUrls.Add(Model.ImageUrl);
+    if (!string.IsNullOrEmpty(Model.ImageUrls))
+    {
+        try
+        {
+            var extra = JsonSerializer.Deserialize<string[]>(Model.ImageUrls);
+            if (extra != null) foreach (var u in extra) { if (!string.IsNullOrEmpty(u) && !imageUrls.Contains(u)) imageUrls.Add(u); }
+        }
+        catch { }
+    }
+    imageUrls = imageUrls.Take(5).ToList();
+    if (imageUrls.Count == 0) imageUrls.Add("/store/images/product-01.jpg");
+    var currentPrice = Model.SalePrice ?? Model.Price;
+    var hasSale = Model.SalePrice.HasValue && Model.SalePrice < Model.Price;
+    var store = "/store";
+}
+
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Trang chủ
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+        <a asp-controller="Products" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            @(Model.Category?.Name ?? "Sản phẩm")
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+        <span class="stext-109 cl4">@Model.Name</span>
+    </div>
+</div>
+
+<section class="sec-product-detail bg0 p-t-65 p-b-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-7 p-b-30">
+                <div class="p-l-25 p-r-30 p-lr-0-lg">
+                    <div class="wrap-slick3 flex-sb flex-w">
+                        <div class="wrap-slick3-dots"></div>
+                        <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+                        <div class="slick3 gallery-lb" id="product-gallery">
+                            @for (int i = 0; i < imageUrls.Count; i++)
+                            {
+                                <div class="item-slick3" data-thumb="@imageUrls[i]">
+                                    <div class="wrap-pic-w pos-relative">
+                                        <img src="@imageUrls[i]" alt="@Model.Name">
+                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="@imageUrls[i]" target="_blank">
+                                            <i class="fa fa-expand"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 p-b-30">
+                <div class="p-r-50 p-t-5 p-lr-0-lg">
+                    <h4 class="mtext-105 cl2 js-name-detail p-b-14">@Model.Name</h4>
+                    <span class="mtext-106 cl2">
+                        @currentPrice.ToString("N0")₫
+                        @if (hasSale)
+                        {
+                            <span class="stext-106 cl6 m-l-10"><del>@Model.Price.ToString("N0")₫</del></span>
+                        }
+                    </span>
+                    @if (Model.Brand != null || !string.IsNullOrEmpty(Model.Sku))
+                    {
+                        <p class="stext-102 cl3 p-t-10">
+                            @if (Model.Brand != null) { <span>Thương hiệu: @Model.Brand.Name</span> }
+                            @if (!string.IsNullOrEmpty(Model.Sku)) { <span class="m-l-15">MSP: @Model.Sku</span> }
+                        </p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.ShortDescription))
+                    {
+                        <p class="stext-102 cl3 p-t-23">@Model.ShortDescription</p>
+                    }
+                    <div class="p-t-33">
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-203 flex-c-m respon6">Kích thước</div>
+                            <div class="size-204 respon6-next">
+                                <div class="rs1-select2 bor8 bg0">
+                                    <select class="js-select2" name="size" id="product-size">
+                                        <option value="">Chọn size</option>
+                                        @foreach (var size in new[] { "37", "38", "39", "40", "41", "42", "43", "44" })
+                                        {
+                                            <option value="@size">Size @size</option>
+                                        }
+                                    </select>
+                                    <div class="dropDownSelect2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-204 flex-w flex-m respon6-next">
+                                <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"><i class="fs-16 zmdi zmdi-minus"></i></div>
+                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1" min="1" max="99" id="product-qty">
+                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"><i class="fs-16 zmdi zmdi-plus"></i></div>
+                                </div>
+                                <button type="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail add-to-cart-btn m-r-10" data-product-id="@Model.Id" data-product-name="@Model.Name" data-image-url="@Model.ImageUrl" data-price="@currentPrice">
+                                    Thêm vào giỏ
+                                </button>
+                                <a href="#" class="flex-c-m stext-101 cl0 size-101 bg2 bor1 hov-btn1 p-lr-15 trans-04 buy-now-btn" data-product-id="@Model.Id">Mua ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-w flex-m p-l-100 p-t-40 respon7">
+                        <p class="stext-102 cl6"><i class="fa fa-truck m-r-5"></i> Miễn phí vận chuyển đơn từ 500.000₫</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bor10 m-t-50 p-t-43 p-b-40">
+            <div class="tab01">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item p-b-10">
+                        <a class="nav-link active" data-toggle="tab" href="#description" role="tab">Mô tả</a>
+                    </li>
+                    <li class="nav-item p-b-10">
+                        <a class="nav-link" data-toggle="tab" href="#payment" role="tab">Thanh toán</a>
+                    </li>
+                    <li class="nav-item p-b-10">
+                        <a class="nav-link" data-toggle="tab" href="#returns" role="tab">Đổi trả</a>
+                    </li>
+                </ul>
+                <div class="tab-content p-t-43">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel">
+                        <div class="how-pos2 p-lr-15-md">
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                @Html.Raw(Model.Description)
+                            }
+                            else
+                            {
+                                <p class="stext-102 cl6">@(Model.ShortDescription ?? "Sản phẩm chính hãng, chất lượng cao.")</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="payment" role="tabpanel">
+                        <div class="how-pos2 p-lr-15-md">
+                            <p class="stext-102 cl6">Thanh toán khi nhận hàng (COD), chuyển khoản ngân hàng hoặc thanh toán tại cửa hàng.</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="returns" role="tabpanel">
+                        <div class="how-pos2 p-lr-15-md">
+                            <p class="stext-102 cl6">Đổi trả trong 07 ngày. Liên hệ Hotline để được hướng dẫn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.Related != null && ((IEnumerable<dynamic>)ViewBag.Related).Any())
+        {
+            <div class="p-t-50">
+                <h3 class="ltext-103 cl5 p-b-20">Sản phẩm tương tự</h3>
+                <div class="row isotope-grid">
+                    @foreach (var p in (IEnumerable<dynamic>)ViewBag.Related)
+                    {
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                            <div class="block2">
+                                <div class="block2-pic hov-img0">
+                                    <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                                </div>
+                                <div class="block2-txt flex-w flex-t p-t-14">
+                                    <div class="block2-txt-child1 flex-col-l">
+                                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">@p.Name</a>
+                                        <span class="stext-105 cl3">@((p.SalePrice ?? p.Price).ToString("N0"))₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+@Html.AntiForgeryToken()
+<script src="/store/vendor/select2/select2.min.js"></script>
+<script>
+$(function() {
+  $('.js-select2').each(function() {
+    $(this).select2({ minimumResultsForSearch: 20, dropdownParent: $(this).next('.dropDownSelect2') });
+  });
+});
+</script>
+<script>
+(function() {
+  function getSize() {
+    var sel = document.getElementById('product-size') || document.querySelector('select[name="size"]');
+    return sel ? sel.value : null;
+  }
+  function getQty() {
+    var inp = document.getElementById('product-qty') || document.querySelector('input[name="num-product"]');
+    return inp ? Math.max(1, parseInt(inp.value, 10) || 1) : 1;
+  }
+  function getToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+  }
+  function addToCart(productId, size, quantity, callback) {
+    var fd = new FormData();
+    fd.append('productId', productId);
+    fd.append('size', size || '');
+    fd.append('quantity', quantity || 1);
+    fd.append('__RequestVerificationToken', getToken());
+    fetch('/Cart/Add', { method: 'POST', body: fd })
+      .then(function(r) { return r.json(); })
+      .then(callback || function() {});
+  }
+  document.querySelector('.add-to-cart-btn')?.addEventListener('click', function() {
+    var btn = this;
+    var productId = parseInt(btn.dataset.productId, 10);
+    var size = getSize();
+    var qty = getQty();
+    btn.disabled = true;
+    btn.textContent = 'Đang thêm...';
+    addToCart(productId, size, qty, function(data) {
+      btn.disabled = false;
+      btn.textContent = 'Thêm vào giỏ';
+      if (data.ok) {
+        document.querySelectorAll('.qty').forEach(function(el) { el.textContent = data.count; });
+        document.querySelectorAll('.icon-header-noti.js-show-cart').forEach(function(el) { el.setAttribute('data-notify', data.count); });
+        if (typeof swal !== 'undefined') swal(btn.dataset.productName || 'Sản phẩm', 'Đã thêm vào giỏ hàng!', 'success');
+        else alert('Đã thêm vào giỏ hàng');
+      } else { alert(data.msg || 'Có lỗi xảy ra'); }
+    });
+  });
+  var buyNow = document.querySelector('.buy-now-btn');
+  if (buyNow) buyNow.addEventListener('click', function(e) {
+    e.preventDefault();
+    var productId = parseInt(this.dataset.productId, 10);
+    var size = getSize();
+    addToCart(productId, size, getQty(), function(data) {
+      if (data.ok) window.location.href = '/Checkout';
+      else alert(data.msg || 'Có lỗi xảy ra');
+    });
+  });
+  var btnDown = document.querySelector('.btn-num-product-down');
+  var btnUp = document.querySelector('.btn-num-product-up');
+  var numProduct = document.getElementById('product-qty') || document.querySelector('input[name="num-product"]');
+  if (btnDown && numProduct) btnDown.addEventListener('click', function() {
+    var v = Math.max(1, parseInt(numProduct.value, 10) - 1);
+    numProduct.value = v;
+  });
+  if (btnUp && numProduct) btnUp.addEventListener('click', function() {
+    var v = Math.min(99, parseInt(numProduct.value, 10) + 1);
+    numProduct.value = v;
+  });
+})();
+</script>
+}

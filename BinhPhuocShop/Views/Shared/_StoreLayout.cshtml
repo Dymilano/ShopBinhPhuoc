@@ -1,0 +1,263 @@
+@{
+    var store = "/store";
+    var categories = ViewBag.Categories as IEnumerable<dynamic> ?? new List<dynamic>();
+    var cartItems = ViewBag.CartItems as IEnumerable<BinhPhuocShop.Models.CartItem> ?? new List<BinhPhuocShop.Models.CartItem>();
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - Bình Phước Shop</title>
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/fonts/linearicons-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/MagnificPopup/magnific-popup.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/css/util.css">
+    <link rel="stylesheet" type="text/css" href="@(store)/css/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="~/css/site-store.css">
+</head>
+<body class="animsition">
+    <header>
+        <div class="container-menu-desktop">
+            <div class="top-bar">
+                <div class="content-topbar flex-sb-m h-full container">
+                    <div class="left-top-bar">Miễn phí vận chuyển đơn hàng trên 1.000.000₫</div>
+                    <div class="right-top-bar flex-w h-full">
+                        <a href="/gioi-thieu" class="flex-c-m trans-04 p-lr-25">Giới thiệu</a>
+                        @if (!string.IsNullOrEmpty(ViewBag.UserName as string))
+                        {
+                            <span class="flex-c-m trans-04 p-lr-25">@ViewBag.UserName</span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="flex-c-m trans-04 p-lr-25" style="background:none;border:none;cursor:pointer;">Thoát</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="flex-c-m trans-04 p-lr-25">Tài khoản</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-menu-desktop how-shadow1">
+                <nav class="limiter-menu-desktop container">
+                    <a asp-controller="Home" asp-action="Index" class="logo">
+                        <span class="stext-103 cl2 fw-bold">Bình Phước Shop</span>
+                    </a>
+                    <div class="menu-desktop">
+                        <ul class="main-menu">
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active-menu" : "")">
+                                <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+                            </li>
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" || ViewContext.RouteData.Values["controller"]?.ToString() == "Collections" ? "active-menu" : "")">
+                                <a href="#">Sản phẩm</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Products" asp-action="Index">Tất cả sản phẩm</a></li>
+                                    @foreach (var c in categories)
+                                    {
+                                        <li><a asp-controller="Collections" asp-action="Index" asp-route-slug="@(c.Slug ?? "")">@c.Name</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Blog" ? "active-menu" : "")"><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Pages" ? "active-menu" : "")"><a href="/gioi-thieu">Giới thiệu</a></li>
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "active-menu" : "")">
+                                <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+                            </li>
+                            <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active-menu" : "")">
+                                <a asp-controller="Contact" asp-action="Index">Liên hệ</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="wrap-icon-header flex-w flex-r-m">
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+                            <i class="zmdi zmdi-search"></i>
+                        </div>
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="@(ViewBag.CartCount ?? 0)">
+                            <a asp-controller="Cart" asp-action="Index" class="text-reset"><i class="zmdi zmdi-shopping-cart"></i><span class="qty">@(ViewBag.CartCount ?? 0)</span></a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="wrap-header-mobile">
+            <div class="logo-mobile">
+                <a asp-controller="Home" asp-action="Index"><span class="stext-103 cl2 fw-bold">Bình Phước Shop</span></a>
+            </div>
+            <div class="wrap-icon-header flex-w flex-r-m m-r-15">
+                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search"><i class="zmdi zmdi-search"></i></div>
+                <a asp-controller="Cart" asp-action="Index" class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="@(ViewBag.CartCount ?? 0)"><i class="zmdi zmdi-shopping-cart"></i><span class="qty">@(ViewBag.CartCount ?? 0)</span></a>
+            </div>
+            <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+                <span class="hamburger-box"><span class="hamburger-inner"></span></span>
+            </div>
+        </div>
+        <div class="menu-mobile">
+            <ul class="topbar-mobile">
+                <li>
+                    <div class="left-top-bar">Miễn phí vận chuyển đơn hàng trên 1.000.000₫</div>
+                </li>
+                <li>
+                    <div class="right-top-bar flex-w h-full">
+                        <a href="/gioi-thieu" class="flex-c-m p-lr-10 trans-04">Giới thiệu</a>
+                        @if (!string.IsNullOrEmpty(ViewBag.UserName as string))
+                        {
+                            <span class="flex-c-m p-lr-10 trans-04">@ViewBag.UserName</span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline flex-c-m p-lr-10">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="trans-04" style="background:none;border:none;cursor:pointer;color:inherit;">Thoát</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="flex-c-m p-lr-10 trans-04">Tài khoản</a>
+                        }
+                    </div>
+                </li>
+            </ul>
+            <ul class="main-menu-m">
+                <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li>
+                    <a href="#">Sản phẩm</a>
+                    <ul class="sub-menu-m">
+                        <li><a asp-controller="Products" asp-action="Index">Tất cả</a></li>
+                        @foreach (var c in categories)
+                        {
+                            <li><a asp-controller="Collections" asp-action="Index" asp-route-slug="@(c.Slug ?? "")">@c.Name</a></li>
+                        }
+                    </ul>
+                    <span class="arrow-main-menu-m"><i class="fa fa-angle-right"></i></span>
+                </li>
+                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                <li><a href="/gioi-thieu">Giới thiệu</a></li>
+                <li><a asp-controller="Cart" asp-action="Index">Giỏ hàng</a></li>
+                <li><a asp-controller="Contact" asp-action="Index">Liên hệ</a></li>
+            </ul>
+        </div>
+        <!-- Modal Search (CozaStore) -->
+        <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
+            <div class="container-search-header">
+                <button type="button" class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
+                    <img src="@(store)/images/icons/icon-close2.png" alt="CLOSE">
+                </button>
+                <form asp-controller="Products" asp-action="Index" method="get" class="wrap-search-header flex-w p-l-15">
+                    <button type="submit" class="flex-c-m trans-04"><i class="zmdi zmdi-search"></i></button>
+                    <input class="plh3" type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="@Context.Request.Query["q"]">
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrap-header-cart js-panel-cart">
+        <div class="s-full js-hide-cart"></div>
+        <div class="header-cart flex-col-l p-l-65 p-r-25">
+            <div class="header-cart-title flex-w flex-sb-m p-b-8">
+                <span class="mtext-103 cl2">Giỏ hàng của bạn</span>
+                <div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart"><i class="zmdi zmdi-close"></i></div>
+            </div>
+            <div class="header-cart-content flex-w js-pscroll">
+                <ul class="header-cart-wrapitem w-full">
+                    @if (cartItems.Any())
+                    {
+                        @foreach (var ci in cartItems.Take(5))
+                        {
+                            <li class="header-cart-item flex-w flex-t m-b-12">
+                                <div class="header-cart-item-img">
+                                    <img src="@(ci.ImageUrl ?? (store + "/images/item-cart-01.jpg"))" alt="@ci.ProductName">
+                                </div>
+                                <div class="header-cart-item-txt p-t-8">
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@ci.ProductId" class="header-cart-item-name m-b-18 hov-cl1 trans-04">@ci.ProductName</a>
+                                    <span class="header-cart-item-info">@ci.Quantity x @(ci.Amount.ToString("N0"))₫</span>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="p-b-15"><span class="stext-107 cl6">Giỏ hàng trống</span></li>
+                    }
+                </ul>
+                <div class="w-full">
+                    <div class="header-cart-total w-full p-tb-40">Tổng: @(((decimal)(ViewBag.CartTotal ?? 0)).ToString("N0"))₫</div>
+                    <div class="header-cart-buttons flex-w w-full">
+                        <a asp-controller="Cart" asp-action="Index" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">Xem giỏ hàng</a>
+                        <a asp-controller="Checkout" asp-action="Index" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">Thanh toán</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <footer class="bg3 p-t-75 p-b-32">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">Danh mục</h4>
+                    <ul>
+                        @foreach (var c in categories.Take(5))
+                        {
+                            <li class="p-b-10"><a asp-controller="Collections" asp-action="Index" asp-route-slug="@(c.Slug ?? "")" class="stext-107 cl7 hov-cl1 trans-04">@c.Name</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">Hỗ trợ</h4>
+                    <ul>
+                        <li class="p-b-10"><a asp-controller="Pages" asp-action="HuongDanMuaHang" class="stext-107 cl7 hov-cl1 trans-04">Hướng dẫn mua hàng</a></li>
+                        <li class="p-b-10"><a asp-controller="Pages" asp-action="ChinhSachVanChuyen" class="stext-107 cl7 hov-cl1 trans-04">Chính sách vận chuyển</a></li>
+                        <li class="p-b-10"><a asp-controller="Pages" asp-action="ChinhSachDoiHang" class="stext-107 cl7 hov-cl1 trans-04">Hoàn trả / Đổi trả</a></li>
+                        <li class="p-b-10"><a asp-controller="Contact" asp-action="Index" class="stext-107 cl7 hov-cl1 trans-04">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">Liên hệ</h4>
+                    <p class="stext-107 cl7 size-201">@(ViewBag.Address ?? "Hà Nội")<br>Hotline: <a href="tel:@(ViewBag.Phone ?? "0984843218")" class="stext-107 cl7 hov-cl1 trans-04">@(ViewBag.Phone ?? "0984843218")</a><br>Email: <a href="mailto:@(ViewBag.Email ?? "contact@binhphuocshop.vn")" class="stext-107 cl7 hov-cl1 trans-04">@(ViewBag.Email ?? "contact@binhphuocshop.vn")</a></p>
+                    <div class="p-t-27">
+                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16" title="Facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16" title="Zalo"><i class="fa fa-phone"></i></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 p-b-50">
+                    <h4 class="stext-301 cl0 p-b-30">@(ViewBag.SiteName ?? "Bình Phước Shop")</h4>
+                    <p class="stext-107 cl7 size-201">@(ViewBag.SiteDescription ?? "Giày dép chính hãng - Chất lượng cao.")</p>
+                </div>
+            </div>
+            <div class="p-t-40">
+                <div class="flex-c-m flex-w p-b-18">
+                    <a href="#" class="m-all-1"><img src="@(store)/images/icons/icon-pay-01.png" alt="Thanh toán"></a>
+                    <a href="#" class="m-all-1"><img src="@(store)/images/icons/icon-pay-02.png" alt="Thanh toán"></a>
+                    <a href="#" class="m-all-1"><img src="@(store)/images/icons/icon-pay-03.png" alt="Thanh toán"></a>
+                    <a href="#" class="m-all-1"><img src="@(store)/images/icons/icon-pay-04.png" alt="Thanh toán"></a>
+                    <a href="#" class="m-all-1"><img src="@(store)/images/icons/icon-pay-05.png" alt="Thanh toán"></a>
+                </div>
+                <p class="stext-107 cl6 txt-center">© @DateTime.Now.Year Bản quyền thuộc về <strong>@(ViewBag.SiteName ?? "Bình Phước Shop")</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="btn-back-to-top" id="myBtn"><span class="symbol-btn-back-to-top"><i class="zmdi zmdi-chevron-up"></i></span></div>
+
+    <script src="@(store)/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="@(store)/vendor/animsition/js/animsition.min.js"></script>
+    <script src="@(store)/vendor/bootstrap/js/popper.js"></script>
+    <script src="@(store)/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="@(store)/vendor/slick/slick.min.js"></script>
+    <script src="@(store)/js/slick-custom.js"></script>
+    <script src="@(store)/vendor/sweetalert/sweetalert.min.js"></script>
+    <script src="@(store)/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="@(store)/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

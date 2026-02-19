@@ -1,0 +1,39 @@
+@{
+    Layout = "_StoreLayout";
+}
+<section class="section pd-top-30">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Phương thức thanh toán</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
+                <partial name="_PagesSidebar" />
+            </aside>
+            <div class="col-md-9 col-sm-12">
+                <h1 class="h3 mb-4">Phương thức thanh toán</h1>
+                <div class="page-content content-entry" style="line-height:1.8;">
+                    <p style="text-align: justify;">Dưới đây là các hình thức thanh toán chấp nhận tại Mulgati:</p>
+                    <h3 class="h5 mt-4"><strong>Khi mua hàng trực tiếp tại cửa hàng</strong></h3>
+                    <p>Quý khách có thể đến trực tiếp cửa hàng, lựa chọn sản phẩm và thanh toán tiền mặt trực tiếp với nhân viên hoặc cà thẻ qua POS do ngân hàng lắp đặt tại cửa hàng.</p>
+                    <p>Một số loại thẻ chấp nhận thanh toán bao gồm: Thẻ nội địa (Vietcombank, Techcombank, BIDV…), thẻ visa, thẻ master.</p>
+                    <h3 class="h5 mt-4"><strong>Khi mua hàng online</strong></h3>
+                    <p>Quý khách hàng mua hàng online có thể thanh toán tiền hàng theo 2 phương thức thanh toán: chuyển khoản trước khi nhận hàng hoặc sau khi nhận hàng rồi thanh toán trực tiếp cho người giao hàng (COD).</p>
+                    <p>Quý khách thanh toán bằng hình thức chuyển khoản khi Mulgati đã liên hệ và xác nhận đơn hàng với các tài khoản dưới đây. Khi nhận được thông báo của ngân hàng, Mulgati sẽ thực hiện đơn đặt hàng của Quý khách.</p>
+                    <h3 class="h5 mt-4"><strong>Thông tin chuyển khoản</strong></h3>
+                    <ul>
+                        <li>Tên chủ tài khoản: <strong>CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ MULGATI VIỆT NAM</strong></li>
+                        <li>Số tài khoản: <strong>19133956611017</strong></li>
+                        <li>Ngân hàng: <strong>TECHCOMBANK - Ngân hàng TMCP Kỹ thương Việt Nam</strong></li>
+                        <li>Nội dung thanh toán theo cú pháp: <strong>[SĐT] [Khoảng cách] [Nội dung muốn nhắn thêm (nếu có)]</strong></li>
+                    </ul>
+                    <p>Sau khi hoàn tất chuyển khoản, quý khách vui lòng gọi điện vào hotline <a href="tel:19004510">1900 4510</a> để nhân viên Mulgati xác nhận thanh toán và xử lý đơn hàng.</p>
+                    <p>Rất hân hạnh được phục vụ quý khách!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

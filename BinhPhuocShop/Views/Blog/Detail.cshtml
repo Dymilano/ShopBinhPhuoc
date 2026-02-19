@@ -1,0 +1,79 @@
+@model Post
+@{
+    Layout = "_StoreLayout";
+    ViewData["Title"] = Model.Title;
+    var publishDate = Model.PublishedAt ?? Model.CreatedAt;
+}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section bp-reveal">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                    <li><a asp-controller="Blog" asp-action="Index">Bài viết</a></li>
+                    <li class="active">@Model.Title</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section section-blog-detail-mulgati">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <article class="post-article-mulgati bp-reveal">
+                    <header class="post-header-mulgati">
+                        <h1 class="post-title-mulgati">@Model.Title</h1>
+                        <p class="post-meta-mulgati">
+                            <i class="fa fa-calendar"></i> @publishDate.ToString("dd/MM/yyyy")
+                            @if (Model.ViewCount > 0)
+                            {
+                                <span class="meta-sep">|</span>
+                                <i class="fa fa-eye"></i> @Model.ViewCount @:lượt xem
+                            }
+                        </p>
+                    </header>
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="post-featured-img">
+                            <img src="@Model.ImageUrl" alt="@Model.Title" />
+                        </div>
+                    }
+                    <div class="post-content-mulgati">
+                        @Html.Raw(Model.Content)
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-4 bp-reveal">
+                <div class="blog-sidebar-mulgati">
+                    <div class="sidebar-block">
+                        <h3 class="sidebar-title-mulgati">Bài viết mới nhất</h3>
+                        <ul class="sidebar-post-list">
+                            @if (ViewBag.LatestPosts != null)
+                            {
+                                @foreach (var p in (IEnumerable<dynamic>)ViewBag.LatestPosts)
+                                {
+                                    <li>
+                                        <a asp-controller="Blog" asp-action="Detail" asp-route-id="@p.Id">@p.Title</a>
+                                        <span class="sidebar-post-date">@(((DateTime?)p.PublishedAt ?? p.CreatedAt).ToString("dd/MM/yyyy"))</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="sidebar-block">
+                        <h3 class="sidebar-title-mulgati">Liên kết</h3>
+                        <ul class="sidebar-links">
+                            <li><a asp-controller="Blog" asp-action="Index">Tất cả bài viết</a></li>
+                            <li><a asp-controller="Products" asp-action="Index">Sản phẩm</a></li>
+                            <li><a asp-controller="Contact" asp-action="Index">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

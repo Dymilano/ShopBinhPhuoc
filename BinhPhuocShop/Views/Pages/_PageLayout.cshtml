@@ -1,0 +1,29 @@
+@{
+    Layout = "_StoreLayout";
+}
+<section class="section pd-top-30" style="padding-top: 30px;">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active">@ViewData["PageTitle"]</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <aside class="col-md-3 col-sm-12 order-md-2 order-sm-1 mb-4">
+                <partial name="_PagesSidebar" />
+            </aside>
+            <div class="col-md-9 col-sm-12 order-md-1 order-sm-2">
+                <div class="heading-page mb-4">
+                    <h1 class="h3">@ViewData["PageTitle"]</h1>
+                </div>
+                <div class="page-content content-entry" id="articleBody" style="line-height:1.8;">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    #articleBody img { max-width: 100%; height: auto; }
+</style>
