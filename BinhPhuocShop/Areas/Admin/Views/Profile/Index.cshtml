@@ -1,0 +1,149 @@
+@model User
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-top-0 mb-4">
+            <div class="card-header border-bottom">
+                <h5 class="mb-0">
+                    <i class="feather-user me-2"></i>
+                    Thông tin cá nhân
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="UpdateProfile" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Họ tên: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-user"></i></div>
+                                <input name="name" value="@Model.Name" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Email: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-mail"></i></div>
+                                <input value="@Model.Email" class="form-control" disabled>
+                            </div>
+                            <div class="fs-11 text-muted mt-1">Email không thể thay đổi</div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Điện thoại: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-phone"></i></div>
+                                <input name="phone" value="@Model.Phone" class="form-control" placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Địa chỉ: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-map-pin"></i></div>
+                                <input name="address" value="@Model.Address" class="form-control" placeholder="Địa chỉ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Vai trò: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            @switch (Model.Role)
+                            {
+                                case "Admin":
+                                    <span class="badge bg-danger">Quản trị viên</span>
+                                    break;
+                                case "Manager":
+                                    <span class="badge bg-warning">Quản lý</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-info">Khách hàng</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9 offset-lg-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="feather-save me-2"></i>
+                                <span>Cập nhật thông tin</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card border-top-0">
+            <div class="card-header border-bottom">
+                <h5 class="mb-0">
+                    <i class="feather-lock me-2"></i>
+                    Đổi mật khẩu
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="ChangePassword" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Mật khẩu hiện tại: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-lock"></i></div>
+                                <input name="currentPassword" type="password" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Mật khẩu mới: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-lock"></i></div>
+                                <input name="newPassword" type="password" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Xác nhận mật khẩu: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-lock"></i></div>
+                                <input name="confirmPassword" type="password" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9 offset-lg-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="feather-save me-2"></i>
+                                <span>Đổi mật khẩu</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

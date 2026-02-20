@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[AdminAuthorization]
 public class ProductsController : Controller
 {
     private readonly AppDbContext _db;
@@ -39,6 +40,12 @@ public class ProductsController : Controller
     public async Task<IActionResult> Create(Product model,
         IFormFile? imageFile, IFormFile? imageFile2, IFormFile? imageFile3, IFormFile? imageFile4, IFormFile? imageFile5)
     {
+        if (!ModelState.IsValid)
+        {
+            await LoadDropdowns();
+            return View(model);
+        }
+        
         if (string.IsNullOrWhiteSpace(model.Slug)) model.Slug = Slugify(model.Name);
         var imageList = await BuildImageListFromFiles(imageFile, imageFile2, imageFile3, imageFile4, imageFile5, null, null);
         if (imageList.Count > 0)
@@ -50,6 +57,7 @@ public class ProductsController : Controller
         model.CreatedAt = DateTime.UtcNow;
         _db.Products.Add(model);
         await _db.SaveChangesAsync();
+        TempData["Message"] = "Đã thêm sản phẩm thành công.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -70,6 +78,13 @@ public class ProductsController : Controller
         if (id != model.Id) return NotFound();
         var item = await _db.Products.FindAsync(id);
         if (item == null) return NotFound();
+        
+        if (!ModelState.IsValid)
+        {
+            await LoadDropdowns();
+            return View(item);
+        }
+        
         if (string.IsNullOrWhiteSpace(model.Slug)) model.Slug = Slugify(model.Name);
         var existingExtra = ParseImageUrls(item.ImageUrls);
         var imageList = await BuildImageListFromFiles(imageFile, imageFile2, imageFile3, imageFile4, imageFile5, item.ImageUrl, existingExtra);
@@ -93,6 +108,7 @@ public class ProductsController : Controller
         item.DisplayOrder = model.DisplayOrder;
         item.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+        TempData["Message"] = "Đã cập nhật sản phẩm thành công.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -103,8 +119,32 @@ public class ProductsController : Controller
         var item = await _db.Products.FindAsync(id);
         if (item != null)
         {
+            // Xóa ảnh nếu có
+            if (!string.IsNullOrEmpty(item.ImageUrl) && item.ImageUrl.StartsWith("/uploads/"))
+            {
+                var imagePath = Path.Combine(_env.WebRootPath, item.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    try { System.IO.File.Delete(imagePath); } catch { }
+                }
+            }
+            
+            var extraUrls = ParseImageUrls(item.ImageUrls);
+            foreach (var url in extraUrls)
+            {
+                if (!string.IsNullOrEmpty(url) && url.StartsWith("/uploads/"))
+                {
+                    var imagePath = Path.Combine(_env.WebRootPath, url.TrimStart('/'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        try { System.IO.File.Delete(imagePath); } catch { }
+                    }
+                }
+            }
+            
             _db.Products.Remove(item);
             await _db.SaveChangesAsync();
+            TempData["Message"] = "Đã xóa sản phẩm thành công.";
         }
         return RedirectToAction(nameof(Index));
     }
@@ -117,9 +157,25 @@ public class ProductsController : Controller
             .OrderBy(c => c.DisplayOrder)
             .ThenBy(c => c.Name)
             .ToListAsync();
-        ViewBag.Categories = new SelectList(categories, "Id", "Name", null, "— Chọn danh mục —");
+        // Đảm bảo SelectList không null
+        if (categories != null && categories.Any())
+        {
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+        }
+        else
+        {
+            ViewBag.Categories = new SelectList(new List<Category>(), "Id", "Name");
+        }
+        
         var brands = await _db.Brands.Where(b => b.IsActive).OrderBy(b => b.Name).ToListAsync();
-        ViewBag.Brands = new SelectList(brands, "Id", "Name", null, "— Chọn thương hiệu —");
+        if (brands != null && brands.Any())
+        {
+            ViewBag.Brands = new SelectList(brands, "Id", "Name");
+        }
+        else
+        {
+            ViewBag.Brands = new SelectList(new List<Brand>(), "Id", "Name");
+        }
     }
 
     private async Task<string> SaveFile(IFormFile file, string folder)

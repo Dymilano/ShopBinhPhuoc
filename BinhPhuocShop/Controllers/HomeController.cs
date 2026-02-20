@@ -55,6 +55,18 @@ public class HomeController : StoreControllerBase
             homeBlocks.Add(new HomeCategoryBlockViewModel { Category = c, Products = products });
         }
         ViewBag.HomeCategoryBlocks = homeBlocks;
+        
+        // Lấy ảnh từ settings
+        var heroBg = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "HeroBackground");
+        var bannerGiayNam = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerGiayNam");
+        var bannerGiayNu = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerGiayNu");
+        var bannerDepNam = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerDepNam");
+        
+        ViewBag.HeroBackground = heroBg?.Value ?? "/store/images/slide-01.jpg";
+        ViewBag.BannerGiayNam = bannerGiayNam?.Value ?? "/store/images/banner-01.jpg";
+        ViewBag.BannerGiayNu = bannerGiayNu?.Value ?? "/store/images/banner-02.jpg";
+        ViewBag.BannerDepNam = bannerDepNam?.Value ?? "/store/images/banner-03.jpg";
+        
         return View();
     }
 

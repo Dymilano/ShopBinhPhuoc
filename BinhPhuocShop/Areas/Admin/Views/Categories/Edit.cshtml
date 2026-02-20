@@ -2,41 +2,66 @@
 @{
     ViewData["Title"] = "Sửa danh mục";
 }
-<h4 class="mb-4">Sửa danh mục</h4>
-<form asp-action="Edit" method="post">
+
+@section PageHeaderRight {
+    <a asp-action="Index" class="btn btn-light-brand">
+        <i class="feather-arrow-left me-2"></i>
+        <span>Quay lại</span>
+    </a>
+    <button type="submit" form="categoryForm" class="btn btn-primary">
+        <i class="feather-save me-2"></i>
+        <span>Cập nhật danh mục</span>
+    </button>
+}
+
+<form id="categoryForm" asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-    <div class="card">
-        <div class="card-body">
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" required />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card border-top-0">
+                <div class="card-body admin-form-card">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    <div class="form-row">
+                        <label asp-for="Name">Tên danh mục <span class="text-danger">*</span></label>
+                        <input asp-for="Name" placeholder="Tên danh mục" required>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="Slug">Slug</label>
+                        <input asp-for="Slug" placeholder="Tự động nếu để trống">
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="Description">Mô tả</label>
+                        <textarea asp-for="Description" rows="2" placeholder="Mô tả danh mục"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="ParentId">Danh mục cha</label>
+                        <select asp-for="ParentId" asp-items="ViewBag.Parents">
+                            <option value="">— Không có —</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="DisplayOrder">Thứ tự hiển thị</label>
+                        <input asp-for="DisplayOrder" type="number" value="0" style="max-width: 150px;">
+                    </div>
+                    <div class="form-row">
+                        <label>Trạng thái</label>
+                        <div class="form-check form-switch form-switch-sm">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                            <label class="form-check-label" for="IsActive">Hiển thị</label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <a asp-action="Index" class="btn btn-light-brand me-2">
+                            <i class="feather-x me-2"></i>
+                            <span>Hủy</span>
+                        </a>
+                        <button type="submit">
+                            <i class="feather-save me-2"></i>
+                            <span>Cập nhật danh mục</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label asp-for="Slug" class="form-label"></label>
-                <input asp-for="Slug" class="form-control" />
-            </div>
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="mb-3">
-                <label asp-for="ParentId" class="form-label"></label>
-                <select asp-for="ParentId" asp-items="ViewBag.Parents" class="form-select">
-                    <option value="">— Không có —</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label asp-for="DisplayOrder" class="form-label"></label>
-                <input asp-for="DisplayOrder" type="number" class="form-control" />
-            </div>
-            <div class="mb-3 form-check">
-                <input asp-for="IsActive" class="form-check-input" />
-                <label asp-for="IsActive" class="form-check-label"></label>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
         </div>
     </div>
 </form>

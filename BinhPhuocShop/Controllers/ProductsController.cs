@@ -10,7 +10,6 @@ public class ProductsController : StoreControllerBase
 
     public async Task<IActionResult> Index(int? categoryId, int? brandId, string? categorySlug, string? q, string sort = "newest", int page = 1, int pageSize = 12)
     {
-        ViewData["Title"] = "Sản phẩm";
         var query = Db.Products.Include(p => p.Category).Include(p => p.Brand).Where(p => p.IsActive);
 
         if (!categoryId.HasValue && !string.IsNullOrEmpty(categorySlug))
@@ -19,7 +18,19 @@ public class ProductsController : StoreControllerBase
             if (cat != null) categoryId = cat.Id;
         }
         if (categoryId.HasValue)
-            query = query.Where(p => p.CategoryId == categoryId || (p.Category != null && p.Category.ParentId == categoryId));
+        {
+            // Lấy tất cả category con của category này
+            var childCategoryIds = await Db.Categories
+                .Where(c => c.ParentId == categoryId.Value)
+                .Select(c => c.Id)
+                .ToListAsync();
+            
+            // Lọc sản phẩm thuộc category này hoặc các category con
+            var allCategoryIds = new List<int> { categoryId.Value };
+            allCategoryIds.AddRange(childCategoryIds);
+            
+            query = query.Where(p => allCategoryIds.Contains(p.CategoryId));
+        }
         if (brandId.HasValue)
             query = query.Where(p => p.BrandId == brandId);
         if (!string.IsNullOrWhiteSpace(q))
@@ -48,7 +59,14 @@ public class ProductsController : StoreControllerBase
         ViewBag.Sort = sort;
         ViewBag.Brands = await Db.Brands.Where(b => b.IsActive).OrderBy(b => b.Name).ToListAsync();
         if (categoryId.HasValue)
+        {
             ViewBag.CurrentCategory = await Db.Categories.FindAsync(categoryId.Value);
+            ViewData["Title"] = ViewBag.CurrentCategory?.Name ?? "Sản phẩm";
+        }
+        else
+        {
+            ViewData["Title"] = "Sản phẩm";
+        }
         return View();
     }
 

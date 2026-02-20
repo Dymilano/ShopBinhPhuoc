@@ -2,63 +2,176 @@
 @{
     ViewData["Title"] = "Sản phẩm";
 }
-<div class="flex flex-row justify-between items-center mb-6">
-    <h5 class="text-gray-800 font-semibold m-0">Danh sách sản phẩm</h5>
-    <a asp-action="Create" class="capitalize font-medium text-sm bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition duration-200">Thêm sản phẩm</a>
-</div>
-<div class="card">
-    <div class="card-body p-0 overflow-x-auto">
-        @if (Model.Any())
-        {
-        <table class="table-auto w-full text-left">
-            <thead>
-                <tr>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Ảnh</th>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Tên</th>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Danh mục</th>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Giá</th>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm">Trạng thái</th>
-                    <th class="px-4 py-3 border-b border-gray-200 bg-gray-50 text-gray-700 font-semibold text-sm"></th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-600">
-                @foreach (var p in Model)
-                {
-                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition duration-150">
-                        <td class="px-4 py-3">
-                            @if (!string.IsNullOrEmpty(p.ImageUrl))
+
+@section PageHeaderRight {
+    <div class="dropdown">
+        <a class="btn btn-icon btn-light-brand" data-bs-toggle="dropdown" data-bs-offset="0, 10" data-bs-auto-close="outside">
+            <i class="feather-filter"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+            <a href="@Url.Action("Index", new { status = "all" })" class="dropdown-item">
+                <i class="feather-eye me-3"></i>
+                <span>Tất cả</span>
+            </a>
+            <a href="@Url.Action("Index", new { status = "active" })" class="dropdown-item">
+                <i class="feather-check-circle me-3"></i>
+                <span>Đang hiển thị</span>
+            </a>
+            <a href="@Url.Action("Index", new { status = "inactive" })" class="dropdown-item">
+                <i class="feather-x-circle me-3"></i>
+                <span>Đã ẩn</span>
+            </a>
+        </div>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="feather-plus me-2"></i>
+        <span>Thêm sản phẩm</span>
+    </a>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card stretch stretch-full">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="productList">
+                        <thead>
+                            <tr>
+                                <th class="wd-30">
+                                    <div class="btn-group mb-1">
+                                        <div class="custom-control custom-checkbox ms-1">
+                                            <input type="checkbox" class="custom-control-input" id="checkAllProduct">
+                                            <label class="custom-control-label" for="checkAllProduct"></label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th>Sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Giá</th>
+                                <th>Giá khuyến mãi</th>
+                                <th>Trạng thái</th>
+                                <th class="text-end">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Any())
                             {
-                                <img src="@p.ImageUrl" alt="" class="w-10 h-10 object-cover rounded flex-shrink-0" />
+                                @foreach (var product in Model)
+                                {
+                                    <tr class="single-item">
+                                        <td>
+                                            <div class="item-checkbox ms-1">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input checkbox" id="checkBox_@product.Id">
+                                                    <label class="custom-control-label" for="checkBox_@product.Id"></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Edit", new { id = product.Id })" class="hstack gap-2 align-items-center">
+                                                <div class="avatar-image" style="width: 40px; height: 40px; overflow: hidden; border-radius: 4px; flex-shrink: 0; border: 1px solid #e5e5e5;">
+                                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                                    {
+                                                        <img src="@product.ImageUrl" alt="@product.Name" class="img-fluid w-100 h-100" style="object-fit: cover;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="w-100 h-100 bg-gray-200 d-flex align-items-center justify-content-center">
+                                                            <i class="feather-image" style="font-size: 14px;"></i>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div style="min-width: 0;">
+                                                    <span class="d-block fw-semibold text-dark text-truncate mb-0" style="max-width: 200px; font-size: 13px;">@product.Name</span>
+                                                    <span class="fs-11 d-block fw-normal text-muted text-truncate" style="max-width: 200px;">@product.Slug</span>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-soft-primary text-primary">@(product.Category?.Name ?? "N/A")</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-semibold text-dark">@product.Price.ToString("N0")₫</span>
+                                        </td>
+                                        <td>
+                                            @if (product.SalePrice.HasValue)
+                                            {
+                                                <span class="fw-semibold text-success">@product.SalePrice.Value.ToString("N0")₫</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (product.IsActive)
+                                            {
+                                                <span class="badge bg-soft-success text-success">Hiển thị</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-soft-secondary text-secondary">Ẩn</span>
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">
+                                                    <i class="feather-more-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a href="@Url.Action("Edit", new { id = product.Id })" class="dropdown-item">
+                                                        <i class="feather-edit me-2"></i>
+                                                        <span>Chỉnh sửa</span>
+                                                    </a>
+                                                    <a href="javascript:void(0);" class="dropdown-item" onclick="viewProduct('@product.Id')">
+                                                        <i class="feather-eye me-2"></i>
+                                                        <span>Xem chi tiết</span>
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <form asp-action="Delete" asp-route-id="@product.Id" method="post" class="m-0" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="feather-trash-2 me-2"></i>
+                                                            <span>Xóa</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             }
                             else
                             {
-                                <span class="text-gray-400">—</span>
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <i class="feather-package fs-1 text-muted mb-3 d-block"></i>
+                                        <p class="text-muted mb-3">Chưa có sản phẩm nào</p>
+                                        <a href="@Url.Action("Create")" class="btn btn-primary">
+                                            <i class="feather-plus me-2"></i>
+                                            <span>Thêm sản phẩm đầu tiên</span>
+                                        </a>
+                                    </td>
+                                </tr>
                             }
-                        </td>
-                        <td class="px-4 py-3 font-medium text-gray-800">@p.Name</td>
-                        <td class="px-4 py-3">@p.Category?.Name</td>
-                        <td class="px-4 py-3">@(p.SalePrice.HasValue ? p.SalePrice.Value.ToString("N0") + "₫" : p.Price.ToString("N0") + "₫")</td>
-                        <td class="px-4 py-3">
-                            @if (p.IsActive)
-                            {<span class="text-xs px-2 py-1 rounded bg-green-100 text-green-800">Hiển thị</span>}
-                            else
-                            {<span class="text-xs px-2 py-1 rounded bg-gray-200 text-gray-600">Ẩn</span>}
-                        </td>
-                        <td class="px-4 py-3">
-                            <a asp-action="Edit" asp-route-id="@p.Id" class="text-teal-600 hover:text-teal-700 text-sm font-medium mr-2">Sửa</a>
-                            <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="inline" onsubmit="return confirm('Xóa sản phẩm này?');">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="text-red-600 hover:text-red-700 text-sm font-medium bg-transparent border-0 cursor-pointer">Xóa</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        }
-        else
-        {
-            <p class="text-gray-500 text-center py-12">Chưa có sản phẩm nào.</p>
-        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Check all functionality
+        document.getElementById('checkAllProduct')?.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('#productList tbody .checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        function viewProduct(id) {
+            window.location.href = '@Url.Action("Edit")?id=' + id;
+        }
+    </script>
+}

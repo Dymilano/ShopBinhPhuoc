@@ -2,38 +2,66 @@
 @{
     ViewData["Title"] = "Thêm thương hiệu";
 }
-<h4 class="mb-4">Thêm thương hiệu</h4>
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="card">
-        <div class="card-body">
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" required />
+
+@section PageHeaderRight {
+    <a asp-action="Index" class="btn btn-light-brand">
+        <i class="feather-arrow-left me-2"></i>
+        <span>Quay lại</span>
+    </a>
+    <button type="submit" form="brandForm" class="btn btn-primary">
+        <i class="feather-save me-2"></i>
+        <span>Lưu thương hiệu</span>
+    </button>
+}
+
+<form id="brandForm" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card border-top-0">
+                <div class="card-body admin-form-card">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    <div class="form-row">
+                        <label asp-for="Name">Tên thương hiệu <span class="text-danger">*</span></label>
+                        <input asp-for="Name" placeholder="Tên thương hiệu" required>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="Slug">Slug</label>
+                        <input asp-for="Slug" placeholder="Tự động nếu để trống">
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="Description">Mô tả</label>
+                        <textarea asp-for="Description" rows="2" placeholder="Mô tả thương hiệu"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Logo</label>
+                        <div>
+                            <input type="file" name="logoFile" accept="image/*">
+                            <div class="fs-11 text-muted mt-1">Kích thước khuyến nghị: 200x100px. Định dạng: JPG, PNG</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label asp-for="DisplayOrder">Thứ tự hiển thị</label>
+                        <input asp-for="DisplayOrder" type="number" value="0" style="max-width: 150px;">
+                    </div>
+                    <div class="form-row">
+                        <label>Trạng thái</label>
+                        <div class="form-check form-switch form-switch-sm">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                            <label class="form-check-label" for="IsActive">Hiển thị</label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <a asp-action="Index" class="btn btn-light-brand me-2">
+                            <i class="feather-x me-2"></i>
+                            <span>Hủy</span>
+                        </a>
+                        <button type="submit">
+                            <i class="feather-save me-2"></i>
+                            <span>Lưu thương hiệu</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label asp-for="Slug" class="form-label"></label>
-                <input asp-for="Slug" class="form-control" placeholder="Tu dong neu de trong" />
-            </div>
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Logo</label>
-                <input type="file" name="logoFile" accept="image/*" class="form-control" />
-            </div>
-            <div class="mb-3">
-                <label asp-for="DisplayOrder" class="form-label"></label>
-                <input asp-for="DisplayOrder" type="number" class="form-control" />
-            </div>
-            <div class="mb-3 form-check">
-                <input asp-for="IsActive" class="form-check-input" checked />
-                <label asp-for="IsActive" class="form-check-label"></label>
-            </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
         </div>
     </div>
 </form>

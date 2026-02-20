@@ -119,8 +119,14 @@
             <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
                 <i class="fad fa-folder text-xs mr-2 w-4"></i> Danh mục
             </a>
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm danh mục
+            </a>
             <a asp-area="Admin" asp-controller="Brands" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
                 <i class="fad fa-award text-xs mr-2 w-4"></i> Thương hiệu
+            </a>
+            <a asp-area="Admin" asp-controller="Brands" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm thương hiệu
             </a>
             <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Nội dung</p>
             <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
@@ -128,6 +134,9 @@
             </a>
             <a asp-area="Admin" asp-controller="Posts" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
                 <i class="fad fa-plus text-xs mr-2 w-4"></i> Thêm bài viết
+            </a>
+            <a asp-area="Admin" asp-controller="Pages" asp-action="EditGioiThieu" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
+                <i class="fad fa-edit text-xs mr-2 w-4"></i> Sửa Giới thiệu
             </a>
             <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Bán hàng</p>
             <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
@@ -155,7 +164,7 @@
                 </ul>
             </div>
         </div>
-        <div class="main-content max-w-full">
+        <div class="main-content max-w-full" style="max-width: 100%;">
             @RenderBody()
         </div>
         <!-- footer (Cleopatra) -->

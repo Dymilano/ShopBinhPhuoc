@@ -1,42 +1,160 @@
 @{
     Layout = "_StoreLayout";
+    ViewData["Title"] = "Hướng dẫn mua hàng";
 }
-<section class="section pd-top-30">
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/store/images/bg-01.jpg'); background-color: #f5f5f5;">
+    <h2 class="ltext-105 cl0 txt-center">Hướng dẫn mua hàng</h2>
+</section>
+
+<!-- Content -->
+<section class="bg0 p-t-62 p-b-60">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                <li class="breadcrumb-item active">Hướng dẫn mua hàng</li>
-            </ol>
-        </nav>
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
+            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            <span class="stext-109 cl4">Hướng dẫn mua hàng</span>
+        </div>
         <div class="row">
-            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
-                <partial name="_PagesSidebar" />
-            </aside>
+            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
+                <div class="p-l-20 p-l-0-lg">
+                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
+                    <partial name="_PagesSidebar" />
+                </div>
+            </div>
             <div class="col-md-9 col-sm-12">
-                <h1 class="h3 mb-4">Hướng dẫn mua hàng</h1>
-                <div class="page-content content-entry" style="line-height:1.8;">
-                    <p><strong>HƯỚNG DẪN MUA HÀNG ONLINE TẠI MULGATI</strong></p>
-                    <h2 class="h5 mt-4">Cách 1: Mua hàng thông qua website</h2>
-                    <h3 class="h6 mt-3">Bước 1: Tìm sản phẩm muốn mua</h3>
-                    <p>Để tìm được sản phẩm ưng ý: tìm nhanh qua ô tìm kiếm, danh mục menu ở đầu trang chủ hoặc chat với nhân viên tư vấn.</p>
-                    <h3 class="h6 mt-3">Bước 2: Thêm sản phẩm vào giỏ hàng hoặc chọn mua ngay</h3>
-                    <p><strong>• Thêm vào giỏ hàng:</strong> Chọn size, màu sắc rồi nhấn "Thêm vào giỏ hàng", điền thông tin và chọn phương thức thanh toán COD hoặc chuyển khoản, sau đó hoàn tất đơn hàng.</p>
-                    <p><strong>• Mua ngay:</strong> Chọn size, màu sắc rồi nhấn "Mua hàng ngay", nhập thông tin người nhận và phương thức thanh toán, sau đó hoàn tất đơn hàng.</p>
-                    <h2 class="h5 mt-4">Cách 2: Mua hàng qua Hotline và OA Zalo</h2>
-                    <p>Quý khách có thể gọi điện đến tổng đài 1900 4510 từ 8h - 22h hàng ngày hoặc truy cập OA Zalo của Mulgati qua link: <a href="https://zalo.me/giaydamulgati" target="_blank">https://zalo.me/giaydamulgati</a></p>
-                    <hr />
-                    <p><strong>DANH SÁCH SHOWROOM:</strong></p>
-                    <ul>
-                        <li>Showroom L3 - 301, Tháp B, Vincom Center Bà Triệu, Quận Hai Bà Trưng, Hà Nội</li>
-                        <li>Showroom S139 - GO Thăng Long - 222 Đ. Trần Duy Hưng, Trung Hoà, Cầu Giấy, Hà Nội</li>
-                        <li>Showroom T102-1, Aeon Mall Hà Đông, Dương Nội, Hà Đông, Hà Nội</li>
-                        <li>Showroom T243 - Aeon Mall Long Biên - 27 Đ. Cổ Linh, Long Biên, Hà Nội</li>
-                        <li>Showroom T240 - Aeon Mall Hải Phòng Lê Chân, TP Hải Phòng</li>
-                        <li>Showroom T209 - Aeon Mall Huế, TP Huế, Thừa Thiên Huế</li>
-                        <li>Showroom L2-05A - Vincom Plaza Ngô Quyền, Đà Nẵng</li>
+                <div class="p-r-45 p-r-0-lg">
+                    <h1 class="ltext-103 cl5 p-b-20">HƯỚNG DẪN MUA HÀNG ONLINE TẠI BÌNH PHƯỚC SHOP</h1>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop mang đến cho bạn trải nghiệm mua sắm trực tuyến dễ dàng và tiện lợi. 
+                        Chúng tôi cam kết cung cấp sản phẩm giày dép chính hãng, chất lượng cao với dịch vụ chăm sóc khách hàng tận tâm.
+                    </p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">CÁCH 1: MUA HÀNG THÔNG QUA WEBSITE</h2>
+                    
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 1: Tìm kiếm sản phẩm</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bạn có thể tìm kiếm sản phẩm theo nhiều cách:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Tìm kiếm nhanh:</strong> Sử dụng ô tìm kiếm ở đầu trang, nhập tên sản phẩm, thương hiệu hoặc từ khóa liên quan</li>
+                        <li><strong>Danh mục sản phẩm:</strong> Duyệt qua các danh mục như Giày nam, Giày nữ, Dép nam, Dép nữ, Phụ kiện</li>
+                        <li><strong>Bộ lọc:</strong> Sử dụng bộ lọc theo giá, thương hiệu, kích cỡ để tìm sản phẩm phù hợp</li>
+                        <li><strong>Chat trực tuyến:</strong> Liên hệ với nhân viên tư vấn qua chat để được hỗ trợ tìm sản phẩm</li>
                     </ul>
-                    <p><strong>Hotline: 1900 4510</strong></p>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 2: Xem chi tiết sản phẩm</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Click vào sản phẩm để xem thông tin chi tiết:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Xem hình ảnh sản phẩm từ nhiều góc độ</li>
+                        <li>Đọc mô tả chi tiết về chất liệu, kích thước, đặc điểm</li>
+                        <li>Kiểm tra giá bán và giá khuyến mãi (nếu có)</li>
+                        <li>Xem đánh giá và nhận xét từ khách hàng đã mua</li>
+                        <li>Kiểm tra tình trạng tồn kho và size có sẵn</li>
+                    </ul>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 3: Chọn size và số lượng</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Trước khi thêm vào giỏ hàng, bạn cần:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Chọn size phù hợp (tham khảo bảng size hướng dẫn nếu có)</li>
+                        <li>Chọn số lượng muốn mua</li>
+                        <li>Kiểm tra lại thông tin sản phẩm, giá và tổng tiền</li>
+                    </ul>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 4: Thêm vào giỏ hàng hoặc mua ngay</h3>
+                    <div class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        <p class="mb-3"><strong>• Thêm vào giỏ hàng:</strong></p>
+                        <ul style="line-height: 2; margin-left: 20px;">
+                            <li>Nhấn nút "Thêm vào giỏ hàng" để lưu sản phẩm</li>
+                            <li>Bạn có thể tiếp tục mua sắm và thêm nhiều sản phẩm khác</li>
+                            <li>Xem giỏ hàng bằng cách click vào icon giỏ hàng ở góc trên bên phải</li>
+                            <li>Trong giỏ hàng, bạn có thể điều chỉnh số lượng hoặc xóa sản phẩm</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>• Mua ngay:</strong></p>
+                        <ul style="line-height: 2; margin-left: 20px;">
+                            <li>Nhấn nút "Mua ngay" để chuyển thẳng đến trang thanh toán</li>
+                            <li>Phù hợp khi bạn chỉ muốn mua một sản phẩm</li>
+                            <li>Tiết kiệm thời gian, không cần qua bước giỏ hàng</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 5: Điền thông tin giao hàng</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bạn cần cung cấp các thông tin sau:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Họ và tên người nhận:</strong> Tên đầy đủ, chính xác</li>
+                        <li><strong>Số điện thoại:</strong> Số điện thoại liên hệ để xác nhận đơn hàng</li>
+                        <li><strong>Địa chỉ giao hàng:</strong> Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố</li>
+                        <li><strong>Ghi chú:</strong> Thông tin bổ sung cho đơn hàng (nếu có)</li>
+                    </ul>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 6: Chọn phương thức thanh toán</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop hỗ trợ các phương thức thanh toán sau:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Thanh toán khi nhận hàng (COD):</strong> Thanh toán bằng tiền mặt khi nhận hàng</li>
+                        <li><strong>Chuyển khoản ngân hàng:</strong> Chuyển khoản trước, chúng tôi sẽ giao hàng sau khi xác nhận</li>
+                        <li><strong>Ví điện tử:</strong> Momo, ZaloPay, VNPay (nếu có tích hợp)</li>
+                    </ul>
+
+                    <h3 class="ltext-102 cl5 p-b-12 mt-3">Bước 7: Xác nhận và hoàn tất đơn hàng</h3>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Sau khi kiểm tra lại toàn bộ thông tin:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Nhấn nút "Đặt hàng" để hoàn tất</li>
+                        <li>Bạn sẽ nhận được email xác nhận đơn hàng</li>
+                        <li>Nhân viên sẽ gọi điện xác nhận đơn hàng trong vòng 24 giờ</li>
+                        <li>Theo dõi trạng thái đơn hàng trong tài khoản của bạn</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">CÁCH 2: MUA HÀNG QUA HOTLINE VÀ ZALO</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Nếu bạn gặp khó khăn khi mua hàng online hoặc cần tư vấn thêm, hãy liên hệ với chúng tôi:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Hotline:</strong> Gọi điện đến số <a href="tel:0984843218" class="hov-cl1">0984 843 218</a> từ 8h - 22h hàng ngày</li>
+                        <li><strong>Zalo:</strong> Chat trực tiếp với nhân viên tư vấn qua Zalo</li>
+                        <li><strong>Email:</strong> Gửi email đến <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a></li>
+                        <li><strong>Fanpage Facebook:</strong> Nhắn tin trực tiếp trên Facebook</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">CÁCH 3: MUA HÀNG TẠI CỬA HÀNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bạn có thể đến trực tiếp các cửa hàng của Bình Phước Shop để xem và thử sản phẩm:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Xem trực tiếp chất lượng sản phẩm</li>
+                        <li>Thử size trước khi mua</li>
+                        <li>Được tư vấn trực tiếp từ nhân viên</li>
+                        <li>Nhận hàng ngay tại cửa hàng</li>
+                    </ul>
+
+                    <hr class="p-t-20 p-b-20" />
+                    <h2 class="ltext-101 cl5 p-b-16">LƯU Ý KHI MUA HÀNG</h2>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Kiểm tra kỹ thông tin sản phẩm, size, màu sắc trước khi đặt hàng</li>
+                        <li>Đảm bảo thông tin giao hàng chính xác để tránh phát sinh phí vận chuyển</li>
+                        <li>Giữ lại hóa đơn mua hàng để đổi trả nếu cần</li>
+                        <li>Liên hệ ngay với chúng tôi nếu có bất kỳ thắc mắc nào</li>
+                    </ul>
+
+                    <hr class="p-t-20 p-b-20" />
+                    <h2 class="ltext-101 cl5 p-b-16">THÔNG TIN LIÊN HỆ</h2>
+                    <p class="stext-117 cl6 p-b-20">
+                        <strong>Bình Phước Shop</strong><br />
+                        Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a><br />
+                        Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a><br />
+                        Thời gian làm việc: 8h00 - 22h00 hàng ngày
+                    </p>
+                    <p class="stext-117 cl6 p-t-20">
+                        <strong>Chúng tôi luôn sẵn sàng phục vụ và hỗ trợ bạn!</strong>
+                    </p>
                 </div>
             </div>
         </div>

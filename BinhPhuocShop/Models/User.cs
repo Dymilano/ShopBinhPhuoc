@@ -7,6 +7,9 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Phone { get; set; }
+    public string? Address { get; set; }
+    public string Role { get; set; } = "Customer"; // Admin, Manager, Customer
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 }

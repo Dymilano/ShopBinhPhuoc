@@ -1,0 +1,47 @@
+@model SiteSetting
+@{
+    ViewData["Title"] = "Sửa trang Giới thiệu";
+    var content = Model?.Value ?? "";
+}
+
+@section PageHeaderRight {
+    <a href="@Url.Action("GioiThieu", "Pages", new { area = "" })" target="_blank" class="btn btn-light-brand">
+        <i class="feather-external-link me-2"></i>
+        <span>Xem trang</span>
+    </a>
+    <button type="submit" form="editForm" class="btn btn-primary">
+        <i class="feather-save me-2"></i>
+        <span>Lưu nội dung</span>
+    </button>
+}
+
+<form id="editForm" asp-action="EditGioiThieu" method="post">
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card border-top-0">
+                <div class="card-body">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold">Nội dung trang Giới thiệu (HTML): <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <textarea name="content" class="form-control" rows="20" placeholder="Nhập nội dung HTML cho trang Giới thiệu...">@content</textarea>
+                            <div class="fs-12 text-muted mt-2">Có thể sử dụng HTML để định dạng nội dung. Ví dụ: &lt;p&gt;Đoạn văn&lt;/p&gt;, &lt;h2&gt;Tiêu đề&lt;/h2&gt;, &lt;img src="..."&gt;</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top d-flex justify-content-between align-items-center">
+                    <a href="@Url.Action("GioiThieu", "Pages", new { area = "" })" target="_blank" class="btn btn-light-brand">
+                        <i class="feather-external-link me-2"></i>
+                        <span>Xem trước</span>
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="feather-save me-2"></i>
+                        <span>Lưu nội dung</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

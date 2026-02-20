@@ -2,25 +2,130 @@
 @{
     ViewData["Title"] = "Chi tiết liên hệ";
 }
-<h4 class="mb-4">Chi tiết tin nhắn</h4>
-<div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Ngày gửi</dt>
-            <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
-            <dt class="col-sm-3">Họ tên</dt>
-            <dd class="col-sm-9">@Model.Name</dd>
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
-            <dt class="col-sm-3">Điện thoại</dt>
-            <dd class="col-sm-9">@(Model.Phone ?? "—")</dd>
-            <dt class="col-sm-3">Tiêu đề</dt>
-            <dd class="col-sm-9">@Model.Subject</dd>
-            <dt class="col-sm-3">Nội dung</dt>
-            <dd class="col-sm-9">@Model.Message</dd>
-        </dl>
-    </div>
-    <div class="card-footer">
-        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+
+@section PageHeaderRight {
+    <a asp-action="Index" class="btn btn-light-brand">
+        <i class="feather-arrow-left me-2"></i>
+        <span>Quay lại</span>
+    </a>
+    @if (!Model.IsRead)
+    {
+        <form asp-action="MarkAsRead" asp-route-id="@Model.Id" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary">
+                <i class="feather-check me-2"></i>
+                <span>Đánh dấu đã đọc</span>
+            </button>
+        </form>
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card border-top-0">
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Ngày gửi:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <p class="mb-0">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Họ tên:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <p class="mb-0 fw-semibold">@Model.Name</p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Email:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <p class="mb-0">
+                            <a href="mailto:@Model.Email">@Model.Email</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Điện thoại:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <p class="mb-0">
+                            @if (!string.IsNullOrEmpty(Model.Phone))
+                            {
+                                <a href="tel:@Model.Phone">@Model.Phone</a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Tiêu đề:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <p class="mb-0">@Model.Subject</p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Nội dung:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="p-3 border border-gray-2 rounded bg-gray-1">
+                            <p class="mb-0" style="white-space: pre-wrap;">@Model.Message</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <label class="fw-semibold text-muted">Trạng thái:</label>
+                    </div>
+                    <div class="col-lg-9">
+                        @if (Model.IsRead)
+                        {
+                            <span class="badge bg-success">Đã đọc</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Chưa đọc</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top d-flex justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-light-brand">
+                    <i class="feather-arrow-left me-2"></i>
+                    <span>Quay lại</span>
+                </a>
+                <div class="hstack gap-2">
+                    @if (!Model.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" asp-route-id="@Model.Id" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary">
+                                <i class="feather-check me-2"></i>
+                                <span>Đánh dấu đã đọc</span>
+                            </button>
+                        </form>
+                    }
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="m-0">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa tin nhắn này?');">
+                            <i class="feather-trash-2 me-2"></i>
+                            <span>Xóa</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -10,6 +10,40 @@ public static class MulgatiSeed
 
     public static async Task SeedAsync(AppDbContext db)
     {
+        // Đảm bảo user admin luôn tồn tại với password đúng (chạy trước khi check products)
+        var adminEmail = "admin@binhphuocshop.vn";
+        var adminPassword = "admin123";
+        var adminPasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(adminPassword)));
+        
+        var adminUser = await db.Users.FirstOrDefaultAsync(u => u.Email == adminEmail);
+        if (adminUser == null)
+        {
+            db.Users.Add(new User
+            {
+                Email = adminEmail,
+                Name = "Admin",
+                PasswordHash = adminPasswordHash,
+                Role = "Admin",
+                Address = "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            });
+            await db.SaveChangesAsync();
+        }
+        else
+        {
+            // Cập nhật password hash, Role và Address nếu user đã tồn tại
+            if (adminUser.PasswordHash != adminPasswordHash || adminUser.Role != "Admin")
+            {
+                adminUser.PasswordHash = adminPasswordHash;
+                adminUser.Role = "Admin";
+                adminUser.Address = adminUser.Address ?? "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh";
+                adminUser.IsActive = true;
+                adminUser.UpdatedAt = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+            }
+        }
+
         if (await db.Products.AnyAsync()) return;
 
         var brandMulgati = await db.Brands.FirstOrDefaultAsync(b => b.Slug == "mulgati");
@@ -134,17 +168,5 @@ public static class MulgatiSeed
             }
         }
         await db.SaveChangesAsync();
-
-        if (!await db.Users.AnyAsync())
-        {
-            db.Users.Add(new User
-            {
-                Email = "admin@binhphuocshop.vn",
-                Name = "Admin",
-                PasswordHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes("admin123"))),
-                IsActive = true
-            });
-            await db.SaveChangesAsync();
-        }
     }
 }

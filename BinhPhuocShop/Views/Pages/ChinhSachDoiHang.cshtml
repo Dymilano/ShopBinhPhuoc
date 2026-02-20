@@ -1,45 +1,215 @@
 @{
     Layout = "_StoreLayout";
+    ViewData["Title"] = "Chính sách đổi hàng";
 }
-<section class="section pd-top-30">
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/store/images/bg-01.jpg'); background-color: #f5f5f5;">
+    <h2 class="ltext-105 cl0 txt-center">Chính sách đổi hàng</h2>
+</section>
+
+<!-- Content -->
+<section class="bg0 p-t-62 p-b-60">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                <li class="breadcrumb-item active">Chính sách đổi hàng</li>
-            </ol>
-        </nav>
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
+            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            <span class="stext-109 cl4">Chính sách đổi hàng</span>
+        </div>
         <div class="row">
-            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
-                <partial name="_PagesSidebar" />
-            </aside>
+            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
+                <div class="p-l-20 p-l-0-lg">
+                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
+                    <partial name="_PagesSidebar" />
+                </div>
+            </div>
             <div class="col-md-9 col-sm-12">
-                <h1 class="h3 mb-4">CHÍNH SÁCH ĐỔI HÀNG</h1>
-                <div class="page-content content-entry" style="line-height:1.8;">
-                    <p>Khách hàng được đổi sản phẩm trong vòng 15 ngày kể từ ngày mua hàng trong trường hợp sản phẩm không đúng với mô tả trên website, bị lỗi kỹ thuật, không vừa size hoặc không còn ưng ý đối với sản phẩm đã đặt trong điều kiện:</p>
-                    <p>• Quý khách còn hoá đơn mua hàng và thông tin khách hàng trên hoá đơn (Bao gồm tên và số điện thoại)</p>
-                    <p>• Sản phẩm chưa qua sử dụng, không bị hư hỏng do hoá chất hoặc tác động ngoại lực, lỗi từ người dùng (va quệt, co kéo, bảo quản không đúng cách, tự ý thay đổi kết cấu và màu sắc của sản phẩm…)</p>
-                    <p>• Sản phẩm đổi mới có giá trị bằng hoặc cao hơn sản phẩm đã mua. Trong trường hợp sản phẩm được chọn để đổi có giá trị cao hơn, khách hàng vui lòng thanh toán thêm phần chênh lệch. Nếu khách hàng lựa chọn sản phẩm được chọn để đổi có giá trị thấp hơn, Mulgati sẽ không hoàn lại tiền thừa.</p>
-                    <p><strong>Cách thức đổi sản phẩm</strong></p>
-                    <p><strong>Đối với khách hàng mua tại cửa hàng</strong></p>
-                    <p>Khách hàng có thể gửi trực tiếp sản phẩm cần đổi trả kèm theo hoá đơn mua hàng đến các showroom của Mulgati trên toàn quốc.</p>
-                    <p><strong>Đối với khách hàng mua online</strong></p>
-                    <p>Khách hàng liên hệ với fanpage hoặc hotline để nhân viên tư vấn, hướng dẫn gửi sản phẩm về showroom gần nhất.</p>
-                    <p>Sau khi đã nhận được sản phẩm trả lại, chúng tôi sẽ tiến hành kiểm tra sản phẩm theo quy định đổi trả (thời gian từ 3 - 7 ngày không tính ngày Lễ, Tết) để xử lý và thông báo đến khách hàng qua điện thoại.</p>
-                    <p><strong>MULGATI - Thương hiệu giày da cao cấp đến từ Nga</strong></p>
-                    <hr />
-                    <p><strong>THÔNG TIN LIÊN HỆ:</strong></p>
-                    <ul>
-                        <li>Showroom L3 - 301, Tháp B, Vincom Center Bà Triệu, Quận Hai Bà Trưng, Hà Nội</li>
-                        <li>Showroom S139 - GO Thăng Long - 222 Đ. Trần Duy Hưng, Trung Hoà, Cầu Giấy, Hà Nội</li>
-                        <li>Showroom T102-1, Aeon Mall Hà Đông, Dương Nội, Hà Đông, Hà Nội</li>
-                        <li>Showroom T243 - Aeon Mall Long Biên - 27 Đ. Cổ Linh, Long Biên, Hà Nội</li>
-                        <li>Showroom S119 tầng 1 Tasco mall Long Biên Đ. Nguyễn Văn Linh, Gia Thụy, Long Biên, Hà Nội</li>
-                        <li>Showroom T240 - Aeon Mall Hải Phòng Lê Chân, TP Hải Phòng</li>
-                        <li>Showroom T209 - Aeon Mall Huế, TP Huế, Thừa Thiên Huế</li>
-                        <li>Showroom L2-05A - Vincom Plaza Ngô Quyền, Đà Nẵng</li>
+                <div class="p-r-45 p-r-0-lg">
+                    <h1 class="ltext-103 cl5 p-b-20">CHÍNH SÁCH ĐỔI HÀNG CỦA BÌNH PHƯỚC SHOP</h1>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop cam kết đảm bảo quyền lợi của khách hàng với chính sách đổi hàng linh hoạt, 
+                        minh bạch. Chúng tôi luôn sẵn sàng hỗ trợ bạn đổi sản phẩm trong các trường hợp hợp lệ.
+                    </p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">1. ĐIỀU KIỆN ĐỔI HÀNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Khách hàng được đổi sản phẩm trong vòng <strong>15 ngày</strong> kể từ ngày nhận hàng trong các trường hợp sau:
+                    </p>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>a) Sản phẩm không đúng với mô tả:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Sản phẩm khác với hình ảnh hoặc mô tả trên website</li>
+                            <li>Sai màu sắc, kích thước so với đơn đặt hàng</li>
+                            <li>Sai model, thương hiệu</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>b) Sản phẩm bị lỗi kỹ thuật:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Lỗi từ nhà sản xuất (đứt chỉ, bong keo, nứt đế, v.v.)</li>
+                            <li>Hư hỏng do quá trình vận chuyển (nếu do lỗi đóng gói)</li>
+                            <li>Thiếu phụ kiện đi kèm</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>c) Không vừa size:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Size không phù hợp với chân</li>
+                            <li>Chưa qua sử dụng, còn nguyên tem, hộp</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>d) Không còn ưng ý:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Khách hàng muốn đổi sang sản phẩm khác</li>
+                            <li>Sản phẩm còn nguyên vẹn, chưa qua sử dụng</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">2. YÊU CẦU ĐỐI VỚI SẢN PHẨM ĐỔI</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Để được đổi hàng, sản phẩm cần đáp ứng các điều kiện sau:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Còn hóa đơn mua hàng:</strong> Hóa đơn gốc hoặc email xác nhận đơn hàng</li>
+                        <li><strong>Thông tin khách hàng:</strong> Tên và số điện thoại trên hóa đơn phải khớp</li>
+                        <li><strong>Chưa qua sử dụng:</strong> Sản phẩm chưa được mang, còn nguyên vẹn</li>
+                        <li><strong>Còn nguyên tem, nhãn mác:</strong> Tem, nhãn mác gốc còn nguyên, chưa bị rách hoặc bóc</li>
+                        <li><strong>Còn hộp, bao bì:</strong> Hộp đựng và bao bì gốc (nếu có) còn nguyên vẹn</li>
+                        <li><strong>Không bị hư hại:</strong> Không bị hư hỏng do:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Hóa chất (nước tẩy, thuốc nhuộm, v.v.)</li>
+                                <li>Tác động ngoại lực (va quệt, co kéo mạnh)</li>
+                                <li>Lỗi từ người dùng (bảo quản không đúng cách)</li>
+                                <li>Tự ý thay đổi kết cấu, màu sắc của sản phẩm</li>
+                            </ul>
+                        </li>
                     </ul>
-                    <p><strong>Số điện thoại: 1900 4510</strong></p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">3. QUY ĐỊNH VỀ SẢN PHẨM ĐỔI MỚI</h2>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>Giá trị sản phẩm đổi:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Sản phẩm đổi mới phải có <strong>giá trị bằng hoặc cao hơn</strong> sản phẩm đã mua</li>
+                            <li>Nếu sản phẩm đổi có giá trị cao hơn: Khách hàng thanh toán thêm phần chênh lệch</li>
+                            <li>Nếu sản phẩm đổi có giá trị thấp hơn: <strong>Bình Phước Shop không hoàn lại tiền thừa</strong></li>
+                            <li>Chỉ được đổi 1 lần duy nhất cho mỗi đơn hàng</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Loại sản phẩm đổi:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Đổi sang sản phẩm cùng loại (giày đổi giày, dép đổi dép)</li>
+                            <li>Đổi sang sản phẩm khác loại (nếu có sự đồng ý từ bộ phận chăm sóc khách hàng)</li>
+                            <li>Không áp dụng đổi hàng khuyến mãi, hàng giảm giá đặc biệt (trừ khi có thỏa thuận riêng)</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">4. CÁCH THỨC ĐỔI HÀNG</h2>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>A. Đối với khách hàng mua tại cửa hàng:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Mang sản phẩm cần đổi trực tiếp đến cửa hàng Bình Phước Shop</li>
+                            <li>Mang theo hóa đơn mua hàng gốc</li>
+                            <li>Nhân viên sẽ kiểm tra sản phẩm và xử lý đổi hàng ngay tại cửa hàng</li>
+                            <li>Nếu có sản phẩm muốn đổi, có thể chọn ngay tại cửa hàng</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>B. Đối với khách hàng mua online:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Bước 1:</strong> Liên hệ với bộ phận chăm sóc khách hàng:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a></li>
+                                    <li>Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a></li>
+                                    <li>Fanpage Facebook hoặc Zalo</li>
+                                </ul>
+                            </li>
+                            <li><strong>Bước 2:</strong> Cung cấp thông tin:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Mã đơn hàng</li>
+                                    <li>Lý do đổi hàng</li>
+                                    <li>Sản phẩm muốn đổi (nếu đã chọn)</li>
+                                    <li>Chụp ảnh sản phẩm cần đổi (nếu có vấn đề)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Bước 3:</strong> Gửi sản phẩm về:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Nhân viên sẽ hướng dẫn địa chỉ gửi hàng về</li>
+                                    <li>Đóng gói cẩn thận, kèm theo hóa đơn và thông tin liên hệ</li>
+                                    <li>Gửi qua đơn vị vận chuyển uy tín (khuyến nghị dùng dịch vụ COD để an toàn)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Bước 4:</strong> Kiểm tra và xử lý:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Chúng tôi sẽ kiểm tra sản phẩm trong vòng 3-7 ngày làm việc (không tính ngày Lễ, Tết)</li>
+                                    <li>Thông báo kết quả qua điện thoại hoặc email</li>
+                                    <li>Nếu đủ điều kiện, chúng tôi sẽ gửi sản phẩm đổi mới cho bạn</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">5. CHI PHÍ ĐỔI HÀNG</h2>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>Miễn phí đổi hàng:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Sản phẩm bị lỗi từ nhà sản xuất</li>
+                            <li>Sản phẩm không đúng với mô tả trên website</li>
+                            <li>Sai hàng, sai size, sai màu do lỗi của cửa hàng</li>
+                            <li>Hư hỏng do quá trình vận chuyển (nếu do lỗi đóng gói)</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Có tính phí:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Đổi hàng do không vừa size (khách hàng tự chọn sai): Phí vận chuyển 2 chiều</li>
+                            <li>Đổi hàng do không còn ưng ý: Phí vận chuyển 2 chiều</li>
+                            <li>Phí vận chuyển sẽ được thông báo cụ thể khi bạn liên hệ đổi hàng</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">6. THỜI GIAN XỬ LÝ ĐỔI HÀNG</h2>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Tiếp nhận yêu cầu:</strong> Trong vòng 24 giờ (trừ ngày Lễ, Tết)</li>
+                        <li><strong>Kiểm tra sản phẩm:</strong> 3-7 ngày làm việc sau khi nhận được hàng trả về</li>
+                        <li><strong>Gửi hàng đổi:</strong> 1-2 ngày làm việc sau khi xác nhận đủ điều kiện đổi</li>
+                        <li><strong>Tổng thời gian:</strong> Khoảng 7-14 ngày làm việc từ khi gửi hàng về đến khi nhận được hàng đổi</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">7. CÁC TRƯỜNG HỢP KHÔNG ĐƯỢC ĐỔI HÀNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Sản phẩm sẽ không được đổi trong các trường hợp sau:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Quá thời hạn 15 ngày kể từ ngày nhận hàng</li>
+                        <li>Đã qua sử dụng, có dấu hiệu mài mòn, bẩn</li>
+                        <li>Mất hóa đơn mua hàng hoặc thông tin không khớp</li>
+                        <li>Thiếu tem, nhãn mác, hộp đựng gốc</li>
+                        <li>Bị hư hại do lỗi người dùng (va quệt, ngâm nước, tiếp xúc hóa chất, v.v.)</li>
+                        <li>Đã được đổi 1 lần trước đó</li>
+                        <li>Sản phẩm khuyến mãi, giảm giá đặc biệt (trừ khi có thỏa thuận riêng)</li>
+                        <li>Sản phẩm đã được tùy chỉnh theo yêu cầu riêng</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">8. HOÀN TIỀN</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Trong một số trường hợp đặc biệt, chúng tôi có thể xem xét hoàn tiền:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Sản phẩm bị lỗi nghiêm trọng và không còn hàng để đổi</li>
+                        <li>Khách hàng không tìm được sản phẩm phù hợp để đổi</li>
+                        <li>Thời gian xử lý đổi hàng quá lâu do lỗi của cửa hàng</li>
+                        <li>Thời gian hoàn tiền: 7-14 ngày làm việc sau khi xác nhận</li>
+                        <li>Phương thức hoàn tiền: Chuyển khoản về tài khoản hoặc số điện thoại đã đăng ký</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">9. CAM KẾT CỦA BÌNH PHƯỚC SHOP</h2>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Xử lý đổi hàng nhanh chóng, công bằng, minh bạch</li>
+                        <li>Luôn lắng nghe và giải quyết thỏa đáng mọi khiếu nại của khách hàng</li>
+                        <li>Đảm bảo sản phẩm đổi mới là hàng chính hãng, chất lượng tốt</li>
+                        <li>Hỗ trợ tư vấn để khách hàng chọn được sản phẩm phù hợp nhất</li>
+                        <li>Bảo vệ quyền lợi khách hàng theo đúng quy định pháp luật</li>
+                    </ul>
+
+                    <hr class="p-t-20 p-b-20" />
+                    <h2 class="ltext-101 cl5 p-b-16">THÔNG TIN LIÊN HỆ</h2>
+                    <p class="stext-117 cl6 p-b-20">
+                        <strong>Bình Phước Shop</strong><br />
+                        Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a><br />
+                        Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a><br />
+                        Thời gian làm việc: 8h00 - 22h00 hàng ngày
+                    </p>
+                    <p class="stext-117 cl6 p-t-20">
+                        <strong>Chúng tôi cam kết mang đến cho bạn trải nghiệm mua sắm tốt nhất và luôn sẵn sàng hỗ trợ bạn trong mọi trường hợp!</strong>
+                    </p>
                 </div>
             </div>
         </div>

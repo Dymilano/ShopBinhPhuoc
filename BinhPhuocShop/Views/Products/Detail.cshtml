@@ -18,6 +18,7 @@
     var currentPrice = Model.SalePrice ?? Model.Price;
     var hasSale = Model.SalePrice.HasValue && Model.SalePrice < Model.Price;
     var store = "/store";
+    var related = ViewBag.Related as IEnumerable<dynamic> ?? new List<dynamic>();
 }
 
 <div class="container">
@@ -46,8 +47,8 @@
                             @for (int i = 0; i < imageUrls.Count; i++)
                             {
                                 <div class="item-slick3" data-thumb="@imageUrls[i]">
-                                    <div class="wrap-pic-w pos-relative">
-                                        <img src="@imageUrls[i]" alt="@Model.Name">
+                                    <div class="wrap-pic-w pos-relative" style="max-height: 600px; overflow: hidden; border-radius: 8px;">
+                                        <img src="@imageUrls[i]" alt="@Model.Name" style="width: 100%; height: auto; object-fit: contain; max-height: 600px;">
                                         <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="@imageUrls[i]" target="_blank">
                                             <i class="fa fa-expand"></i>
                                         </a>
@@ -81,7 +82,9 @@
                     }
                     <div class="p-t-33">
                         <div class="flex-w flex-r-m p-b-10">
-                            <div class="size-203 flex-c-m respon6">Kích thước</div>
+                            <div class="size-203 flex-c-m respon6">
+                                Kích thước
+                            </div>
                             <div class="size-204 respon6-next">
                                 <div class="rs1-select2 bor8 bg0">
                                     <select class="js-select2" name="size" id="product-size">
@@ -95,6 +98,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="flex-w flex-r-m p-b-10">
                             <div class="size-204 flex-w flex-m respon6-next">
                                 <div class="wrap-num-product flex-w m-r-20 m-tb-10">
@@ -110,7 +114,20 @@
                         </div>
                     </div>
                     <div class="flex-w flex-m p-l-100 p-t-40 respon7">
-                        <p class="stext-102 cl6"><i class="fa fa-truck m-r-5"></i> Miễn phí vận chuyển đơn từ 500.000₫</p>
+                        <div class="flex-m bor9 p-r-10 m-r-11">
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Thêm vào yêu thích">
+                                <i class="zmdi zmdi-favorite"></i>
+                            </a>
+                        </div>
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Google Plus">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -122,15 +139,15 @@
                         <a class="nav-link active" data-toggle="tab" href="#description" role="tab">Mô tả</a>
                     </li>
                     <li class="nav-item p-b-10">
-                        <a class="nav-link" data-toggle="tab" href="#payment" role="tab">Thanh toán</a>
+                        <a class="nav-link" data-toggle="tab" href="#information" role="tab">Thông tin bổ sung</a>
                     </li>
                     <li class="nav-item p-b-10">
-                        <a class="nav-link" data-toggle="tab" href="#returns" role="tab">Đổi trả</a>
+                        <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Đánh giá</a>
                     </li>
                 </ul>
                 <div class="tab-content p-t-43">
                     <div class="tab-pane fade show active" id="description" role="tabpanel">
-                        <div class="how-pos2 p-lr-15-md">
+                        <div class="how-pos2 p-lr-15-md" id="product-description">
                             @if (!string.IsNullOrEmpty(Model.Description))
                             {
                                 @Html.Raw(Model.Description)
@@ -141,36 +158,100 @@
                             }
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="payment" role="tabpanel">
-                        <div class="how-pos2 p-lr-15-md">
-                            <p class="stext-102 cl6">Thanh toán khi nhận hàng (COD), chuyển khoản ngân hàng hoặc thanh toán tại cửa hàng.</p>
+                    <div class="tab-pane fade" id="information" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
+                                <ul class="p-lr-28 p-lr-15-sm">
+                                    @if (Model.Brand != null)
+                                    {
+                                        <li class="flex-w flex-t p-b-7">
+                                            <span class="stext-102 cl3 size-205">Thương hiệu</span>
+                                            <span class="stext-102 cl6 size-206">@Model.Brand.Name</span>
+                                        </li>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.Sku))
+                                    {
+                                        <li class="flex-w flex-t p-b-7">
+                                            <span class="stext-102 cl3 size-205">Mã sản phẩm</span>
+                                            <span class="stext-102 cl6 size-206">@Model.Sku</span>
+                                        </li>
+                                    }
+                                    @if (Model.Category != null)
+                                    {
+                                        <li class="flex-w flex-t p-b-7">
+                                            <span class="stext-102 cl3 size-205">Danh mục</span>
+                                            <span class="stext-102 cl6 size-206">@Model.Category.Name</span>
+                                        </li>
+                                    }
+                                    <li class="flex-w flex-t p-b-7">
+                                        <span class="stext-102 cl3 size-205">Tình trạng</span>
+                                        <span class="stext-102 cl6 size-206">@(Model.IsActive ? "Còn hàng" : "Hết hàng")</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="returns" role="tabpanel">
-                        <div class="how-pos2 p-lr-15-md">
-                            <p class="stext-102 cl6">Đổi trả trong 07 ngày. Liên hệ Hotline để được hướng dẫn.</p>
+                    <div class="tab-pane fade" id="reviews" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
+                                <div class="p-b-30 m-lr-15-sm">
+                                    <p class="stext-102 cl6">Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá sản phẩm này!</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @if (ViewBag.Related != null && ((IEnumerable<dynamic>)ViewBag.Related).Any())
-        {
-            <div class="p-t-50">
-                <h3 class="ltext-103 cl5 p-b-20">Sản phẩm tương tự</h3>
-                <div class="row isotope-grid">
-                    @foreach (var p in (IEnumerable<dynamic>)ViewBag.Related)
+        <div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
+            @if (!string.IsNullOrEmpty(Model.Sku))
+            {
+                <span class="stext-107 cl6 p-lr-25">
+                    SKU: @Model.Sku
+                </span>
+            }
+            @if (Model.Category != null)
+            {
+                <span class="stext-107 cl6 p-lr-25">
+                    Danh mục: @Model.Category.Name
+                </span>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+@if (ViewBag.Related != null && ((IEnumerable<dynamic>)ViewBag.Related).Any())
+{
+    <section class="sec-relate-product bg0 p-t-45 p-b-105">
+        <div class="container">
+            <div class="p-b-45">
+                <h3 class="ltext-106 cl5 txt-center">
+                    Sản phẩm liên quan
+                </h3>
+            </div>
+
+            <!-- Slide2 -->
+            <div class="wrap-slick2">
+                <div class="slick2">
+                    @foreach (var p in related.Take(8))
                     {
-                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                        <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
                                     <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
-                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+                                        Xem
+                                    </a>
                                 </div>
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l">
-                                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">@p.Name</a>
-                                        <span class="stext-105 cl3">@((p.SalePrice ?? p.Price).ToString("N0"))₫</span>
+                                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                            @p.Name
+                                        </a>
+                                        <span class="stext-105 cl3">
+                                            @((p.SalePrice ?? p.Price).ToString("N0"))₫
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -178,9 +259,9 @@
                     }
                 </div>
             </div>
-        }
-    </div>
-</section>
+        </div>
+    </section>
+}
 
 @section Scripts {
 @Html.AntiForgeryToken()
@@ -254,6 +335,33 @@ $(function() {
     var v = Math.min(99, parseInt(numProduct.value, 10) + 1);
     numProduct.value = v;
   });
+  
+  // Format description: xuống dòng sau mỗi dấu chấm
+  var descEl = document.getElementById('product-description');
+  if (descEl) {
+    var text = descEl.textContent || descEl.innerText;
+    if (text && text.trim()) {
+      // Thay thế dấu chấm + khoảng trắng bằng dấu chấm + xuống dòng
+      var formatted = text.replace(/\.\s+/g, '.<br><br>');
+      descEl.innerHTML = formatted;
+    }
+  }
 })();
 </script>
+<style>
+#product-description {
+  line-height: 1.8;
+  font-size: 15px;
+  color: #666;
+}
+#product-description p {
+  margin-bottom: 15px;
+}
+#product-gallery .wrap-pic-w {
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
 }

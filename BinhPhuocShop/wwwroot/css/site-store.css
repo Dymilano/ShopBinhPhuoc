@@ -47,6 +47,53 @@ body.animsition h1, body.animsition h2, body.animsition h3, body.animsition h4, 
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* Tối ưu trang chủ */
+.hov-img-zoom {
+  transition: transform 0.3s ease;
+}
+
+.hov-img-zoom:hover {
+  transform: scale(1.05);
+}
+
+.block1:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.block2:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Lazy loading images */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .hero-section .item-slick1 {
+    min-height: 400px !important;
+  }
+  
+  .hero-content {
+    padding-top: 60px !important;
+    padding-bottom: 30px !important;
+  }
+  
+  .ltext-201 {
+    font-size: 28px !important;
+  }
+  
+  .sec-banner .block1 {
+    margin-bottom: 20px;
+  }
+}
+
 /* Giỏ hàng slide */
 .wrap-header-cart {
   transition: transform 0.35s ease-in-out;
@@ -108,10 +155,71 @@ footer .stext-107.cl7:hover {
 
 .row.isotope-grid .block2-pic {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   padding-top: 100%;
   background: #f5f5f5;
+}
+
+/* Đảm bảo nút xem nhanh hiển thị đúng - theo template gốc */
+.block2-pic {
+  position: relative;
+  overflow: hidden;
+}
+
+.row.isotope-grid .block2-pic {
+  overflow: visible !important;
+}
+
+.block2-pic .block2-btn {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: auto;
+  white-space: nowrap;
+  min-width: 100px;
+  text-align: center;
+}
+
+.block2-pic:hover .block2-btn,
+.block2:hover .block2-btn {
+  bottom: 20px;
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
+/* Đảm bảo link sản phẩm click được */
+.block2-txt a,
+.block2-pic img {
+  position: relative;
+  z-index: 1;
+}
+
+/* Đảm bảo nút không bị ẩn bởi overflow - override cho isotope-grid */
+.row.isotope-grid .block2-pic {
+  overflow: visible !important;
+}
+
+/* Container chứa block2-pic cần overflow visible */
+.row.isotope-grid .isotope-item {
+  overflow: visible;
+}
+
+/* Trên mobile, hiển thị nút luôn */
+@media (max-width: 768px) {
+  .block2-pic .block2-btn {
+    opacity: 0.9;
+    bottom: 10px;
+  }
+  
+  .block2-pic:hover .block2-btn,
+  .block2:hover .block2-pic .block2-btn {
+    opacity: 1;
+  }
 }
 
 .row.isotope-grid .block2-pic img {
@@ -135,6 +243,7 @@ footer .stext-107.cl7:hover {
 .row.isotope-grid .block2-txt-child1 a {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.35;
@@ -150,4 +259,221 @@ footer .stext-107.cl7:hover {
 .bg0.p-b-140 .isotope-grid .block2 {
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   border-radius: 4px;
+}
+
+/* Header đồng bộ trên tất cả trang */
+.wrap-menu-desktop {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.top-bar {
+  background: #333;
+  color: #fff;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+/* Cải thiện màu sắc */
+:root {
+  --primary: #717fe0;
+  --primary-hover: #5a67d8;
+  --secondary: #333;
+  --text: #333;
+  --text-light: #666;
+  --border: #e0e0e0;
+  --bg-light: #f8f9fa;
+}
+
+.bg1 {
+  background-color: var(--primary) !important;
+}
+
+.hov-btn1:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+/* Blog improvements */
+.p-b-63 {
+  transition: transform 0.3s ease;
+}
+
+.p-b-63:hover {
+  transform: translateY(-3px);
+}
+
+.p-b-63 img {
+  transition: transform 0.3s ease;
+}
+
+.p-b-63:hover img {
+  transform: scale(1.05);
+}
+
+/* Search improvements */
+.modal-search-header {
+  background: rgba(0,0,0,0.8);
+}
+
+.container-search-header {
+  background: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  max-width: 600px;
+  width: 90%;
+}
+
+#search-input {
+  font-size: 16px;
+  padding: 12px 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Product detail improvements */
+.sec-product-detail {
+  background: #fff;
+}
+
+.bor10 {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 30px;
+}
+
+.nav-tabs .nav-link {
+  color: var(--text);
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Related Products Section - Slick2 */
+.sec-relate-product {
+  background: #fff;
+}
+
+.wrap-slick2 {
+  position: relative;
+}
+
+.slick2 {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+}
+
+.slick2 .item-slick2 {
+  padding: 0 15px;
+}
+
+.wrap-slick2-arrows {
+  position: absolute;
+  top: -60px;
+  right: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.arrow-slick2 {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.arrow-slick2:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.arrow-slick2.prev-slick2 {
+  left: 0;
+}
+
+.arrow-slick2.next-slick2 {
+  right: 0;
+}
+
+/* Filter and Search Panel */
+.panel-filter,
+.panel-search {
+  display: none;
+}
+
+.panel-filter.show-filter,
+.panel-search.show-search {
+  display: block;
+}
+
+.js-show-filter.show-filter .icon-filter,
+.js-show-search.show-search .icon-search {
+  display: none;
+}
+
+.js-show-filter.show-filter .icon-close-filter,
+.js-show-search.show-search .icon-close-search {
+  display: inline-block;
+}
+
+.icon-close-filter,
+.icon-close-search {
+  display: none;
+}
+
+/* Isotope filter active state */
+.filter-tope-group .how-active1 {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Pagination */
+.how-pagination1 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.how-pagination1:hover,
+.how-pagination1.active-pagination1 {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
 }

@@ -25,9 +25,9 @@ public class StoreControllerBase : Controller
         ViewBag.Phone = settings.GetValueOrDefault("Phone", "0984843218");
         ViewBag.Email = settings.GetValueOrDefault("Email", "contact@binhphuocshop.vn");
         ViewBag.Address = settings.GetValueOrDefault("Address", "Hà Nội");
-        var allowedSlugs = AllowedCategories.Slugs;
+        // Lấy tất cả danh mục cha đang active, không filter theo allowedSlugs để đồng bộ với header
         ViewBag.Categories = await Db.Categories
-            .Where(c => c.IsActive && c.ParentId == null && c.Slug != null && allowedSlugs.Contains(c.Slug))
+            .Where(c => c.IsActive && c.ParentId == null)
             .OrderBy(c => c.DisplayOrder)
             .ThenBy(c => c.Name)
             .ToListAsync();

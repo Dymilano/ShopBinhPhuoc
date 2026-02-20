@@ -1,8 +1,10 @@
+using BinhPhuocShop.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[AdminAuthorization]
 public class UploadController : Controller
 {
     private readonly IWebHostEnvironment _env;

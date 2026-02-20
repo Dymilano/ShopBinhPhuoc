@@ -14,20 +14,20 @@
     var store = "/store";
 }
 
-<section class="section-slide">
+<section class="section-slide hero-section">
     <div class="wrap-slick1">
         <div class="slick1">
-            <div class="item-slick1" style="background-image: url(@(store)/images/slide-01.jpg);">
+            <div class="item-slick1" style="background-image: url(@(ViewBag.HeroBackground ?? store + "/images/slide-01.jpg")); background-size: cover; background-position: center;">
                 <div class="container h-full">
-                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-                        <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
-                            <span class="ltext-101 cl2 respon2">@siteName</span>
+                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5 hero-content">
+                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="fadeInDown" data-delay="0">
+                            <span class="ltext-101 cl2 respon2" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">@siteName</span>
                         </div>
-                        <div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
-                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">GIÀY DÉP CHÍNH HÃNG</h2>
+                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="fadeInUp" data-delay="800">
+                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">GIÀY DÉP CHÍNH HÃNG</h2>
                         </div>
-                        <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-                            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Mua sắm ngay</a>
+                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="zoomIn" data-delay="1600">
+                            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 glow-btn magnetic-btn ripple-btn" style="box-shadow: 0 0 20px rgba(113, 127, 224, 0.5);">Mua sắm ngay</a>
                         </div>
                     </div>
                 </div>
@@ -46,9 +46,12 @@
             @foreach (var (slug, label) in catSlugs)
             {
                 if (idx >= 3) { break; }
+                var bannerImage = idx == 0 ? (ViewBag.BannerGiayNam ?? store + "/images/banner-01.jpg") :
+                                   idx == 1 ? (ViewBag.BannerGiayNu ?? store + "/images/banner-02.jpg") :
+                                   (ViewBag.BannerDepNam ?? store + "/images/banner-03.jpg");
                 <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
                     <div class="block1 wrap-pic-w">
-                        <img src="@(store)/images/banner-0@(idx + 1).jpg" alt="@label">
+                        <img src="@bannerImage" alt="@label">
                         <a asp-controller="Collections" asp-action="Index" asp-route-slug="@slug" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                             <div class="block1-txt-child1 flex-col-l">
                                 <span class="block1-name ltext-102 trans-04 p-b-8">@label</span>
@@ -77,13 +80,14 @@
         <div class="row isotope-grid">
             @if (showProducts != null && showProducts.Any())
             {
+                var prodIdx = 0;
                 @foreach (var p in showProducts.Take(12))
                 {
                     <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
                         <div class="block2">
                             <div class="block2-pic hov-img0">
                                 <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
-                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem</a>
                             </div>
                             <div class="block2-txt flex-w flex-t p-t-14">
                                 <div class="block2-txt-child1 flex-col-l">
@@ -99,6 +103,7 @@
                             </div>
                         </div>
                     </div>
+                    prodIdx++;
                 }
             }
             else
@@ -140,13 +145,16 @@
                     <h3 class="ltext-103 cl5">@cat.Name</h3>
                 </div>
                 <div class="row isotope-grid">
+                    @{
+                        var blockIdx = 0;
+                    }
                     @foreach (var p in block.Products.Take(4))
                     {
                         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
                                     <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
-                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem nhanh</a>
+                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem</a>
                                 </div>
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l">
@@ -156,6 +164,7 @@
                                 </div>
                             </div>
                         </div>
+                        blockIdx++;
                     }
                 </div>
                 <div class="flex-c-m flex-w w-full p-t-20">

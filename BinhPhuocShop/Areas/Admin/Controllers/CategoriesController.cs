@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[AdminAuthorization]
 public class CategoriesController : Controller
 {
     private readonly AppDbContext _db;

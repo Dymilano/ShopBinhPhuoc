@@ -1,47 +1,188 @@
 @{
     Layout = "_StoreLayout";
+    ViewData["Title"] = "Chính sách vận chuyển";
 }
-<section class="section pd-top-30">
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/store/images/bg-01.jpg'); background-color: #f5f5f5;">
+    <h2 class="ltext-105 cl0 txt-center">Chính sách vận chuyển</h2>
+</section>
+
+<!-- Content -->
+<section class="bg0 p-t-62 p-b-60">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                <li class="breadcrumb-item active">Chính sách vận chuyển</li>
-            </ol>
-        </nav>
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
+            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
+            <span class="stext-109 cl4">Chính sách vận chuyển</span>
+        </div>
         <div class="row">
-            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
-                <partial name="_PagesSidebar" />
-            </aside>
+            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
+                <div class="p-l-20 p-l-0-lg">
+                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
+                    <partial name="_PagesSidebar" />
+                </div>
+            </div>
             <div class="col-md-9 col-sm-12">
-                <h1 class="h3 mb-4">Chính sách thanh toán, vận chuyển</h1>
-                <div class="page-content content-entry" style="line-height:1.8;">
-                    <p><strong>Thời gian xử lý đơn hàng để vận chuyển</strong></p>
-                    <ul>
-                        <li>Toàn bộ đơn hàng sẽ được nhân viên chăm sóc khách hàng gọi điện để xác nhận thông tin đơn hàng.</li>
-                        <li>Sau đó, đơn hàng sẽ được đóng gói và vận chuyển ngay sau khi xác nhận đơn hàng.</li>
-                        <li>Nếu như quá trình xử lý đơn hoặc vận chuyển bị gián đoạn, chúng tôi sẽ email hoặc gọi điện thông báo đến quý khách hàng.</li>
+                <div class="p-r-45 p-r-0-lg">
+                    <h1 class="ltext-103 cl5 p-b-20">CHÍNH SÁCH VẬN CHUYỂN CỦA BÌNH PHƯỚC SHOP</h1>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop cam kết giao hàng nhanh chóng, an toàn đến tay khách hàng. 
+                        Chúng tôi luôn nỗ lực để đảm bảo sản phẩm được đóng gói cẩn thận và vận chuyển đúng thời hạn.
+                    </p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">1. THỜI GIAN XỬ LÝ ĐƠN HÀNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Sau khi bạn đặt hàng thành công:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Xác nhận đơn hàng:</strong> Nhân viên chăm sóc khách hàng sẽ gọi điện xác nhận thông tin đơn hàng trong vòng 24 giờ (trừ ngày Lễ, Tết)</li>
+                        <li><strong>Đóng gói:</strong> Đơn hàng sẽ được đóng gói cẩn thận ngay sau khi xác nhận</li>
+                        <li><strong>Giao cho đơn vị vận chuyển:</strong> Trong vòng 1-2 ngày làm việc sau khi xác nhận</li>
+                        <li><strong>Thông báo:</strong> Nếu quá trình xử lý hoặc vận chuyển bị gián đoạn, chúng tôi sẽ thông báo qua email hoặc điện thoại</li>
                     </ul>
-                    <p><strong>Thời gian làm việc</strong></p>
-                    <p>Tất cả các ngày trong tuần từ 10h - 22h.</p>
-                    <p><strong>Phí vận chuyển</strong></p>
-                    <ul>
-                        <li>Với đơn hàng có giá trị <strong>trên 1 triệu</strong> đồng, Mulgati sẽ <strong>miễn phí</strong> giao hàng.</li>
-                        <li>Với đơn hàng <strong>dưới 1 triệu</strong>, Mulgati sẽ tính <strong>phí vận chuyển phụ thuộc vào vùng miền</strong> và sẽ thông báo cụ thể đến quý khách hàng.</li>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">2. THỜI GIAN LÀM VIỆC</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bộ phận chăm sóc khách hàng và xử lý đơn hàng làm việc:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Thứ 2 - Chủ nhật:</strong> 8h00 - 22h00</li>
+                        <li><strong>Ngày Lễ, Tết:</strong> Có thể điều chỉnh, vui lòng liên hệ để biết thêm chi tiết</li>
+                        <li>Đơn hàng đặt sau 18h00 sẽ được xử lý vào ngày làm việc tiếp theo</li>
                     </ul>
-                    <p><strong>Thời gian vận chuyển</strong></p>
-                    <ul>
-                        <li>Đối với đơn hàng nội thành Hà Nội: dự kiến từ 1 - 2 ngày làm việc.</li>
-                        <li>Đối với đơn hàng ngoại thành Hà Nội và các tỉnh thành khác: dự kiến từ 2 - 3 ngày làm việc.</li>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">3. PHÍ VẬN CHUYỂN</h2>
+                    <div class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        <p class="mb-3"><strong>Miễn phí vận chuyển:</strong></p>
+                        <ul style="line-height: 2; margin-left: 20px;">
+                            <li>Đơn hàng có giá trị <strong>từ 1.000.000₫ trở lên</strong> được miễn phí vận chuyển toàn quốc</li>
+                            <li>Áp dụng cho tất cả các đơn vị vận chuyển</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Phí vận chuyển có tính phí:</strong></p>
+                        <ul style="line-height: 2; margin-left: 20px;">
+                            <li>Đơn hàng <strong>dưới 1.000.000₫</strong> sẽ tính phí vận chuyển</li>
+                            <li>Phí vận chuyển phụ thuộc vào:
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Khoảng cách địa lý (nội thành, ngoại thành, tỉnh thành khác)</li>
+                                    <li>Trọng lượng và kích thước sản phẩm</li>
+                                    <li>Đơn vị vận chuyển được chọn</li>
+                                </ul>
+                            </li>
+                            <li>Phí vận chuyển cụ thể sẽ được thông báo khi bạn đặt hàng và trong email xác nhận</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">4. THỜI GIAN VẬN CHUYỂN</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Thời gian giao hàng dự kiến (tính từ ngày đơn hàng được xác nhận):
+                    </p>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>Nội thành Hà Nội:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Thời gian: <strong>1 - 2 ngày làm việc</strong></li>
+                            <li>Giao hàng nhanh trong ngày (nếu đặt trước 12h00 và có sẵn hàng)</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Ngoại thành Hà Nội và các tỉnh thành khác:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Thời gian: <strong>2 - 5 ngày làm việc</strong></li>
+                            <li>Tùy thuộc vào khoảng cách và đơn vị vận chuyển</li>
+                            <li>Các tỉnh miền Trung, miền Nam: 3 - 5 ngày</li>
+                            <li>Các tỉnh miền Bắc: 2 - 3 ngày</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Vùng sâu, vùng xa:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Thời gian: <strong>5 - 7 ngày làm việc</strong></li>
+                            <li>Có thể lâu hơn tùy điều kiện thời tiết và địa hình</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-info" style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0;">
+                        <p class="stext-117 cl6 mb-0">
+                            <strong>Lưu ý:</strong> Thời gian trên là thời gian dự kiến. Thời gian giao hàng thực tế có thể sớm hơn hoặc trễ hơn 1-2 ngày 
+                            tùy thuộc vào điều kiện thời tiết, tình hình giao thông, và các yếu tố khách quan khác. 
+                            Chúng tôi sẽ cố gắng giao hàng đúng hẹn và thông báo nếu có thay đổi.
+                        </p>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">5. ĐƠN VỊ VẬN CHUYỂN</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop hợp tác với các đơn vị vận chuyển uy tín:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li><strong>Viettel Post:</strong> Dịch vụ nhanh, phủ sóng toàn quốc</li>
+                        <li><strong>Giao Hàng Nhanh (GHN):</strong> Giao hàng nhanh trong thành phố</li>
+                        <li><strong>Giao Hàng Tiết Kiệm (GHTK):</strong> Giá cả hợp lý, phù hợp đơn hàng lớn</li>
+                        <li><strong>J&T Express:</strong> Dịch vụ vận chuyển nhanh, giá tốt</li>
+                        <li><strong>Ninja Van:</strong> Giao hàng tận nơi, theo dõi đơn hàng dễ dàng</li>
                     </ul>
-                    <p>Lưu ý: Thời gian trên là thời gian dự kiến. Thời gian giao hàng chính thức có thể sớm hơn hoặc trễ hơn một vài ngày tùy theo một số điều kiện khách quan.</p>
-                    <p><strong>Một số lưu ý khi nhận hàng</strong></p>
-                    <ul>
-                        <li>Quý khách vui lòng kiểm tra sản phẩm khi thanh toán với nhân viên giao hàng.</li>
-                        <li>Khi kiểm tra hàng lúc nhận hàng, nếu phát hiện hàng bị hư hại, trầy xước, sai hàng hoá, kích thước, màu sắc đã đặt, hãy kí nhận tình trạng cùng với nhân viên giao hàng và thông báo đến bộ phận chăm sóc khách hàng.</li>
-                        <li>Mulgati cam kết tất cả các sản phẩm gửi đến quý khách hàng theo đơn đặt hàng đều là hàng chính hãng, mới 100% và được bảo hành theo chính sách của công ty.</li>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Đơn vị vận chuyển sẽ được chọn dựa trên địa chỉ giao hàng và yêu cầu của khách hàng để đảm bảo giao hàng nhanh nhất và an toàn nhất.
+                    </p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">6. THEO DÕI ĐƠN HÀNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Sau khi đơn hàng được giao cho đơn vị vận chuyển, bạn có thể:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Nhận mã vận đơn (tracking number) qua email hoặc SMS</li>
+                        <li>Theo dõi đơn hàng trên website của đơn vị vận chuyển</li>
+                        <li>Kiểm tra trạng thái đơn hàng trong tài khoản của bạn trên website</li>
+                        <li>Liên hệ hotline để được cập nhật tình trạng đơn hàng</li>
                     </ul>
-                    <p><strong>Số điện thoại: 1900 4510</strong></p>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">7. LƯU Ý KHI NHẬN HÀNG</h2>
+                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <p class="mb-3"><strong>Kiểm tra hàng hóa:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Vui lòng kiểm tra kỹ sản phẩm trước khi thanh toán cho nhân viên giao hàng</li>
+                            <li>Kiểm tra số lượng, màu sắc, size, và tình trạng sản phẩm</li>
+                            <li>Đảm bảo sản phẩm không bị hư hại, trầy xước, hoặc sai hàng</li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Nếu phát hiện vấn đề:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Không ký nhận hàng nếu sản phẩm bị hư hại nghiêm trọng</li>
+                            <li>Ghi chú tình trạng trên phiếu giao hàng nếu có vấn đề nhỏ</li>
+                            <li>Chụp ảnh làm bằng chứng nếu cần</li>
+                            <li>Liên hệ ngay với bộ phận chăm sóc khách hàng: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a></li>
+                        </ul>
+                        <p class="mb-3 mt-4"><strong>Cam kết chất lượng:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Tất cả sản phẩm đều là hàng chính hãng, mới 100%</li>
+                            <li>Sản phẩm được đóng gói cẩn thận, đảm bảo an toàn trong quá trình vận chuyển</li>
+                            <li>Được bảo hành theo chính sách của Bình Phước Shop</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">8. XỬ LÝ KHI GIAO HÀNG KHÔNG THÀNH CÔNG</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Trong trường hợp giao hàng không thành công:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Đơn vị vận chuyển sẽ liên hệ lại với bạn để sắp xếp thời gian giao hàng mới</li>
+                        <li>Nếu sau 3 lần giao hàng không thành công, đơn hàng sẽ được trả về kho</li>
+                        <li>Bạn có thể yêu cầu giao lại hoặc hủy đơn hàng (nếu hủy, chúng tôi sẽ hoàn tiền theo chính sách)</li>
+                        <li>Vui lòng cung cấp địa chỉ chính xác và số điện thoại liên hệ để tránh phát sinh phí vận chuyển</li>
+                    </ul>
+
+                    <h2 class="ltext-101 cl5 p-b-16 mt-4">9. BỒI THƯỜNG KHI MẤT HÀNG HOẶC HƯ HẠI</h2>
+                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                        Bình Phước Shop cam kết:
+                    </p>
+                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                        <li>Bồi thường 100% giá trị đơn hàng nếu hàng bị mất trong quá trình vận chuyển</li>
+                        <li>Đổi mới hoặc hoàn tiền nếu sản phẩm bị hư hại do lỗi đóng gói hoặc vận chuyển</li>
+                        <li>Xử lý nhanh chóng, công bằng trong vòng 3-5 ngày làm việc</li>
+                    </ul>
+
+                    <hr class="p-t-20 p-b-20" />
+                    <h2 class="ltext-101 cl5 p-b-16">THÔNG TIN LIÊN HỆ</h2>
+                    <p class="stext-117 cl6 p-b-20">
+                        <strong>Bình Phước Shop</strong><br />
+                        Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a><br />
+                        Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a><br />
+                        Thời gian làm việc: 8h00 - 22h00 hàng ngày
+                    </p>
+                    <p class="stext-117 cl6 p-t-20">
+                        <strong>Chúng tôi luôn sẵn sàng giải đáp mọi thắc mắc về vận chuyển và hỗ trợ bạn tốt nhất!</strong>
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 using BinhPhuocShop.Data;
+using BinhPhuocShop.Infrastructure;
 using BinhPhuocShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[AdminAuthorization]
 public class PostsController : Controller
 {
     private readonly AppDbContext _db;

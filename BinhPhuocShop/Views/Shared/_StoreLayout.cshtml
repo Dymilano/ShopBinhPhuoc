@@ -25,6 +25,8 @@
     <link rel="stylesheet" type="text/css" href="@(store)/css/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" type="text/css" href="~/css/site-store.css">
+    <link rel="stylesheet" type="text/css" href="~/css/animations.css" asp-append-version="true">
+    <link rel="stylesheet" type="text/css" href="~/css/hero-effects.css" asp-append-version="true">
 </head>
 <body class="animsition">
     <header>
@@ -253,11 +255,122 @@
     <script src="@(store)/vendor/animsition/js/animsition.min.js"></script>
     <script src="@(store)/vendor/bootstrap/js/popper.js"></script>
     <script src="@(store)/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="@(store)/vendor/select2/select2.min.js"></script>
+    <script src="@(store)/vendor/daterangepicker/moment.min.js"></script>
+    <script src="@(store)/vendor/daterangepicker/daterangepicker.js"></script>
     <script src="@(store)/vendor/slick/slick.min.js"></script>
     <script src="@(store)/js/slick-custom.js"></script>
+    <script src="@(store)/vendor/parallax100/parallax100.js"></script>
+    <script src="@(store)/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+    <script src="@(store)/vendor/isotope/isotope.pkgd.min.js"></script>
     <script src="@(store)/vendor/sweetalert/sweetalert.min.js"></script>
     <script src="@(store)/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="@(store)/js/main.js"></script>
+    <script src="~/js/animations.js" asp-append-version="true"></script>
+    <script src="~/js/hero-effects.js" asp-append-version="true"></script>
+    <script>
+        // Initialize Select2
+        $(document).ready(function() {
+            $(".js-select2").each(function(){
+                $(this).select2({
+                    minimumResultsForSearch: 20,
+                    dropdownParent: $(this).next('.dropDownSelect2')
+                });
+            });
+
+            // Filter and Search toggle
+            $('.js-show-filter').on('click', function(){
+                $(this).parent().find('.panel-filter').slideToggle(300);
+                $(this).toggleClass('show-filter');
+                $('.js-panel-filter').removeClass('show-filter');
+            });
+
+            $('.js-show-search').on('click', function(){
+                $(this).parent().find('.panel-search').slideToggle(300);
+                $(this).toggleClass('show-search');
+                $('.js-panel-search').removeClass('show-search');
+            });
+
+            // Isotope filter
+            if ($('.isotope-grid').length) {
+                var $topeContainer = $('.isotope-grid');
+                var $filter = $('.filter-tope-group button, .filter-tope-group a');
+                $filter.on('click', function(e) {
+                    e.preventDefault();
+                    var filterValue = $(this).attr('data-filter') || '*';
+                    $topeContainer.isotope({ filter: filterValue });
+                    $filter.removeClass('how-active1');
+                    $(this).addClass('how-active1');
+                });
+            }
+
+            // Slick2 for related products
+            if ($('.slick2').length) {
+                $('.wrap-slick2').each(function(){
+                    var wrapSlick2 = $(this);
+                    var slick2 = wrapSlick2.find('.slick2');
+                    
+                    slick2.on('init', function(){
+                        wrapSlick2.append('<div class="wrap-slick2-arrows flex-sb-m flex-w p-t-37 p-b-23"></div>');
+                    });
+                    
+                    slick2.slick({
+                        slidesToShow: 4,
+                        slidesToScroll: 1,
+                        fade: false,
+                        infinite: true,
+                        speed: 600,
+                        autoplay: true,
+                        autoplaySpeed: 3000,
+                        arrows: true,
+                        appendArrows: wrapSlick2.find('.wrap-slick2-arrows'),
+                        prevArrow:'<button class="arrow-slick2 prev-slick2"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
+                        nextArrow:'<button class="arrow-slick2 next-slick2"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
+                        responsive: [
+                            {
+                                breakpoint: 1200,
+                                settings: {
+                                    slidesToShow: 3,
+                                    slidesToScroll: 1
+                                }
+                            },
+                            {
+                                breakpoint: 992,
+                                settings: {
+                                    slidesToShow: 2,
+                                    slidesToScroll: 1
+                                }
+                            },
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 1,
+                                    slidesToScroll: 1
+                                }
+                            }
+                        ]
+                    });
+                });
+            }
+
+            // Parallax
+            if ($('.parallax100').length) {
+                $('.parallax100').parallax100();
+            }
+
+            // Magnific Popup for gallery
+            $('.gallery-lb').each(function() {
+                $(this).magnificPopup({
+                    delegate: 'a',
+                    type: 'image',
+                    gallery: {
+                        enabled: true
+                    },
+                    mainClass: 'mfp-fade'
+                });
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

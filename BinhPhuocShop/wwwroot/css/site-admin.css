@@ -9,6 +9,41 @@ body.bg-gray-100 table, body.bg-gray-100 input, body.bg-gray-100 select {
   font-family: "Poppins", "Segoe UI", Tahoma, sans-serif !important;
 }
 
+/* Cân đối kích thước toàn bộ admin */
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Header section - thống nhất */
+.flex.flex-row.justify-between.items-center.mb-6 {
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.flex.flex-row.justify-between.items-center.mb-6 h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Card - thống nhất padding và spacing */
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: white;
+  margin-bottom: 1.5rem;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.card-body.p-0 {
+  padding: 0;
+}
+
 /* Nội dung chính: căn đối, max-width cho màn hình rộng */
 .main-content {
   animation: fadeIn 0.25s ease-out;
@@ -80,4 +115,243 @@ button, .btn-shadow, input, select, textarea {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Cải thiện table styling - đồng đều */
+.table-auto {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-auto thead th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1rem;
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.table-auto tbody td {
+  vertical-align: middle;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.875rem;
+}
+
+.table-auto tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Đồng đều kích thước ảnh trong table */
+.table-auto tbody td img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+}
+
+/* Button improvements */
+.btn-shadow {
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(20, 184, 166, 0.2);
+}
+
+.btn-shadow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(20, 184, 166, 0.3);
+}
+
+/* Card header improvements */
+.card-header {
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Status badges */
+.text-xs.px-2.py-1.rounded {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Action buttons - rõ ràng và đồng đều */
+.flex.items-center.gap-2 {
+  gap: 0.5rem;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.flex.items-center.gap-2 a,
+.flex.items-center.gap-2 button {
+  transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Nút Sửa */
+.flex.items-center.gap-2 a[title="Sửa"],
+.flex.items-center.gap-2 a[href*="Edit"] {
+  background-color: #0d9488;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.flex.items-center.gap-2 a[title="Sửa"]:hover,
+.flex.items-center.gap-2 a[href*="Edit"]:hover {
+  background-color: #0f766e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(13, 148, 136, 0.3);
+}
+
+/* Nút Xóa */
+.flex.items-center.gap-2 button[title="Xóa"],
+.flex.items-center.gap-2 button[type="submit"] {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.flex.items-center.gap-2 button[title="Xóa"]:hover,
+.flex.items-center.gap-2 button[type="submit"]:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+/* Icon trong nút */
+.flex.items-center.gap-2 i {
+  font-size: 0.875rem;
+}
+
+/* Empty state */
+.text-center.py-12 {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+/* Thống nhất spacing cho các section */
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* Button thêm mới - đồng đều */
+a[asp-action="Create"],
+a[href*="Create"] {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Status badges - đồng đều */
+.text-xs.px-2.py-1.rounded {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+  line-height: 1.2;
+}
+
+/* Number animation */
+.num-4, .num-2 {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Quick actions card */
+.card .card-body.flex.flex-col.gap-3 a {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.card .card-body.flex.flex-col.gap-3 a:hover {
+  background-color: #f9fafb;
+  border-color: #14b8a6;
+  transform: translateX(4px);
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .table-auto {
+    font-size: 0.8125rem;
+  }
+  
+  .table-auto thead th,
+  .table-auto tbody td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .flex.items-center.gap-2 {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .flex.items-center.gap-2 a,
+  .flex.items-center.gap-2 button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Đồng đều chiều cao row */
+.table-auto tbody tr {
+  min-height: 60px;
+}
+
+.table-auto tbody td {
+  min-height: 60px;
+  vertical-align: middle;
+}
+
+/* Cải thiện header table */
+.table-auto thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Message alert */
+.bg-green-100.border.border-green-400 {
+  padding: 0.875rem 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

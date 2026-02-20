@@ -60,9 +60,37 @@ using (var scope = app.Services.CreateScope())
             PasswordHash TEXT NOT NULL,
             Name TEXT NOT NULL,
             Phone TEXT,
+            Address TEXT,
+            Role TEXT NOT NULL DEFAULT 'Customer',
             IsActive INTEGER NOT NULL DEFAULT 1,
-            CreatedAt TEXT NOT NULL
+            CreatedAt TEXT NOT NULL,
+            UpdatedAt TEXT
         )");
+    }
+    // Add missing columns to Users table if they don't exist
+    try
+    {
+        db.Database.ExecuteSqlRaw("SELECT Address FROM Users LIMIT 1");
+    }
+    catch
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN Address TEXT");
+    }
+    try
+    {
+        db.Database.ExecuteSqlRaw("SELECT Role FROM Users LIMIT 1");
+    }
+    catch
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN Role TEXT NOT NULL DEFAULT 'Customer'");
+    }
+    try
+    {
+        db.Database.ExecuteSqlRaw("SELECT UpdatedAt FROM Users LIMIT 1");
+    }
+    catch
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN UpdatedAt TEXT");
     }
     try
     {
@@ -79,9 +107,49 @@ using (var scope = app.Services.CreateScope())
             new BinhPhuocShop.Models.SiteSetting { Key = "SiteDescription", Value = "Thương hiệu chuyên kinh doanh, phân phối giày da nam. Chất lượng cao, nhiều bộ sưu tập độc đáo." },
             new BinhPhuocShop.Models.SiteSetting { Key = "Phone", Value = "0984843218" },
             new BinhPhuocShop.Models.SiteSetting { Key = "Email", Value = "contact@binhphuocshop.vn" },
-            new BinhPhuocShop.Models.SiteSetting { Key = "Address", Value = "Hà Nội" });
+            new BinhPhuocShop.Models.SiteSetting { Key = "Address", Value = "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh" },
+            new BinhPhuocShop.Models.SiteSetting { Key = "WebsiteUrl", Value = "https://binhphuocshop.vn" });
         db.SaveChanges();
     }
+    else
+    {
+        // Đảm bảo WebsiteUrl luôn có
+        if (!db.SiteSettings.Any(s => s.Key == "WebsiteUrl"))
+        {
+            db.SiteSettings.Add(new BinhPhuocShop.Models.SiteSetting { Key = "WebsiteUrl", Value = "https://binhphuocshop.vn" });
+            db.SaveChanges();
+        }
+    }
+    // Seed admin user - đảm bảo luôn có Role = Admin và Address
+    var adminEmail = "admin@binhphuocshop.vn";
+    var adminUser = db.Users.FirstOrDefault(u => u.Email == adminEmail);
+    var adminHash = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes("admin123"));
+    var adminHashBase64 = Convert.ToBase64String(adminHash);
+    
+    if (adminUser == null)
+    {
+        adminUser = new BinhPhuocShop.Models.User
+        {
+            Email = adminEmail,
+            PasswordHash = adminHashBase64,
+            Name = "Administrator",
+            Role = "Admin",
+            Address = "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh",
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
+        db.Users.Add(adminUser);
+    }
+    else
+    {
+        // Cập nhật Role, Address và password nếu cần
+        adminUser.Role = "Admin";
+        adminUser.Address = adminUser.Address ?? "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh";
+        adminUser.PasswordHash = adminHashBase64; // Đảm bảo password luôn đúng
+        adminUser.IsActive = true;
+        adminUser.UpdatedAt = DateTime.UtcNow;
+    }
+    db.SaveChanges();
     var allowedSlugs = BinhPhuocShop.Infrastructure.AllowedCategories.Slugs;
     var requiredCategories = BinhPhuocShop.Infrastructure.AllowedCategories.Defaults;
 
@@ -157,6 +225,16 @@ if (Directory.Exists(cleopatraPath))
         RequestPath = "/admin"
     });
 }
+// Serve Duralux admin assets
+var duraluxAssetsPath = Path.Combine(builder.Environment.WebRootPath, "duralux");
+if (Directory.Exists(duraluxAssetsPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(duraluxAssetsPath),
+        RequestPath = "/duralux"
+    });
+}
 
 app.UseRouting();
 app.UseAuthorization();
@@ -169,6 +247,11 @@ app.MapControllerRoute(
     name: "gioi-thieu",
     pattern: "gioi-thieu",
     defaults: new { controller = "Pages", action = "GioiThieu" });
+
+app.MapControllerRoute(
+    name: "pages-direct",
+    pattern: "Pages/{action=Index}",
+    defaults: new { controller = "Pages" });
 
 app.MapControllerRoute(
     name: "pages",

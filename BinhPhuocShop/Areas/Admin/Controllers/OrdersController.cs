@@ -1,10 +1,12 @@
 using BinhPhuocShop.Data;
+using BinhPhuocShop.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[AdminAuthorization]
 public class OrdersController : Controller
 {
     private readonly AppDbContext _db;

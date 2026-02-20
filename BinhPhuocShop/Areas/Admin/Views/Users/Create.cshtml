@@ -1,0 +1,115 @@
+@model User
+@{
+    ViewData["Title"] = "Thêm người dùng";
+}
+
+@section PageHeaderRight {
+    <a asp-action="Index" class="btn btn-light-brand">
+        <i class="feather-arrow-left me-2"></i>
+        <span>Quay lại</span>
+    </a>
+    <button type="submit" form="userForm" class="btn btn-primary">
+        <i class="feather-save me-2"></i>
+        <span>Lưu người dùng</span>
+    </button>
+}
+
+<form id="userForm" asp-action="Create" method="post">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card border-top-0">
+                <div class="card-body">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Họ tên: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-user"></i></div>
+                                <input name="Name" class="form-control" placeholder="Họ tên" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Email: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-mail"></i></div>
+                                <input name="Email" type="email" class="form-control" placeholder="email@example.com" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Mật khẩu: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-lock"></i></div>
+                                <input name="password" type="password" class="form-control" placeholder="Mật khẩu" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Điện thoại: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-phone"></i></div>
+                                <input name="Phone" type="tel" class="form-control" placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Địa chỉ: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-text"><i class="feather-map-pin"></i></div>
+                                <input name="Address" class="form-control" placeholder="Địa chỉ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Vai trò: <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-lg-9">
+                            <select name="Role" class="form-select form-select-sm" required style="max-width: 300px;">
+                                <option value="Customer">Khách hàng</option>
+                                <option value="Manager">Quản lý</option>
+                                <option value="Admin">Quản trị viên</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-lg-3">
+                            <label class="fw-semibold mb-0">Trạng thái: </label>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="form-check form-switch form-switch-sm">
+                                <input name="IsActive" class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label" for="IsActive">Hoạt động</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-top d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-light-brand">
+                        <i class="feather-x me-2"></i>
+                        <span>Hủy</span>
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="feather-save me-2"></i>
+                        <span>Lưu người dùng</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
