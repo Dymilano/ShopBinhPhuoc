@@ -214,7 +214,7 @@ public class SettingsController : Controller
         if (imageFile == null || imageFile.Length == 0)
         {
             TempData["Message"] = "Vui lòng chọn file ảnh.";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ManageHomeImages));
         }
 
         var uploadsPath = Path.Combine(_env.WebRootPath, "uploads", "home-images");
@@ -260,7 +260,7 @@ public class SettingsController : Controller
 
         await _db.SaveChangesAsync();
         TempData["Message"] = $"Đã cập nhật ảnh {GetImageTypeName(imageType)} thành công.";
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(ManageHomeImages));
     }
 
     private string GetImageTypeName(string imageType)

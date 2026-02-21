@@ -4,7 +4,10 @@
     var items = ViewBag.CartItems as IEnumerable<BinhPhuocShop.Models.CartItem> ?? new List<BinhPhuocShop.Models.CartItem>();
     var total = (decimal)(ViewBag.CartTotal ?? 0);
     var error = ViewBag.Error as string;
-    var store = "/store";
+    var customerName = ViewBag.CustomerName as string ?? "";
+    var customerEmail = ViewBag.CustomerEmail as string ?? "";
+    var customerPhone = ViewBag.CustomerPhone as string ?? "";
+    var customerAddress = ViewBag.CustomerAddress as string ?? "";
 }
 
 <div class="bg0 p-t-23 p-b-140">
@@ -27,16 +30,16 @@
                     <div class="p-lr-40 p-t-30 p-b-40 bor10 bg0">
                         <h3 class="stext-101 cl2 p-b-20">Thông tin giao hàng</h3>
                         <div class="bor8 m-b-20">
-                            <input type="text" name="customerName" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Họ và tên *" required />
+                            <input type="text" name="customerName" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Họ và tên *" value="@customerName" required />
                         </div>
                         <div class="bor8 m-b-20">
-                            <input type="tel" name="phone" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Số điện thoại *" required />
+                            <input type="tel" name="phone" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Số điện thoại *" value="@customerPhone" required />
                         </div>
                         <div class="bor8 m-b-20">
-                            <input type="email" name="email" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Email" />
+                            <input type="email" name="email" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Email" value="@customerEmail" />
                         </div>
                         <div class="bor8 m-b-20">
-                            <textarea name="address" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" rows="3" placeholder="Địa chỉ giao hàng *" required></textarea>
+                            <textarea name="address" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" rows="3" placeholder="Địa chỉ giao hàng *" required>@customerAddress</textarea>
                         </div>
                         <div class="bor8 m-b-20">
                             <textarea name="note" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" rows="2" placeholder="Ghi chú về đơn hàng..."></textarea>

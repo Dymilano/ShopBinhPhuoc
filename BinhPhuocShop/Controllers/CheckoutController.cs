@@ -17,13 +17,25 @@ public class CheckoutController : StoreControllerBase
         _cart = cart;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var items = _cart.GetCart();
         if (!items.Any()) return RedirectToAction("Index", "Cart");
         ViewData["Title"] = "Thanh toán";
         ViewBag.CartItems = items;
         ViewBag.CartTotal = _cart.GetTotal();
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out var uid))
+        {
+            var user = await _db.Users.FindAsync(uid);
+            if (user != null)
+            {
+                ViewBag.CustomerName = user.Name;
+                ViewBag.CustomerEmail = user.Email;
+                ViewBag.CustomerPhone = user.Phone;
+                ViewBag.CustomerAddress = user.Address;
+            }
+        }
         return View();
     }
 
@@ -43,11 +55,18 @@ public class CheckoutController : StoreControllerBase
             ViewBag.CartItems = items;
             ViewBag.CartTotal = _cart.GetTotal();
             ViewBag.Error = "Vui lòng nhập đầy đủ Họ tên, Số điện thoại và Địa chỉ.";
+            ViewBag.CustomerName = customerName;
+            ViewBag.CustomerEmail = email;
+            ViewBag.CustomerPhone = phone;
+            ViewBag.CustomerAddress = address;
             return View();
         }
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        int? userId = !string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out var uid) ? uid : null;
         var orderCode = "BP" + DateTime.UtcNow.ToString("yyMMddHHmmss");
         var order = new Order
         {
+            UserId = userId,
             OrderCode = orderCode,
             CustomerName = customerName.Trim(),
             Phone = phone.Trim(),

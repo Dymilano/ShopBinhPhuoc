@@ -2,6 +2,7 @@ using System.Text.Json;
 using BinhPhuocShop.Data;
 using BinhPhuocShop.Infrastructure;
 using BinhPhuocShop.Models;
+using BinhPhuocShop.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,13 @@ public class ProductsController : Controller
 {
     private readonly AppDbContext _db;
     private readonly IWebHostEnvironment _env;
+    private readonly ActivityLogService _activityLog;
 
-    public ProductsController(AppDbContext db, IWebHostEnvironment env)
+    public ProductsController(AppDbContext db, IWebHostEnvironment env, ActivityLogService activityLog)
     {
         _db = db;
         _env = env;
+        _activityLog = activityLog;
     }
 
     public async Task<IActionResult> Index()
@@ -57,6 +60,7 @@ public class ProductsController : Controller
         model.CreatedAt = DateTime.UtcNow;
         _db.Products.Add(model);
         await _db.SaveChangesAsync();
+        await _activityLog.LogAsync("Create", "Product", model.Id, model.Name, "Thêm sản phẩm mới");
         TempData["Message"] = "Đã thêm sản phẩm thành công.";
         return RedirectToAction(nameof(Index));
     }
@@ -108,6 +112,7 @@ public class ProductsController : Controller
         item.DisplayOrder = model.DisplayOrder;
         item.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+        await _activityLog.LogAsync("Update", "Product", item.Id, item.Name, "Cập nhật sản phẩm");
         TempData["Message"] = "Đã cập nhật sản phẩm thành công.";
         return RedirectToAction(nameof(Index));
     }
@@ -142,8 +147,10 @@ public class ProductsController : Controller
                 }
             }
             
+            var name = item.Name;
             _db.Products.Remove(item);
             await _db.SaveChangesAsync();
+            await _activityLog.LogAsync("Delete", "Product", null, name, "Xóa sản phẩm");
             TempData["Message"] = "Đã xóa sản phẩm thành công.";
         }
         return RedirectToAction(nameof(Index));

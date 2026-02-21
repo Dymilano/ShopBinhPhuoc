@@ -244,9 +244,27 @@
                         </a>
                     </li>
                     <li class="nxl-item">
+                        <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-users"></i></span>
+                            <span class="nxl-mtext">Người dùng</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item">
+                        <a asp-area="Admin" asp-controller="Profile" asp-action="Index" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-user"></i></span>
+                            <span class="nxl-mtext">Thông tin cá nhân</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item">
                         <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-settings"></i></span>
                             <span class="nxl-mtext">Cài đặt</span>
+                        </a>
+                    </li>
+                    <li class="nxl-item">
+                        <a asp-area="Admin" asp-controller="ActivityLogs" asp-action="Index" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-activity"></i></span>
+                            <span class="nxl-mtext">Lịch sử hoạt động</span>
                         </a>
                     </li>
                 </ul>
@@ -381,11 +399,7 @@
                             </a>
                             <a asp-area="Admin" asp-controller="Profile" asp-action="Index" class="dropdown-item">
                                 <i class="feather-user me-2"></i>
-                                <span>Thông tin cá nhân</span>
-                            </a>
-                            <a asp-area="Admin" asp-controller="Profile" asp-action="Index" class="dropdown-item">
-                                <i class="feather-settings me-2"></i>
-                                <span>Cài đặt tài khoản</span>
+                                <span>Thông tin cá nhân / Chỉnh sửa</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="m-0">

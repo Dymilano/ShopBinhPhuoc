@@ -42,27 +42,48 @@ public class UsersController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Create()
+    public IActionResult Create(string? role = null)
     {
-        ViewData["Title"] = "Thêm người dùng";
-        return View(new User { Role = "Customer" });
+        ViewData["Title"] = role == "Admin" ? "Cấp tài khoản Admin" : "Thêm người dùng";
+        var user = new User
+        {
+            Role = role == "Admin" ? "Admin" : role == "Manager" ? "Manager" : "Customer",
+            IsActive = true
+        };
+        ViewBag.IsCreateAdmin = (role == "Admin");
+        return View(user);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(User user, string password)
     {
-        if (await _db.Users.AnyAsync(u => u.Email == user.Email))
+        if (string.IsNullOrWhiteSpace(user.Email))
+        {
+            ModelState.AddModelError("Email", "Email không được để trống.");
+            return View(user);
+        }
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+        {
+            ModelState.AddModelError("", "Mật khẩu phải có ít nhất 6 ký tự.");
+            return View(user);
+        }
+        var email = user.Email.Trim().ToLowerInvariant();
+        if (await _db.Users.AnyAsync(u => u.Email != null && u.Email.ToLower() == email))
         {
             ModelState.AddModelError("Email", "Email đã được sử dụng.");
             return View(user);
         }
         
+        user.Email = email;
         user.PasswordHash = HashPassword(password);
         user.CreatedAt = DateTime.UtcNow;
+        user.Name = user.Name?.Trim() ?? "";
+        user.Phone = string.IsNullOrWhiteSpace(user.Phone) ? null : user.Phone.Trim();
+        user.Address = string.IsNullOrWhiteSpace(user.Address) ? null : user.Address.Trim();
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
-        TempData["Success"] = "Đã thêm người dùng thành công.";
+        TempData["Success"] = user.Role == "Admin" ? "Đã cấp tài khoản Admin thành công." : "Đã thêm người dùng thành công.";
         return RedirectToAction(nameof(Index));
     }
 

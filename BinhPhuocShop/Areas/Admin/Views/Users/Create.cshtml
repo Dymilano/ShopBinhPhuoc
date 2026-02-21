@@ -1,6 +1,7 @@
 @model User
 @{
-    ViewData["Title"] = "Thêm người dùng";
+    ViewData["Title"] = ViewBag.IsCreateAdmin == true ? "Cấp tài khoản Admin" : "Thêm người dùng";
+    var isAdmin = Model?.Role == "Admin";
 }
 
 @section PageHeaderRight {
@@ -8,9 +9,9 @@
         <i class="feather-arrow-left me-2"></i>
         <span>Quay lại</span>
     </a>
-    <button type="submit" form="userForm" class="btn btn-primary">
+    <button type="submit" form="userForm" class="btn @(isAdmin ? "btn-danger" : "btn-primary")">
         <i class="feather-save me-2"></i>
-        <span>Lưu người dùng</span>
+        <span>@(isAdmin ? "Cấp tài khoản Admin" : "Lưu người dùng")</span>
     </button>
 }
 
@@ -49,7 +50,7 @@
                         <div class="col-lg-9">
                             <div class="input-group input-group-sm">
                                 <div class="input-group-text"><i class="feather-lock"></i></div>
-                                <input name="password" type="password" class="form-control" placeholder="Mật khẩu" required>
+                                <input name="password" type="password" class="form-control" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
                             </div>
                         </div>
                     </div>
@@ -81,10 +82,14 @@
                         </div>
                         <div class="col-lg-9">
                             <select name="Role" class="form-select form-select-sm" required style="max-width: 300px;">
-                                <option value="Customer">Khách hàng</option>
-                                <option value="Manager">Quản lý</option>
-                                <option value="Admin">Quản trị viên</option>
+                                <option value="Customer" selected="@(Model?.Role == "Customer")">Khách hàng</option>
+                                <option value="Manager" selected="@(Model?.Role == "Manager")">Quản lý</option>
+                                <option value="Admin" selected="@(Model?.Role == "Admin")">Quản trị viên (Admin)</option>
                             </select>
+                            @if (isAdmin)
+                            {
+                                <p class="text-muted fs-12 mt-1 mb-0">Tài khoản Admin có quyền truy cập đầy đủ vào khu vực quản trị.</p>
+                            }
                         </div>
                     </div>
                     <div class="row mb-3 align-items-center">

@@ -23,6 +23,7 @@ public class ContactController : StoreControllerBase
             ModelState.AddModelError("", "Vui lòng điền đầy đủ Họ tên, Email và Nội dung.");
             return View(model);
         }
+        if (string.IsNullOrWhiteSpace(model.Subject)) model.Subject = "Liên hệ từ website";
         model.CreatedAt = DateTime.UtcNow;
         Db.ContactMessages.Add(model);
         await Db.SaveChangesAsync();

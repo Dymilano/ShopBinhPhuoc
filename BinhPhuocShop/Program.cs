@@ -1,17 +1,17 @@
 using BinhPhuocShop.Data;
 using BinhPhuocShop.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromDays(7); options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BinhPhuocShop.Services.CartService>();
+builder.Services.AddScoped<BinhPhuocShop.Services.ActivityLogService>();
 
 builder.Services.AddControllersWithViews();
 
@@ -20,86 +20,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    // SQL Server: Chạy CreateDatabase.sql trước, hoặc EnsureCreated sẽ tạo bảng từ models
     db.Database.EnsureCreated();
-    // Ensure Order tables exist (for existing databases created before Order was added)
-    try { db.Database.ExecuteSqlRaw("SELECT 1 FROM Orders LIMIT 1"); }
-    catch
-    {
-        db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS Orders (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            OrderCode TEXT NOT NULL,
-            CustomerName TEXT NOT NULL,
-            Phone TEXT NOT NULL,
-            Email TEXT NOT NULL,
-            Address TEXT NOT NULL,
-            Note TEXT,
-            Status TEXT NOT NULL DEFAULT 'pending',
-            TotalAmount REAL NOT NULL,
-            CreatedAt TEXT NOT NULL,
-            UpdatedAt TEXT
-        )");
-        db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS OrderItems (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            OrderId INTEGER NOT NULL,
-            ProductId INTEGER NOT NULL,
-            ProductName TEXT NOT NULL,
-            ProductImageUrl TEXT,
-            Size TEXT,
-            Price REAL NOT NULL,
-            Quantity INTEGER NOT NULL,
-            FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
-            FOREIGN KEY (ProductId) REFERENCES Products(Id)
-        )");
-    }
-    try { db.Database.ExecuteSqlRaw("SELECT 1 FROM Users LIMIT 1"); }
-    catch
-    {
-        db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS Users (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Email TEXT NOT NULL,
-            PasswordHash TEXT NOT NULL,
-            Name TEXT NOT NULL,
-            Phone TEXT,
-            Address TEXT,
-            Role TEXT NOT NULL DEFAULT 'Customer',
-            IsActive INTEGER NOT NULL DEFAULT 1,
-            CreatedAt TEXT NOT NULL,
-            UpdatedAt TEXT
-        )");
-    }
-    // Add missing columns to Users table if they don't exist
-    try
-    {
-        db.Database.ExecuteSqlRaw("SELECT Address FROM Users LIMIT 1");
-    }
-    catch
-    {
-        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN Address TEXT");
-    }
-    try
-    {
-        db.Database.ExecuteSqlRaw("SELECT Role FROM Users LIMIT 1");
-    }
-    catch
-    {
-        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN Role TEXT NOT NULL DEFAULT 'Customer'");
-    }
-    try
-    {
-        db.Database.ExecuteSqlRaw("SELECT UpdatedAt FROM Users LIMIT 1");
-    }
-    catch
-    {
-        db.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN UpdatedAt TEXT");
-    }
-    try
-    {
-        db.Database.ExecuteSqlRaw("SELECT BlogCategory FROM Posts LIMIT 1");
-    }
-    catch
-    {
-        db.Database.ExecuteSqlRaw("ALTER TABLE Posts ADD COLUMN BlogCategory TEXT");
-    }
     if (!db.SiteSettings.Any())
     {
         db.SiteSettings.AddRange(
@@ -207,36 +129,20 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseSession();
 
-var cozaPath = Path.Combine(builder.Environment.ContentRootPath, "..", "cozastore-master", "cozastore-master");
-if (Directory.Exists(cozaPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(cozaPath),
-        RequestPath = "/store"
-    });
-}
-var cleopatraPath = Path.Combine(builder.Environment.ContentRootPath, "..", "cleopatra-tailwind-1.0.0", "cleopatra-tailwind-1.0.0", "dist");
-if (Directory.Exists(cleopatraPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(cleopatraPath),
-        RequestPath = "/admin"
-    });
-}
-// Serve Duralux admin assets
-var duraluxAssetsPath = Path.Combine(builder.Environment.WebRootPath, "duralux");
-if (Directory.Exists(duraluxAssetsPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(duraluxAssetsPath),
-        RequestPath = "/duralux"
-    });
-}
+// Store (CozaStore) và Duralux (Admin) đã nằm trong wwwroot/store và wwwroot/duralux
+// app.UseStaticFiles() mặc định phục vụ tất cả từ wwwroot
 
 app.UseRouting();
+// Port 4080: chuyển / về /Admin
+app.Use(async (context, next) =>
+{
+    if (context.Connection.LocalPort == 4080 && context.Request.Path == "/")
+    {
+        context.Response.Redirect("/Admin");
+        return;
+    }
+    await next();
+});
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,0 +1,84 @@
+@model IEnumerable<BinhPhuocShop.Models.ActivityLog>
+@{
+    ViewData["Title"] = "Lịch sử hoạt động";
+    var total = ViewBag.Total as int? ?? 0;
+    var page = ViewBag.Page as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+    var actionFilter = ViewBag.ActionFilter as string ?? "";
+    var entityFilter = ViewBag.EntityFilter as string ?? "";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="mb-0">Lịch sử hoạt động</h5>
+        <form method="get" class="d-flex gap-2 flex-wrap">
+            <select name="action" class="form-select form-select-sm" style="width: auto;">
+                <option value="">-- Hành động --</option>
+                <option value="Login" selected="@(actionFilter == "Login")">Đăng nhập</option>
+                <option value="Logout" selected="@(actionFilter == "Logout")">Đăng xuất</option>
+                <option value="Register" selected="@(actionFilter == "Register")">Đăng ký</option>
+                <option value="Create" selected="@(actionFilter == "Create")">Thêm mới</option>
+                <option value="Update" selected="@(actionFilter == "Update")">Cập nhật</option>
+                <option value="Delete" selected="@(actionFilter == "Delete")">Xóa</option>
+            </select>
+            <select name="entityType" class="form-select form-select-sm" style="width: auto;">
+                <option value="">-- Loại --</option>
+                <option value="User" selected="@(entityFilter == "User")">User</option>
+                <option value="Product" selected="@(entityFilter == "Product")">Product</option>
+                <option value="Order" selected="@(entityFilter == "Order")">Order</option>
+                <option value="Category" selected="@(entityFilter == "Category")">Category</option>
+                <option value="Brand" selected="@(entityFilter == "Brand")">Brand</option>
+                <option value="Post" selected="@(entityFilter == "Post")">Post</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-primary">Lọc</button>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Hành động</th>
+                        <th>Loại</th>
+                        <th>Người dùng</th>
+                        <th>Chi tiết</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model ?? Enumerable.Empty<BinhPhuocShop.Models.ActivityLog>())
+                    {
+                        <tr>
+                            <td class="text-nowrap">@log.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><span class="badge bg-@(log.Action == "Login" || log.Action == "Register" ? "success" : log.Action == "Delete" ? "danger" : "primary")">@log.Action</span></td>
+                            <td>@log.EntityType</td>
+                            <td>@(log.UserName ?? "Guest") <small class="text-muted">@log.UserEmail</small></td>
+                            <td>@log.Details</td>
+                            <td><small>@log.IpAddress</small></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (totalPages > 1)
+        {
+            <nav class="mt-3">
+                <ul class="pagination pagination-sm justify-content-center mb-0">
+                    <li class="page-item @(page <= 1 ? "disabled" : "")">
+                        <a class="page-link" href="?page=@(page - 1)&action=@actionFilter&entityType=@entityFilter">Trước</a>
+                    </li>
+                    @for (var p = 1; p <= Math.Min(totalPages, 10); p++)
+                    {
+                        <li class="page-item @(p == page ? "active" : "")">
+                            <a class="page-link" href="?page=@p&action=@actionFilter&entityType=@entityFilter">@p</a>
+                        </li>
+                    }
+                    <li class="page-item @(page >= totalPages ? "disabled" : "")">
+                        <a class="page-link" href="?page=@(page + 1)&action=@actionFilter&entityType=@entityFilter">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</div>

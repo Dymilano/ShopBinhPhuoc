@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using BinhPhuocShop.Data;
+using BinhPhuocShop.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace BinhPhuocShop.Areas.Admin.Controllers;
 public class AccountController : Controller
 {
     private readonly AppDbContext _db;
+    private readonly ActivityLogService _activityLog;
 
-    public AccountController(AppDbContext db)
+    public AccountController(AppDbContext db, ActivityLogService activityLog)
     {
         _db = db;
+        _activityLog = activityLog;
     }
 
     [HttpGet]
@@ -50,13 +53,18 @@ public class AccountController : Controller
         HttpContext.Session.SetString("UserEmail", user.Email);
         HttpContext.Session.SetString("UserRole", user.Role);
         HttpContext.Session.SetString("IsAdmin", user.Role == "Admin" ? "true" : "false");
-        return Redirect(returnUrl ?? Url.Action("Index", "Dashboard") ?? "/admin");
+        await _activityLog.LogAsync("Login", "User", user.Id, user.Email, $"Admin đăng nhập - {user.Role}");
+        return Redirect(returnUrl ?? Url.Action("Index", "Dashboard") ?? "/Admin");
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
+        var userId = HttpContext.Session.GetString("UserId");
+        var email = HttpContext.Session.GetString("UserEmail");
+        if (!string.IsNullOrEmpty(userId) && int.TryParse(userId, out var id))
+            await _activityLog.LogAsync("Logout", "User", id, email, "Admin đăng xuất");
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
     }

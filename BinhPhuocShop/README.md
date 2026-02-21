@@ -1,8 +1,8 @@
 # Bình Phước Shop - Web bán giày dép (ASP.NET Core)
 
-Dự án web bán giày dép sử dụng **ASP.NET Core 10 MVC**, gồm:
-- **Trang người dùng**: giao diện CozaStore (Trang chủ, Giới thiệu, Sản phẩm, Bài viết, Liên hệ, Giỏ hàng, Thanh toán)
-- **Trang Admin**: giao diện Duralux Admin (quản lý sản phẩm, danh mục, thương hiệu, bài viết, đơn hàng, cài đặt web, tin nhắn liên hệ, người dùng)
+ sử dụng **ASP.NET Core 10 MVC**, gồm:
+- **Trang người dùng**:Trang chủ, Giới thiệu, Sản phẩm, Bài viết, Liên hệ, Giỏ hàng, Thanh toán)
+- **Trang Admin**: giao diện Admin (quản lý sản phẩm, danh mục, thương hiệu, bài viết, đơn hàng, cài đặt web, tin nhắn liên hệ, người dùng)
 
 ## Danh mục sản phẩm chính (5 mục)
 
@@ -14,20 +14,22 @@ Dự án web bán giày dép sử dụng **ASP.NET Core 10 MVC**, gồm:
 
 ## Yêu cầu
 
-- .NET 10.0 SDK (hoặc .NET 8+)
-- Thư mục **cozastore-master** và **cleopatra-tailwind-1.0.0** nằm cùng cấp với thư mục **BinhPhuocShop** (để phục vụ CSS/JS/img của store và admin)
-- Thư mục **duralux** trong **wwwroot** (cho giao diện admin)
+- .NET 9.0 SDK (hoặc .NET 8+)
+- SQL Server (LocalDB hoặc SQLEXPRESS): `DESKTOP-C14HLFU\SQLEXPRESS` ( database)
 
 ## Chạy dự án
 
 ```bash
 cd BinhPhuocShop
+donet build
 dotnet run
 ```
 
-- **Trang chủ (người dùng)**: http://localhost:5188
-- **Trang Admin**: http://localhost:5188/Admin/Account/Login
-  - **Email**: `admin@binhphuocshop.vn`
+- **Trang chủ (Web)**: http://localhost:5000
+- **Trang Admin**: http://localhost:4080 hoặc http://localhost:4080/Admin
+- ** Trang web địa chỉ khác và admin địa chỉ khác, chú ý.
+
+  - **Email**: `admin@binhphuocshop.vn`( tk và mk để đăng nhập admin)
   - **Password**: `admin123`
 
 ## Các trang web chính (store)
@@ -49,11 +51,16 @@ dotnet run
 
 ## Cấu trúc
 
-- **Areas/Admin**: Quản trị (Duralux Admin) – Tổng quan, Sản phẩm (danh sách, thêm, sửa, xóa), Danh mục, Thương hiệu, Bài viết, Đơn hàng, Liên hệ, Cài đặt web, Người dùng, Profile. Sidebar gọn, giao diện hiện đại.
+- **Areas/Admin**: Quản trị  – Tổng quan, Sản phẩm (danh sách, thêm, sửa, xóa), Danh mục, Thương hiệu, Bài viết, Đơn hàng, Liên hệ, Cài đặt web, Người dùng, Profile. Sidebar gọn, giao diện hiện đại.
+
 - **Controllers**: Home, Products, Collections, Blog, Contact, Cart, Checkout, Pages, Account (trang store)
+
 - **Models**: Category, Brand, Product, Post, SiteSetting, ContactMessage, Order, OrderItem, User, CartItem
-- **Data**: SQLite (file `app.db`), có thể đổi sang SQL Server trong `appsettings.json` và `Program.cs`
+
+- **Data**: SQL Server (`DESKTOP-C14HLFU\SQLEXPRESS`). Chạy `Database/CreateDatabase.sql` lần đầu để tạo database và dữ liệu mẫu
+
 - **Services**: CartService (quản lý giỏ hàng qua session)
+
 - **Infrastructure**: AdminAuthorizationAttribute, AllowedCategories, SkipCollectionsPathConstraint
 
 ## Database Schema
@@ -74,19 +81,7 @@ dotnet run
 - **Manager**: Quyền quản trị (có thể mở rộng)
 - **Customer**: Người dùng thường
 
-## Lần đầu chạy
 
-- Database tự tạo và seed:
-  - 5 danh mục mặc định (Giày nam, Giày nữ, Dép nam, Dép nữ, Phụ kiện)
-  - Cài đặt web (SiteName, SiteDescription, Phone, Email, Address, WebsiteUrl)
-  - User admin mặc định:
-    - Email: `admin@binhphuocshop.vn`
-    - Password: `admin123`
-    - Role: `Admin`
-    - Address: `123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh`
-  - Dữ liệu mẫu sản phẩm Mulgati (nếu chưa có sản phẩm)
-- Vào **Admin** → **Danh mục** / **Thương hiệu** / **Sản phẩm** để thêm nội dung.
-- **Cài đặt web**: Admin → Cài đặt web để sửa tên shop, số điện thoại, địa chỉ, URL website hiển thị trên trang chủ và footer.
 
 ## Tính năng
 
@@ -117,13 +112,8 @@ dotnet run
 ## Cấu hình
 
 ### Database:
-- Mặc định: SQLite (`app.db`)
-- Có thể đổi sang SQL Server trong `appsettings.json`:
-  ```json
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=...;Database=...;..."
-  }
-  ```
+- SQL Server: `Server=DESKTOP-C14HLFU\SQLEXPRESS;Database=BinhPhuocShop;Trusted_Connection=True;TrustServerCertificate=True;`
+- Sửa `appsettings.json` nếu dùng server/instance khác
 
 ### Session:
 - Timeout: 7 ngày
@@ -131,11 +121,7 @@ dotnet run
 
 ## Lưu ý
 
-- Database tự động migrate khi khởi động (EnsureCreated)
-- Các cột mới sẽ tự động được thêm vào bảng cũ (Address, Role, UpdatedAt trong Users)
-- Admin user luôn được đảm bảo có Role = "Admin" khi khởi động
+- Chạy `Database/CreateDatabase.sql` trên SQL Server trước khi chạy ứng dụng lần đầu
+- Admin user mặc định: `admin@binhphuocshop.vn` / `admin123` (nên đổi sau khi deploy)
 - Password admin mặc định: `admin123` (nên đổi sau khi deploy)
 
-## License
-
-Dự án này được phát triển cho Bình Phước Shop.
