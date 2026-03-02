@@ -7,16 +7,14 @@ namespace BinhPhuocShop.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [AdminAuthorization]
-public class ActivityLogsController : Controller
+public class ActivityLogsController : AdminControllerBase
 {
-    private readonly AppDbContext _db;
-
-    public ActivityLogsController(AppDbContext db) => _db = db;
+    public ActivityLogsController(AppDbContext db) : base(db) { }
 
     public async Task<IActionResult> Index(int page = 1, string? action = null, string? entityType = null)
     {
         ViewData["Title"] = "Lịch sử hoạt động";
-        var query = _db.ActivityLogs.OrderByDescending(l => l.CreatedAt).AsQueryable();
+        var query = Db.ActivityLogs.OrderByDescending(l => l.CreatedAt).AsQueryable();
         if (!string.IsNullOrWhiteSpace(action))
             query = query.Where(l => l.Action == action);
         if (!string.IsNullOrWhiteSpace(entityType))

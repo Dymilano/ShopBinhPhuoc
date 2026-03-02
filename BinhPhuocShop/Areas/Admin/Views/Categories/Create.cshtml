@@ -3,64 +3,83 @@
     ViewData["Title"] = "Thêm danh mục";
 }
 
-@section PageHeaderRight {
-    <a asp-action="Index" class="btn btn-light-brand">
-        <i class="feather-arrow-left me-2"></i>
-        <span>Quay lại</span>
-    </a>
-    <button type="submit" form="categoryForm" class="btn btn-primary">
-        <i class="feather-save me-2"></i>
-        <span>Lưu danh mục</span>
-    </button>
-}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">Thêm danh mục</h4>
+        <div>
+            <a asp-action="Index" class="btn btn-light me-2">
+                <i class="feather-arrow-left me-2"></i>Quay lại
+            </a>
+            <button type="submit" form="categoryForm" class="btn btn-primary">
+                <i class="feather-save me-2"></i>Lưu danh mục
+            </button>
+        </div>
+    </div>
 
-<form id="categoryForm" asp-action="Create" method="post">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card border-top-0">
-                <div class="card-body admin-form-card">
-                    <div asp-validation-summary="All" class="alert alert-danger"></div>
-                    <div class="form-row">
-                        <label asp-for="Name">Tên danh mục <span class="text-danger">*</span></label>
-                        <input asp-for="Name" placeholder="Tên danh mục" required>
+    <form id="categoryForm" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+        
+        <div class="row">
+            <!-- CỘT TRÁI -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Thông tin danh mục
                     </div>
-                    <div class="form-row">
-                        <label asp-for="Slug">Slug</label>
-                        <input asp-for="Slug" placeholder="Tự động nếu để trống">
-                    </div>
-                    <div class="form-row">
-                        <label asp-for="Description">Mô tả</label>
-                        <textarea asp-for="Description" rows="2" placeholder="Mô tả danh mục"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <label asp-for="ParentId">Danh mục cha</label>
-                        <select asp-for="ParentId" asp-items="ViewBag.Parents">
-                            <option value="">— Không có —</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <label asp-for="DisplayOrder">Thứ tự hiển thị</label>
-                        <input asp-for="DisplayOrder" type="number" value="0" style="max-width: 150px;">
-                    </div>
-                    <div class="form-row">
-                        <label>Trạng thái</label>
-                        <div class="form-check form-switch form-switch-sm">
-                            <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
-                            <label class="form-check-label" for="IsActive">Hiển thị</label>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Tên danh mục <span class="text-danger">*</span></label>
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Tên danh mục" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label">Slug</label>
+                            <input asp-for="Slug" type="text" class="form-control" placeholder="Để trống sẽ tự động tạo">
+                            <small class="text-muted">Để trống sẽ tự động tạo</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả danh mục"></textarea>
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <a asp-action="Index" class="btn btn-light-brand me-2">
-                            <i class="feather-x me-2"></i>
-                            <span>Hủy</span>
-                        </a>
-                        <button type="submit">
-                            <i class="feather-save me-2"></i>
-                            <span>Lưu danh mục</span>
-                        </button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold">
+                        Phân loại
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ParentId" class="form-label">Danh mục cha</label>
+                            <select asp-for="ParentId" asp-items="ViewBag.Parents" class="form-select">
+                                <option value="">— Không có —</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Trạng thái
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="DisplayOrder" class="form-label">Thứ tự hiển thị</label>
+                            <input asp-for="DisplayOrder" type="number" class="form-control" value="0">
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                            <label class="form-check-label" asp-for="IsActive">Hiển thị</label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>

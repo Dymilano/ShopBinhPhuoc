@@ -7,180 +7,277 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] | Bình Phước Shop - Admin</title>
-    <link rel="shortcut icon" href="@(adminBase)/img/fav.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.css">
     <link rel="stylesheet" type="text/css" href="@(adminBase)/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/css/site-admin.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-light">
 @Html.AntiForgeryToken()
-<!-- start navbar (Cleopatra) -->
-<div class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center bg-white p-6 border-b border-gray-300">
-    <div class="flex-none w-56 flex flex-row items-center">
-        <img src="@(adminBase)/img/logo.png" class="w-10 flex-none" alt="Logo">
-        <strong class="capitalize ml-1 flex-1 text-teal-600">Bình Phước Shop</strong>
-        <button id="sliderBtn" class="flex-none text-right text-gray-900 hidden md:block">
-            <i class="fad fa-list-ul"></i>
+
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px; font-weight: bold;">BP</div>
+            <strong class="text-primary">Bình Phước Shop</strong>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-    <button id="navbarToggle" class="hidden md:block md:fixed right-0 mr-6">
-        <i class="fad fa-chevron-double-down"></i>
-    </button>
-    <div id="navbar" class="animated md:hidden md:fixed md:top-0 md:w-full md:left-0 md:mt-16 md:border-t md:border-b md:border-gray-200 md:p-10 md:bg-white flex-1 pl-3 flex flex-row flex-wrap justify-between items-center md:flex-col md:items-center">
-        <div class="text-gray-600 md:w-full md:flex md:flex-row md:justify-evenly md:pb-10 md:mb-10 md:border-b md:border-gray-200">
-            <a href="@Url.Action("Index", "Home", new { area = "" })" target="_blank" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Trang chủ"><i class="fad fa-home"></i></a>
-            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Tổng quan"><i class="fad fa-chart-pie"></i></a>
-            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="mr-2 transition duration-500 ease-in-out hover:text-gray-900" title="Đơn hàng"><i class="fad fa-shopping-cart"></i></a>
-        </div>
-        <div class="flex flex-row-reverse items-center">
-            <div class="dropdown relative md:static">
-                <button class="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
-                    <div class="w-8 h-8 overflow-hidden rounded-full bg-teal-100 border border-teal-300 flex items-center justify-center">
-                        <i class="fad fa-user text-teal-600"></i>
-                    </div>
-                    <div class="ml-2 capitalize flex">
-                        <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">Admin</h1>
-                        <i class="fad fa-chevron-down ml-2 text-xs leading-none"></i>
-                    </div>
-                </button>
-                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
-                <div class="text-gray-500 menu hidden md:mt-10 md:w-full rounded bg-white shadow-md absolute z-20 right-0 w-40 mt-5 py-2 animated faster">
-                    <a href="@Url.Action("Index", "Home", new { area = "" })" target="_blank" class="px-4 py-2 block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out">
-                        <i class="fad fa-external-link text-xs mr-1"></i> Xem trang chủ
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="@Url.Action("Index", "Home", new { area = "" })" target="_blank" title="Xem trang chủ">
+                        <i class="bi bi-house-door"></i>
                     </a>
-                    <hr>
-                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="p-0 m-0">
-                        <button type="submit" class="px-4 py-2 w-full text-left block capitalize font-medium text-sm tracking-wide bg-white hover:bg-gray-200 hover:text-gray-900 transition-all duration-300 ease-in-out border-0 cursor-pointer">
-                            <i class="fad fa-user-times text-xs mr-1"></i> Đăng xuất
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div class="dropdown relative mr-5 md:static">
-                <button class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
-                    <i class="fad fa-bells"></i>
-                </button>
-                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
-                <div class="menu hidden rounded bg-white md:right-0 md:w-full shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster">
-                    <div class="px-4 py-2 flex flex-row justify-between items-center capitalize font-semibold text-sm">
-                        <h1>Thông báo</h1>
-                        <div class="bg-teal-100 border border-teal-200 text-teal-500 text-xs rounded px-1"><strong>0</strong></div>
-                    </div>
-                    <hr>
-                    <div class="px-4 py-6 text-center text-gray-500 text-sm">Chưa có thông báo mới.</div>
-                    <hr>
-                    <div class="px-4 py-2 mt-2">
-                        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="border border-gray-300 block text-center text-xs uppercase rounded p-1 hover:text-teal-500 transition-all ease-in-out duration-500">Xem đơn hàng</a>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdown relative mr-5 md:static">
-                <button class="text-gray-500 menu-btn p-0 m-0 hover:text-gray-900 focus:text-gray-900 focus:outline-none transition-all ease-in-out duration-300">
-                    <i class="fad fa-comments"></i>
-                </button>
-                <button class="hidden fixed top-0 left-0 z-10 w-full h-full menu-overflow"></button>
-                <div class="menu hidden md:w-full md:right-0 rounded bg-white shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster">
-                    <div class="px-4 py-2 flex flex-row justify-between items-center capitalize font-semibold text-sm">
-                        <h1>Liên hệ</h1>
-                        <div class="bg-teal-100 border border-teal-200 text-teal-500 text-xs rounded px-1"><strong>0</strong></div>
-                    </div>
-                    <hr>
-                    <div class="px-4 py-6 text-center text-gray-500 text-sm">Tin nhắn mới sẽ hiển thị tại đây.</div>
-                    <hr>
-                    <div class="px-4 py-2 mt-2">
-                        <a asp-area="Admin" asp-controller="ContactMessages" asp-action="Index" class="border border-gray-300 block text-center text-xs uppercase rounded p-1 hover:text-teal-500 transition-all ease-in-out duration-500">Xem tất cả</a>
-                    </div>
-                </div>
-            </div>
+                </li>
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        @{
+                            var pendingOrdersCount = ViewBag.PendingOrdersCount as int? ?? 0;
+                        }
+                        @if (pendingOrdersCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">@pendingOrdersCount</span>
+                        }
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="min-width: 300px;">
+                        <li><h6 class="dropdown-header">Thông báo</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        @if (pendingOrdersCount > 0)
+                        {
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Orders", new { area = "Admin", status = "pending" })">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Đơn hàng đang chờ</span>
+                                        <span class="badge bg-warning text-dark">@pendingOrdersCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><span class="dropdown-item-text text-muted">Chưa có thông báo mới</span></li>
+                        }
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="@Url.Action("Index", "Orders", new { area = "Admin" })">Xem tất cả đơn hàng</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-envelope"></i>
+                        @{
+                            var unreadContactsCount = ViewBag.UnreadContactsCount as int? ?? 0;
+                        }
+                        @if (unreadContactsCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">@unreadContactsCount</span>
+                        }
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="min-width: 300px;">
+                        <li><h6 class="dropdown-header">Liên hệ</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        @if (unreadContactsCount > 0)
+                        {
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Index", "ContactMessages", new { area = "Admin" })">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Tin nhắn mới</span>
+                                        <span class="badge bg-info">@unreadContactsCount</span>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><span class="dropdown-item-text text-muted">Chưa có tin nhắn mới</span></li>
+                        }
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="@Url.Action("Index", "ContactMessages", new { area = "Admin" })">Xem tất cả</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <span>Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="@Url.Action("Index", "Home", new { area = "" })" target="_blank"><i class="bi bi-box-arrow-up-right me-2"></i>Xem trang chủ</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
-<!-- end navbar -->
+</nav>
 
-<div class="min-h-screen flex flex-row flex-wrap">
-    <!-- start sidebar (Cleopatra) -->
-    <div id="sideBar" class="relative flex flex-col flex-wrap bg-white border-r border-gray-300 p-4 flex-none w-52 md:-ml-52 md:fixed md:top-0 md:z-30 md:h-screen md:shadow-xl animated faster">
-        <div class="flex flex-col">
-            <div class="text-right hidden md:block mb-2">
-                <button id="sideBarHideBtn" class="text-gray-500 hover:text-gray-700"><i class="fad fa-times-circle text-sm"></i></button>
-            </div>
-            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-1 tracking-wider">Trang chủ</p>
-            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-chart-pie text-xs mr-2 w-4"></i> Tổng quan
-            </a>
-            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Sản phẩm</p>
-            <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-shopping-bag text-xs mr-2 w-4"></i> Danh sách
-            </a>
-            <a asp-area="Admin" asp-controller="Products" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm SP
-            </a>
-            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-folder text-xs mr-2 w-4"></i> Danh mục
-            </a>
-            <a asp-area="Admin" asp-controller="Categories" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm danh mục
-            </a>
-            <a asp-area="Admin" asp-controller="Brands" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-award text-xs mr-2 w-4"></i> Thương hiệu
-            </a>
-            <a asp-area="Admin" asp-controller="Brands" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-plus-circle text-xs mr-2 w-4"></i> Thêm thương hiệu
-            </a>
-            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Nội dung</p>
-            <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-file-text text-xs mr-2 w-4"></i> Bài viết
-            </a>
-            <a asp-area="Admin" asp-controller="Posts" asp-action="Create" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-plus text-xs mr-2 w-4"></i> Thêm bài viết
-            </a>
-            <a asp-area="Admin" asp-controller="Pages" asp-action="EditGioiThieu" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-edit text-xs mr-2 w-4"></i> Sửa Giới thiệu
-            </a>
-            <p class="uppercase text-[10px] text-gray-500 mb-2 mt-2 tracking-wider">Bán hàng</p>
-            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-shopping-cart text-xs mr-2 w-4"></i> Đơn hàng
-            </a>
-            <a asp-area="Admin" asp-controller="ContactMessages" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-mail text-xs mr-2 w-4"></i> Liên hệ
-            </a>
-            <a asp-area="Admin" asp-controller="Settings" asp-action="Index" class="mb-2 py-1.5 capitalize font-medium text-xs hover:text-teal-600 transition duration-200">
-                <i class="fad fa-cog text-xs mr-2 w-4"></i> Cài đặt
-            </a>
-        </div>
-    </div>
-    <!-- end sidebar -->
-
-    <!-- start content -->
-    <div class="bg-gray-100 flex-1 p-6 md:mt-16 md:pl-8 md:pr-8">
-        <div class="mb-6 flex flex-row flex-wrap justify-between items-center">
-            <div>
-                <h5 class="text-gray-800 font-semibold mb-1">@ViewData["Title"]</h5>
-                <ul class="flex text-sm text-gray-500">
-                    <li><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="hover:text-teal-600 transition duration-200">Bình Phước Shop</a></li>
-                    <li class="mx-1">/</li>
-                    <li>@ViewData["Title"]</li>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-white border-end sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
+                            <i class="bi bi-speedometer2 me-2"></i> Tổng quan
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <small class="text-muted text-uppercase px-3">Sản phẩm</small>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "active" : "")" href="@Url.Action("Index", "Products", new { area = "Admin" })">
+                            <i class="bi bi-box-seam me-2"></i> Danh sách
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Create", "Products", new { area = "Admin" })">
+                            <i class="bi bi-plus-circle me-2"></i> Thêm sản phẩm
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Categories" ? "active" : "")" href="@Url.Action("Index", "Categories", new { area = "Admin" })">
+                            <i class="bi bi-folder me-2"></i> Danh mục
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Create", "Categories", new { area = "Admin" })">
+                            <i class="bi bi-plus-circle me-2"></i> Thêm danh mục
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Brands" ? "active" : "")" href="@Url.Action("Index", "Brands", new { area = "Admin" })">
+                            <i class="bi bi-award me-2"></i> Thương hiệu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Create", "Brands", new { area = "Admin" })">
+                            <i class="bi bi-plus-circle me-2"></i> Thêm thương hiệu
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <small class="text-muted text-uppercase px-3">Nội dung</small>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Posts" ? "active" : "")" href="@Url.Action("Index", "Posts", new { area = "Admin" })">
+                            <i class="bi bi-file-text me-2"></i> Bài viết
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Create", "Posts", new { area = "Admin" })">
+                            <i class="bi bi-plus-circle me-2"></i> Thêm bài viết
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pages" ? "active" : "")" href="@Url.Action("EditGioiThieu", "Pages", new { area = "Admin" })">
+                            <i class="bi bi-pencil me-2"></i> Sửa Giới thiệu
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <small class="text-muted text-uppercase px-3">Bán hàng</small>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Orders" ? "active" : "")" href="@Url.Action("Index", "Orders", new { area = "Admin" })">
+                            <i class="bi bi-cart me-2"></i> Đơn hàng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ContactMessages" ? "active" : "")" href="@Url.Action("Index", "ContactMessages", new { area = "Admin" })">
+                            <i class="bi bi-envelope me-2"></i> Liên hệ
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <small class="text-muted text-uppercase px-3">Hệ thống</small>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")" href="@Url.Action("Index", "Users", new { area = "Admin" })">
+                            <i class="bi bi-people me-2"></i> Người dùng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Create", "Users", new { area = "Admin", role = "Admin" })">
+                            <i class="bi bi-person-plus me-2"></i> Cấp tài khoản Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "ActivityLogs" ? "active" : "")" href="@Url.Action("Index", "ActivityLogs", new { area = "Admin" })">
+                            <i class="bi bi-clock-history me-2"></i> Lịch sử hoạt động
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")" href="@Url.Action("Index", "Settings", new { area = "Admin" })">
+                            <i class="bi bi-gear me-2"></i> Cài đặt
+                        </a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <hr>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Home", new { area = "" })" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i> Xem trang web
+                        </a>
+                    </li>
                 </ul>
             </div>
-        </div>
-        <div class="main-content max-w-full" style="max-width: 100%;">
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div>
+                    <h1 class="h2 mb-1">@ViewData["Title"]</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">Bình Phước Shop</a></li>
+                            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="d-flex gap-2">
+                    @await RenderSectionAsync("PageHeaderRight", required: false)
+                </div>
+            </div>
             @RenderBody()
-        </div>
-        <!-- footer (Cleopatra) -->
-        <div class="mt-10 pt-4 border-t border-gray-200 text-center text-xs text-gray-600">
-            © <span id="tw-current-year"></span> <strong>Bình Phước Shop</strong>. All rights reserved.
-        </div>
+            <footer class="my-5 pt-4 border-top text-center text-muted">
+                <small>© <span id="current-year"></span> <strong>Bình Phước Shop</strong>. All rights reserved.</small>
+            </footer>
+        </main>
     </div>
-    <!-- end content -->
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
 <script src="@(adminBase)/js/scripts.js"></script>
 <script>
-  (function () {
-    var el = document.getElementById('tw-current-year');
-    if (el) el.textContent = new Date().getFullYear();
-  })();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Feather Icons
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+        
+        // Set current year
+        var yearEl = document.getElementById('current-year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+        
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
 </script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

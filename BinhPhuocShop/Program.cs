@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=app.db"));
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromDays(7); options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; });
@@ -17,11 +17,18 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// Seed database - tách ra method async để sử dụng await
+await SeedDatabaseAsync(app.Services);
+
+// Method để seed database
+static async Task SeedDatabaseAsync(IServiceProvider serviceProvider)
 {
+    using var scope = serviceProvider.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    
     // SQL Server: Chạy CreateDatabase.sql trước, hoặc EnsureCreated sẽ tạo bảng từ models
     db.Database.EnsureCreated();
+    
     if (!db.SiteSettings.Any())
     {
         db.SiteSettings.AddRange(
@@ -42,6 +49,7 @@ using (var scope = app.Services.CreateScope())
             db.SaveChanges();
         }
     }
+    
     // Seed admin user - đảm bảo luôn có Role = Admin và Address
     var adminEmail = "admin@binhphuocshop.vn";
     var adminUser = db.Users.FirstOrDefault(u => u.Email == adminEmail);
@@ -72,6 +80,7 @@ using (var scope = app.Services.CreateScope())
         adminUser.UpdatedAt = DateTime.UtcNow;
     }
     db.SaveChanges();
+    
     var allowedSlugs = BinhPhuocShop.Infrastructure.AllowedCategories.Slugs;
     var requiredCategories = BinhPhuocShop.Infrastructure.AllowedCategories.Defaults;
 
@@ -99,7 +108,7 @@ using (var scope = app.Services.CreateScope())
         var toRemove = await db.Categories.Where(c => c.Slug == null || !allowedSlugs.Contains(c.Slug)).ToListAsync();
         foreach (var cat in toRemove)
         {
-            var productsToReassign = await db.Products.Where(p => p.CategoryId == cat.Id).ToListAsync();
+            var productsToReassign = await db.Products.Where(p => p.CategoryId.HasValue && p.CategoryId.Value == cat.Id).ToListAsync();
             foreach (var p in productsToReassign) p.CategoryId = firstAllowedId;
             db.Categories.Remove(cat);
         }
@@ -112,13 +121,14 @@ using (var scope = app.Services.CreateScope())
             var keep = withSlug[0];
             foreach (var dup in withSlug.Skip(1))
             {
-                var productsToReassign = await db.Products.Where(p => p.CategoryId == dup.Id).ToListAsync();
+                var productsToReassign = await db.Products.Where(p => p.CategoryId.HasValue && p.CategoryId.Value == dup.Id).ToListAsync();
                 foreach (var p in productsToReassign) p.CategoryId = keep.Id;
                 db.Categories.Remove(dup);
             }
         }
         await db.SaveChangesAsync();
     }
+    
     await MulgatiSeed.SeedAsync(db);
 }
 

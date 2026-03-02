@@ -1,5 +1,5 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Đăng ký";
     var error = ViewBag.Error as string;
     var name = ViewBag.Name as string ?? "";
@@ -7,47 +7,54 @@
     var phone = ViewBag.Phone as string ?? "";
 }
 
-<div class="section" style="padding: 60px 0;">
+<section class="section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
-                <div class="card" style="border-radius: 8px; border: 1px solid #e5e5e5;">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Đăng ký tài khoản</h2>
-                        @if (!string.IsNullOrEmpty(error))
-                        {
-                            <div class="alert alert-danger">@error</div>
-                        }
-                        <form asp-action="Register" method="post">
-                            @Html.AntiForgeryToken()
-                            <div class="form-group mb-3">
-                                <label>Họ tên</label>
-                                <input type="text" name="name" class="form-control" value="@name" required />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>Email</label>
-                                <input type="email" name="email" class="form-control" value="@email" required />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>Số điện thoại</label>
-                                <input type="tel" name="phone" class="form-control" value="@phone" />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>Mật khẩu</label>
-                                <input type="password" name="password" class="form-control" required minlength="6" placeholder="Tối thiểu 6 ký tự" />
-                            </div>
-                            <div class="form-group mb-4">
-                                <label>Xác nhận mật khẩu</label>
-                                <input type="password" name="confirmPassword" class="form-control" required minlength="6" placeholder="Nhập lại mật khẩu" />
-                            </div>
-                            <button type="submit" class="btn btn-dark btn-block w-100 mb-3">Đăng ký</button>
-                            <p class="text-center mb-0">
-                                Đã có tài khoản? <a asp-action="Login">Đăng nhập</a>
-                            </p>
-                        </form>
-                    </div>
+                <div class="register-card">
+                    <h2 class="text-center mb-4">Đăng ký tài khoản</h2>
+                    @if (!string.IsNullOrEmpty(error))
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-circle me-2"></i>@error
+                        </div>
+                    }
+                    <form asp-action="Register" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label">Họ tên</label>
+                            <input type="text" name="name" class="form-control" value="@name" required placeholder="Nhập họ và tên của bạn" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="@email" required placeholder="Nhập địa chỉ email" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                            <input type="tel" name="phone" class="form-control" value="@phone" required placeholder="Nhập số điện thoại (10-11 chữ số)" pattern="[0-9]{10,11}" />
+                            <small class="text-muted">Ví dụ: 0912345678</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                            <textarea name="address" class="form-control" rows="3" required placeholder="Nhập địa chỉ của bạn">@(ViewBag.Address as string ?? "")</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                            <input type="password" name="password" class="form-control" required minlength="6" placeholder="Tối thiểu 6 ký tự" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Xác nhận mật khẩu</label>
+                            <input type="password" name="confirmPassword" class="form-control" required minlength="6" placeholder="Nhập lại mật khẩu" />
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 mb-3">
+                            <i class="fa fa-user-plus me-2"></i>Đăng ký
+                        </button>
+                        <p class="text-center mb-0">
+                            Đã có tài khoản? <a asp-action="Login" style="color: #667eea; font-weight: 600;">Đăng nhập</a>
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>

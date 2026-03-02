@@ -135,31 +135,14 @@
                                         <td>
                                             <span class="text-muted">@o.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</span>
                                         </td>
-                                        <td>
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <a asp-action="Detail" asp-route-id="@o.Id" class="avatar-text avatar-md" data-bs-toggle="tooltip" title="Xem chi tiết">
-                                                    <i class="feather-eye"></i>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Detail" asp-route-id="@o.Id" class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                                    <i class="bi bi-eye"></i>
                                                 </a>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                        <i class="feather-more-horizontal"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a class="dropdown-item" asp-action="Detail" asp-route-id="@o.Id">
-                                                                <i class="feather-eye me-3"></i>
-                                                                <span>Xem chi tiết</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="javascript:void(0)">
-                                                                <i class="feather-printer me-3"></i>
-                                                                <span>In đơn hàng</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()" title="In đơn hàng">
+                                                    <i class="bi bi-printer"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

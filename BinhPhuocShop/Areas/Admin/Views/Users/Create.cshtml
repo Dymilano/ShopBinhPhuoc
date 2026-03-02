@@ -4,117 +4,100 @@
     var isAdmin = Model?.Role == "Admin";
 }
 
-@section PageHeaderRight {
-    <a asp-action="Index" class="btn btn-light-brand">
-        <i class="feather-arrow-left me-2"></i>
-        <span>Quay lại</span>
-    </a>
-    <button type="submit" form="userForm" class="btn @(isAdmin ? "btn-danger" : "btn-primary")">
-        <i class="feather-save me-2"></i>
-        <span>@(isAdmin ? "Cấp tài khoản Admin" : "Lưu người dùng")</span>
-    </button>
-}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">@ViewData["Title"]</h4>
+        <div>
+            <a asp-action="Index" class="btn btn-light me-2">
+                <i class="feather-arrow-left me-2"></i>Quay lại
+            </a>
+            <button type="submit" form="userForm" class="btn @(isAdmin ? "btn-danger" : "btn-primary")">
+                <i class="feather-save me-2"></i>@(isAdmin ? "Cấp tài khoản Admin" : "Lưu người dùng")
+            </button>
+        </div>
+    </div>
 
-<form id="userForm" asp-action="Create" method="post">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card border-top-0">
-                <div class="card-body">
-                    <div asp-validation-summary="All" class="alert alert-danger"></div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Họ tên: <span class="text-danger">*</span></label>
+    <form id="userForm" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+        
+        <div class="row">
+            <!-- CỘT TRÁI -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Thông tin người dùng
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Họ tên <span class="text-danger">*</span></label>
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Họ tên" required>
                         </div>
-                        <div class="col-lg-9">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text"><i class="feather-user"></i></div>
-                                <input name="Name" class="form-control" placeholder="Họ tên" required>
-                            </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email <span class="text-danger">*</span></label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="email@example.com" required>
+                            <small class="text-muted">Email sẽ được dùng để đăng nhập</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                            <input name="password" type="password" class="form-control" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
+                            <small class="text-muted">Mật khẩu phải có ít nhất 6 ký tự</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Điện thoại <span class="text-danger">*</span></label>
+                            <input asp-for="Phone" type="tel" class="form-control" placeholder="Số điện thoại (10-11 chữ số)" pattern="[0-9]{10,11}" required>
+                            <small class="text-muted">Ví dụ: 0912345678</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Địa chỉ" required></textarea>
                         </div>
                     </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Email: <span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text"><i class="feather-mail"></i></div>
-                                <input name="Email" type="email" class="form-control" placeholder="email@example.com" required>
-                            </div>
-                        </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Phân quyền
                     </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Mật khẩu: <span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text"><i class="feather-lock"></i></div>
-                                <input name="password" type="password" class="form-control" placeholder="Mật khẩu (tối thiểu 6 ký tự)" required minlength="6">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Điện thoại: </label>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text"><i class="feather-phone"></i></div>
-                                <input name="Phone" type="tel" class="form-control" placeholder="Số điện thoại">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Địa chỉ: </label>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text"><i class="feather-map-pin"></i></div>
-                                <input name="Address" class="form-control" placeholder="Địa chỉ">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Vai trò: <span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-lg-9">
-                            <select name="Role" class="form-select form-select-sm" required style="max-width: 300px;">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Vai trò <span class="text-danger">*</span></label>
+                            <select asp-for="Role" class="form-select" required>
                                 <option value="Customer" selected="@(Model?.Role == "Customer")">Khách hàng</option>
                                 <option value="Manager" selected="@(Model?.Role == "Manager")">Quản lý</option>
                                 <option value="Admin" selected="@(Model?.Role == "Admin")">Quản trị viên (Admin)</option>
                             </select>
                             @if (isAdmin)
                             {
-                                <p class="text-muted fs-12 mt-1 mb-0">Tài khoản Admin có quyền truy cập đầy đủ vào khu vực quản trị.</p>
+                                <div class="alert alert-warning mt-2 mb-0 small">
+                                    <i class="feather-alert-triangle me-1"></i>
+                                    Tài khoản Admin có quyền truy cập đầy đủ vào khu vực quản trị.
+                                </div>
                             }
                         </div>
                     </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-lg-3">
-                            <label class="fw-semibold mb-0">Trạng thái: </label>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="form-check form-switch form-switch-sm">
-                                <input name="IsActive" class="form-check-input" type="checkbox" checked>
-                                <label class="form-check-label" for="IsActive">Hoạt động</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="card-footer border-top d-flex justify-content-end gap-2">
-                    <a asp-action="Index" class="btn btn-light-brand">
-                        <i class="feather-x me-2"></i>
-                        <span>Hủy</span>
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="feather-save me-2"></i>
-                        <span>Lưu người dùng</span>
-                    </button>
+
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header fw-semibold">
+                        Trạng thái
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                            <label class="form-check-label" asp-for="IsActive">Hoạt động</label>
+                        </div>
+                        <small class="text-muted">Tài khoản sẽ được kích hoạt ngay sau khi tạo</small>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>

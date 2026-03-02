@@ -1,29 +1,25 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Hướng dẫn mua hàng";
+    var hexashop = "/hexashop";
 }
-<!-- Title page -->
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/store/images/bg-01.jpg'); background-color: #f5f5f5;">
-    <h2 class="ltext-105 cl0 txt-center">Hướng dẫn mua hàng</h2>
-</section>
 
-<!-- Content -->
-<section class="bg0 p-t-62 p-b-60">
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
-            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
-            <span class="stext-109 cl4">Hướng dẫn mua hàng</span>
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Hướng dẫn mua hàng</h2>
         </div>
+    </div>
+</div>
+
+<!-- ***** About Area Starts ***** -->
+<div class="about-us">
+    <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
-                <div class="p-l-20 p-l-0-lg">
-                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
-                    <partial name="_PagesSidebar" />
-                </div>
-            </div>
-            <div class="col-md-9 col-sm-12">
-                <div class="p-r-45 p-r-0-lg">
-                    <h1 class="ltext-103 cl5 p-b-20">HƯỚNG DẪN MUA HÀNG ONLINE TẠI BÌNH PHƯỚC SHOP</h1>
+            <div class="col-lg-12">
+                <div class="right-content">
+                    <h1>HƯỚNG DẪN MUA HÀNG ONLINE TẠI BÌNH PHƯỚC SHOP</h1>
                     <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
                         Bình Phước Shop mang đến cho bạn trải nghiệm mua sắm trực tuyến dễ dàng và tiện lợi. 
                         Chúng tôi cam kết cung cấp sản phẩm giày dép chính hãng, chất lượng cao với dịch vụ chăm sóc khách hàng tận tâm.
@@ -152,11 +148,12 @@
                         Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a><br />
                         Thời gian làm việc: 8h00 - 22h00 hàng ngày
                     </p>
-                    <p class="stext-117 cl6 p-t-20">
+                    <p class="mt-4">
                         <strong>Chúng tôi luôn sẵn sàng phục vụ và hỗ trợ bạn!</strong>
                     </p>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+<!-- ***** About Area Ends ***** -->

@@ -1,76 +1,161 @@
 @model BinhPhuocShop.Models.User
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Thông tin cá nhân";
     var success = TempData["Success"] as string;
     var error = TempData["Error"] as string;
-    var store = "/store";
 }
 
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('@(store)/images/bg-01.jpg'); background-color: #f5f5f5;">
-    <h2 class="ltext-105 cl0 txt-center">Thông tin cá nhân</h2>
-</section>
-
-<section class="bg0 p-t-60 p-b-80">
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
-            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ <i class="fa fa-angle-right m-l-9 m-r-10"></i></a>
-            <span class="stext-109 cl4">Thông tin cá nhân</span>
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Thông tin cá nhân</h2>
         </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 @if (!string.IsNullOrEmpty(success))
                 {
-                    <div class="alert alert-success">@success</div>
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fa fa-check-circle me-2"></i>@success
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 }
                 @if (!string.IsNullOrEmpty(error))
                 {
-                    <div class="alert alert-danger">@error</div>
-                }
-                <div class="card mb-4" style="border-radius: 8px; border: 1px solid #e5e5e5;">
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">Cập nhật thông tin</h5>
-                        <form asp-action="UpdateProfile" method="post">
-                            @Html.AntiForgeryToken()
-                            <div class="mb-3">
-                                <label class="form-label">Họ tên</label>
-                                <input type="text" name="name" class="form-control" value="@Model.Name" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" value="@Model.Email" readonly disabled />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Số điện thoại</label>
-                                <input type="tel" name="phone" class="form-control" value="@Model.Phone" />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Địa chỉ</label>
-                                <input type="text" name="address" class="form-control" value="@Model.Address" />
-                            </div>
-                            <button type="submit" class="btn btn-dark">Lưu thay đổi</button>
-                        </form>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fa fa-exclamation-circle me-2"></i>@error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                </div>
-                <div class="card" style="border-radius: 8px; border: 1px solid #e5e5e5;">
-                    <div class="card-body p-4">
-                        <h5 class="card-title mb-3">Đổi mật khẩu</h5>
-                        <form asp-action="ChangePassword" method="post">
-                            @Html.AntiForgeryToken()
-                            <div class="mb-3">
-                                <label class="form-label">Mật khẩu hiện tại</label>
-                                <input type="password" name="currentPassword" class="form-control" required />
+                }
+                
+                <div class="row g-4">
+                    <!-- Cập nhật thông tin -->
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0"><i class="fa fa-user me-2"></i>Cập nhật thông tin cá nhân</h4>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Mật khẩu mới</label>
-                                <input type="password" name="newPassword" class="form-control" required minlength="6" />
+                            <div class="card-body">
+                                <form asp-action="UpdateProfile" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Họ tên <span class="text-danger">*</span></label>
+                                            <input type="text" name="name" class="form-control" value="@Model.Name" required placeholder="Nhập họ và tên" />
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="@Model.Email" readonly disabled />
+                                            <small class="text-muted">Email không thể thay đổi</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                            <input type="tel" name="phone" class="form-control" value="@Model.Phone" required placeholder="Nhập số điện thoại" pattern="[0-9]{10,11}" />
+                                            <small class="text-muted">Ví dụ: 0912345678</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Ngày đăng ký</label>
+                                            <input type="text" class="form-control" value="@Model.CreatedAt.ToString("dd/MM/yyyy")" readonly disabled />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                                        <textarea name="address" class="form-control" rows="3" required placeholder="Nhập địa chỉ của bạn">@Model.Address</textarea>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-dark">
+                                            <i class="fa fa-save me-2"></i>Lưu thay đổi
+                                        </button>
+                                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                                            <i class="fa fa-arrow-left me-2"></i>Quay lại
+                                        </a>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Xác nhận mật khẩu mới</label>
-                                <input type="password" name="confirmPassword" class="form-control" required />
+                        </div>
+                    </div>
+                    
+                    <!-- Đổi mật khẩu -->
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fa fa-lock me-2"></i>Đổi mật khẩu</h5>
                             </div>
-                            <button type="submit" class="btn btn-outline-dark">Đổi mật khẩu</button>
-                        </form>
+                            <div class="card-body">
+                                <form asp-action="ChangePassword" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <div class="mb-3">
+                                        <label class="form-label">Mật khẩu hiện tại</label>
+                                        <input type="password" name="currentPassword" class="form-control" required placeholder="Nhập mật khẩu hiện tại" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Mật khẩu mới</label>
+                                        <input type="password" name="newPassword" class="form-control" required minlength="6" placeholder="Tối thiểu 6 ký tự" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Xác nhận mật khẩu mới</label>
+                                        <input type="password" name="confirmPassword" class="form-control" required minlength="6" placeholder="Nhập lại mật khẩu mới" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fa fa-key me-2"></i>Đổi mật khẩu
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Thông tin tài khoản -->
+                        <div class="card shadow-sm mt-3">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fa fa-info-circle me-2"></i>Thông tin tài khoản</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <small class="text-muted">Vai trò:</small>
+                                    <div>
+                                        @if (Model.Role == "Admin")
+                                        {
+                                            <span class="badge bg-danger">Quản trị viên</span>
+                                        }
+                                        else if (Model.Role == "Manager")
+                                        {
+                                            <span class="badge bg-warning">Quản lý</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info">Khách hàng</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Trạng thái:</small>
+                                    <div>
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge bg-success">Hoạt động</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Đã khóa</span>
+                                        }
+                                    </div>
+                                </div>
+                                @if (Model.UpdatedAt.HasValue)
+                                {
+                                    <div>
+                                        <small class="text-muted">Cập nhật lần cuối:</small>
+                                        <div class="small">@Model.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

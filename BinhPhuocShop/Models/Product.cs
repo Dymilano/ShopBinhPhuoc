@@ -13,8 +13,8 @@ public class Product
     public string? ImageUrls { get; set; } // JSON array of additional images
     public string? Sku { get; set; }
     public int Stock { get; set; }
-    public int CategoryId { get; set; }
-    public Category Category { get; set; } = null!;
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
     public int? BrandId { get; set; }
     public Brand? Brand { get; set; }
     public bool IsActive { get; set; } = true;

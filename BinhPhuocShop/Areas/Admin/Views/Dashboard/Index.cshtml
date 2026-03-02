@@ -8,533 +8,390 @@
     var completedOrders = ViewBag.CompletedOrders as int? ?? 0;
     var contactCount = ViewBag.ContactCount as int? ?? 0;
     var userCount = ViewBag.UserCount as int? ?? 0;
+    var adminCount = ViewBag.AdminCount as int? ?? 0;
+    var managerCount = ViewBag.ManagerCount as int? ?? 0;
+    var customerCount = ViewBag.CustomerCount as int? ?? 0;
+    var activeUserCount = ViewBag.ActiveUserCount as int? ?? 0;
     var recentOrders = ViewBag.RecentOrders as IEnumerable<BinhPhuocShop.Models.Order> ?? new List<BinhPhuocShop.Models.Order>();
     var recentProducts = ViewBag.RecentProducts as IEnumerable<BinhPhuocShop.Models.Product> ?? new List<BinhPhuocShop.Models.Product>();
     var recentPosts = ViewBag.RecentPosts as IEnumerable<BinhPhuocShop.Models.Post> ?? new List<BinhPhuocShop.Models.Post>();
+    
+    var totalRevenue = ViewBag.TotalRevenue as decimal? ?? 0;
+    var avgOrderValue = orderCount > 0 ? totalRevenue / orderCount : 0;
 }
 
-<div class="row">
-    <!-- [Đơn hàng đang chờ] start -->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card stretch stretch-full">
-            <div class="card-body">
-                <div class="d-flex align-items-start justify-content-between mb-4">
-                    <div class="d-flex gap-4 align-items-center">
-                        <div class="avatar-text avatar-lg bg-gray-200">
-                            <i class="feather-clock"></i>
-                        </div>
-                        <div>
-                            <div class="fs-4 fw-bold text-dark"><span class="counter">@pendingOrders</span>/<span class="counter">@orderCount</span></div>
-                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Đơn hàng đang chờ</h3>
+<div class="dashboard-container">
+    <!-- Report Cards Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="report-card">
+                <div class="report-card-content">
+                    <div class="report-card-header">
+                        <h3 class="report-card-primary">@totalRevenue.ToString("N0")₫</h3>
+                        <div class="report-card-icon" style="color: #ff9800;">
+                            <i class="feather-dollar-sign"></i>
                         </div>
                     </div>
-                    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="">
-                        <i class="feather-more-vertical"></i>
-                    </a>
+                    <p class="report-card-secondary">Tổng doanh thu</p>
                 </div>
-                <div class="pt-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <a href="@Url.Action("Index", "Orders", new { area = "Admin", status = "pending" })" class="fs-12 fw-medium text-muted text-truncate-1-line">Đơn hàng đang chờ</a>
-                        <div class="w-100 text-end">
-                            <span class="fs-12 text-dark">@pendingOrders đơn</span>
-                            <span class="fs-11 text-muted">(@(orderCount > 0 ? (pendingOrders * 100 / orderCount) : 0)%)</span>
+                <div class="report-card-footer" style="background-color: #ff9800;">
+                    <span>@completedOrders đơn hoàn thành</span>
+                    <i class="feather-trending-up"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="report-card">
+                <div class="report-card-content">
+                    <div class="report-card-header">
+                        <h3 class="report-card-primary">@orderCount</h3>
+                        <div class="report-card-icon" style="color: #f44336;">
+                            <i class="feather-shopping-cart"></i>
                         </div>
                     </div>
-                    <div class="progress mt-2 ht-3">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: @(orderCount > 0 ? (pendingOrders * 100 / orderCount) : 0)%"></div>
+                    <p class="report-card-secondary">Tổng đơn hàng</p>
+                </div>
+                <div class="report-card-footer" style="background-color: #f44336;">
+                    <span>@pendingOrders đơn đang chờ</span>
+                    <i class="feather-trending-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="report-card">
+                <div class="report-card-content">
+                    <div class="report-card-header">
+                        <h3 class="report-card-primary">@productCount</h3>
+                        <div class="report-card-icon" style="color: #4caf50;">
+                            <i class="feather-package"></i>
+                        </div>
                     </div>
+                    <p class="report-card-secondary">Sản phẩm</p>
+                </div>
+                <div class="report-card-footer" style="background-color: #4caf50;">
+                    <span>@categoryCount danh mục</span>
+                    <i class="feather-trending-up"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="report-card">
+                <div class="report-card-content">
+                    <div class="report-card-header">
+                        <h3 class="report-card-primary">@userCount</h3>
+                        <div class="report-card-icon" style="color: #2196f3;">
+                            <i class="feather-users"></i>
+                        </div>
+                    </div>
+                    <p class="report-card-secondary">Người dùng</p>
+                </div>
+                <div class="report-card-footer" style="background-color: #2196f3;">
+                    <span>@activeUserCount đang hoạt động</span>
+                    <i class="feather-trending-up"></i>
                 </div>
             </div>
         </div>
     </div>
-    <!-- [Đơn hàng đang chờ] end -->
-    <!-- [Đơn hàng hoàn thành] start -->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card stretch stretch-full">
-            <div class="card-body">
-                <div class="d-flex align-items-start justify-content-between mb-4">
-                    <div class="d-flex gap-4 align-items-center">
-                        <div class="avatar-text avatar-lg bg-gray-200">
-                            <i class="feather-check-circle"></i>
-                        </div>
-                        <div>
-                            <div class="fs-4 fw-bold text-dark"><span class="counter">@completedOrders</span>/<span class="counter">@orderCount</span></div>
-                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Đơn hàng hoàn thành</h3>
-                        </div>
-                    </div>
-                    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="">
-                        <i class="feather-more-vertical"></i>
-                    </a>
+
+    <!-- User Statistics Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header fw-semibold">
+                    <i class="feather-users me-2"></i>Thống kê người dùng
                 </div>
-                <div class="pt-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <a href="@Url.Action("Index", "Orders", new { area = "Admin", status = "completed" })" class="fs-12 fw-medium text-muted text-truncate-1-line">Đơn hàng hoàn thành</a>
-                        <div class="w-100 text-end">
-                            <span class="fs-12 text-dark">@completedOrders đơn</span>
-                            <span class="fs-11 text-muted">(@(orderCount > 0 ? (completedOrders * 100 / orderCount) : 0)%)</span>
-                        </div>
-                    </div>
-                    <div class="progress mt-2 ht-3">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: @(orderCount > 0 ? (completedOrders * 100 / orderCount) : 0)%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- [Đơn hàng hoàn thành] end -->
-    <!-- [Sản phẩm đang bán] start -->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card stretch stretch-full">
-            <div class="card-body">
-                <div class="d-flex align-items-start justify-content-between mb-4">
-                    <div class="d-flex gap-4 align-items-center">
-                        <div class="avatar-text avatar-lg bg-gray-200">
-                            <i class="feather-shopping-bag"></i>
-                        </div>
-                        <div>
-                            <div class="fs-4 fw-bold text-dark"><span class="counter">@productCount</span></div>
-                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Sản phẩm đang bán</h3>
-                        </div>
-                    </div>
-                    <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="">
-                        <i class="feather-more-vertical"></i>
-                    </a>
-                </div>
-                <div class="pt-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="fs-12 fw-medium text-muted text-truncate-1-line">Tổng sản phẩm</a>
-                        <div class="w-100 text-end">
-                            <span class="fs-12 text-dark">@productCount sản phẩm</span>
-                            <span class="fs-11 text-muted">(@categoryCount danh mục)</span>
-                        </div>
-                    </div>
-                    <div class="progress mt-2 ht-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- [Sản phẩm đang bán] end -->
-    <!-- [Tỷ lệ chuyển đổi] start -->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card stretch stretch-full">
-            <div class="card-body">
-                <div class="d-flex align-items-start justify-content-between mb-4">
-                    <div class="d-flex gap-4 align-items-center">
-                        <div class="avatar-text avatar-lg bg-gray-200">
-                            <i class="feather-activity"></i>
-                        </div>
-                        <div>
-                            <div class="fs-4 fw-bold text-dark"><span class="counter">@(orderCount > 0 && userCount > 0 ? Math.Round((double)orderCount / userCount * 100, 2) : 0)</span>%</div>
-                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Tỷ lệ chuyển đổi</h3>
-                        </div>
-                    </div>
-                    <a href="javascript:void(0);" class="">
-                        <i class="feather-more-vertical"></i>
-                    </a>
-                </div>
-                <div class="pt-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <a href="javascript:void(0);" class="fs-12 fw-medium text-muted text-truncate-1-line">Tỷ lệ chuyển đổi</a>
-                        <div class="w-100 text-end">
-                            <span class="fs-12 text-dark">@orderCount đơn / @userCount user</span>
-                            <span class="fs-11 text-muted">(@(orderCount > 0 && userCount > 0 ? Math.Round((double)orderCount / userCount * 100, 2) : 0)%)</span>
-                        </div>
-                    </div>
-                    <div class="progress mt-2 ht-3">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: @(orderCount > 0 && userCount > 0 ? Math.Min((double)orderCount / userCount * 100, 100) : 0)%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- [Tỷ lệ chuyển đổi] end -->
-    <!-- [Thống kê đơn hàng] start -->
-    <div class="col-xxl-8">
-        <div class="card stretch stretch-full">
-            <div class="card-header">
-                <h5 class="card-title">Thống kê đơn hàng</h5>
-                <div class="card-header-action">
-                    <div class="card-header-btn">
-                        <div data-bs-toggle="tooltip" title="Refresh">
-                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-warning" data-bs-toggle="refresh"> </a>
-                        </div>
-                        <div data-bs-toggle="tooltip" title="Maximize/Minimize">
-                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"> </a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25, 25">
-                            <div data-bs-toggle="tooltip" title="Options">
-                                <i class="feather-more-vertical"></i>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-primary">@userCount</div>
+                                <div class="text-muted small">Tổng người dùng</div>
                             </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-danger">@adminCount</div>
+                                <div class="text-muted small">Quản trị viên</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-warning">@managerCount</div>
+                                <div class="text-muted small">Quản lý</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-info">@customerCount</div>
+                                <div class="text-muted small">Khách hàng</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-success">@activeUserCount</div>
+                                <div class="text-muted small">Đang hoạt động</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <div class="fs-3 fw-bold text-secondary">@(userCount - activeUserCount)</div>
+                                <div class="text-muted small">Đã khóa</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="btn btn-sm btn-primary">
+                            <i class="feather-arrow-right me-2"></i>Quản lý người dùng
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="dropdown-item"><i class="feather-list"></i>Xem tất cả</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="@Url.Action("Index", "Settings", new { area = "Admin" })" class="dropdown-item"><i class="feather-settings"></i>Cài đặt</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body custom-card-action p-0">
-                <div id="payment-records-chart" style="min-height: 300px;"></div>
-            </div>
-            <div class="card-footer">
-                <div class="row g-4">
-                    <div class="col-lg-3">
-                        <div class="p-3 border border-dashed rounded">
-                            <div class="fs-12 text-muted mb-1">Đang chờ</div>
-                            <h6 class="fw-bold text-dark">@pendingOrders</h6>
-                            <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: @(orderCount > 0 ? (pendingOrders * 100 / orderCount) : 0)%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="p-3 border border-dashed rounded">
-                            <div class="fs-12 text-muted mb-1">Hoàn thành</div>
-                            <h6 class="fw-bold text-dark">@completedOrders</h6>
-                            <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: @(orderCount > 0 ? (completedOrders * 100 / orderCount) : 0)%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="p-3 border border-dashed rounded">
-                            <div class="fs-12 text-muted mb-1">Đã hủy</div>
-                            <h6 class="fw-bold text-dark">@(orderCount - pendingOrders - completedOrders)</h6>
-                            <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: @(orderCount > 0 ? ((orderCount - pendingOrders - completedOrders) * 100 / orderCount) : 0)%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="p-3 border border-dashed rounded">
-                            <div class="fs-12 text-muted mb-1">Tổng đơn</div>
-                            <h6 class="fw-bold text-dark">@orderCount</h6>
-                            <div class="progress mt-2 ht-3">
-                                <div class="progress-bar bg-dark" role="progressbar" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- [Thống kê đơn hàng] end -->
-    <!-- [Tổng quan] start -->
-    <div class="col-xxl-4">
-        <div class="card stretch stretch-full overflow-hidden">
-            <div class="bg-primary text-white">
-                <div class="p-4">
-                    <span class="badge bg-light text-primary text-dark float-end">@(orderCount > 0 && userCount > 0 ? Math.Round((double)orderCount / userCount * 100, 1) : 0)%</span>
-                    <div class="text-start">
-                        <h4 class="text-reset">@orderCount</h4>
-                        <p class="text-reset m-0">Tổng đơn hàng</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="hstack gap-3">
-                        <div class="avatar-text avatar-lg bg-primary bg-opacity-10 rounded">
-                            <i class="feather-shopping-bag text-primary"></i>
-                        </div>
-                        <div>
-                            <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="d-block">Sản phẩm</a>
-                            <span class="fs-12 text-muted">@productCount sản phẩm</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="fw-bold text-dark">@productCount</div>
-                        <div class="fs-12 text-end">@categoryCount danh mục</div>
-                    </div>
-                </div>
-                <hr class="border-dashed my-3" />
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="hstack gap-3">
-                        <div class="avatar-text avatar-lg bg-success bg-opacity-10 rounded">
-                            <i class="feather-shopping-cart text-success"></i>
-                        </div>
-                        <div>
-                            <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="d-block">Đơn hàng</a>
-                            <span class="fs-12 text-muted">@orderCount đơn hàng</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="fw-bold text-dark">@orderCount</div>
-                        <div class="fs-12 text-end">@completedOrders hoàn thành</div>
-                    </div>
-                </div>
-                <hr class="border-dashed my-3" />
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="hstack gap-3">
-                        <div class="avatar-text avatar-lg bg-info bg-opacity-10 rounded">
-                            <i class="feather-file-text text-info"></i>
-                        </div>
-                        <div>
-                            <a href="@Url.Action("Index", "Posts", new { area = "Admin" })" class="d-block">Bài viết</a>
-                            <span class="fs-12 text-muted">@postCount bài viết</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="fw-bold text-dark">@postCount</div>
-                        <div class="fs-12 text-end">Đã xuất bản</div>
-                    </div>
-                </div>
-            </div>
-            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="card-footer fs-11 fw-bold text-uppercase text-center py-4">Xem chi tiết</a>
-        </div>
-    </div>
-    <!-- [Tổng quan] end !-->
-    <!-- [Đơn hàng gần đây] start -->
-    <div class="col-xxl-8">
-        <div class="card stretch stretch-full">
-            <div class="card-header">
-                <h5 class="card-title">Đơn hàng gần đây</h5>
-                <div class="card-header-action">
-                    <div class="card-header-btn">
-                        <div data-bs-toggle="tooltip" title="Refresh">
-                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-warning" data-bs-toggle="refresh"> </a>
-                        </div>
-                        <div data-bs-toggle="tooltip" title="Maximize/Minimize">
-                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"> </a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25, 25">
-                            <div data-bs-toggle="tooltip" title="Options">
-                                <i class="feather-more-vertical"></i>
-                            </div>
+                        <a href="@Url.Action("Create", "Users", new { area = "Admin", role = "Admin" })" class="btn btn-sm btn-danger ms-2">
+                            <i class="feather-user-plus me-2"></i>Cấp tài khoản Admin
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="dropdown-item"><i class="feather-list"></i>Xem tất cả</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="@Url.Action("Index", "Settings", new { area = "Admin" })" class="dropdown-item"><i class="feather-settings"></i>Cài đặt</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-3 mb-4">
+        <!-- Sales Chart -->
+        <div class="col-lg-8">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h5 class="card-title">Thống kê đơn hàng theo ngày</h5>
+                </div>
+                <div class="card-body">
+                    <div id="sales-chart" style="min-height: 300px;"></div>
+                </div>
+                <div class="card-footer">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="chart-stat-item">
+                                <div class="chart-stat-label">Đang chờ</div>
+                                <div class="chart-stat-value">@pendingOrders</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="chart-stat-item">
+                                <div class="chart-stat-label">Hoàn thành</div>
+                                <div class="chart-stat-value text-success">@completedOrders</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="chart-stat-item">
+                                <div class="chart-stat-label">Tổng đơn</div>
+                                <div class="chart-stat-value text-primary">@orderCount</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="chart-stat-item">
+                                <div class="chart-stat-label">Giá trị TB</div>
+                                <div class="chart-stat-value text-info">@avgOrderValue.ToString("N0")₫</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body custom-card-action p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr class="border-b">
-                                <th scope="row">Khách hàng</th>
-                                <th>Mã đơn</th>
-                                <th>Ngày</th>
-                                <th>Tổng tiền</th>
-                                <th>Trạng thái</th>
-                                <th class="text-end">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (recentOrders.Any())
-                            {
-                                @foreach (var order in recentOrders)
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="col-lg-4">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h5 class="card-title">Phân loại đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div id="revenue-chart" style="min-height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables Row -->
+    <div class="row g-3">
+        <!-- Recent Orders -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Đơn hàng gần đây</h5>
+                    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="btn btn-sm btn-light-primary">
+                        Xem tất cả <i class="feather-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Khách hàng</th>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th class="text-end">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (recentOrders.Any())
+                                {
+                                    @foreach (var order in recentOrders.Take(8))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="avatar-text avatar-sm bg-primary bg-opacity-10">
+                                                        <i class="feather-user text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-semibold">@order.CustomerName</div>
+                                                        <small class="text-muted">@order.Email</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark">@order.OrderCode</span></td>
+                                            <td>@order.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                            <td class="fw-bold">@order.TotalAmount.ToString("N0")₫</td>
+                                            <td>
+                                                @{
+                                                    var statusClass = order.Status switch
+                                                    {
+                                                        "completed" => "bg-success",
+                                                        "cancelled" => "bg-danger",
+                                                        _ => "bg-warning"
+                                                    };
+                                                    var statusText = order.Status switch
+                                                    {
+                                                        "completed" => "Hoàn thành",
+                                                        "cancelled" => "Đã hủy",
+                                                        "confirmed" => "Đã xác nhận",
+                                                        "shipping" => "Đang giao",
+                                                        _ => "Đang chờ"
+                                                    };
+                                                }
+                                                <span class="badge @statusClass">@statusText</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="@Url.Action("Detail", "Orders", new { area = "Admin", id = order.Id })" class="btn btn-sm btn-light">
+                                                    <i class="feather-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="avatar-text avatar-md bg-primary bg-opacity-10">
-                                                    <i class="feather-user text-primary"></i>
-                                                </div>
-                                                <a href="@Url.Action("Detail", "Orders", new { area = "Admin", id = order.Id })">
-                                                    <span class="d-block">@order.CustomerName</span>
-                                                    <span class="fs-12 d-block fw-normal text-muted">@order.Email</span>
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-gray-200 text-dark">@order.OrderCode</span>
-                                        </td>
-                                        <td>@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                                        <td>
-                                            <span class="fw-bold">@order.TotalAmount.ToString("N0")₫</span>
-                                        </td>
-                                        <td>
-                                            @if (order.Status == "completed")
-                                            {
-                                                <span class="badge bg-soft-success text-success">Hoàn thành</span>
-                                            }
-                                            else if (order.Status == "cancelled")
-                                            {
-                                                <span class="badge bg-soft-danger text-danger">Đã hủy</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-soft-warning text-warning">Đang chờ</span>
-                                            }
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">
-                                                    <i class="feather-more-vertical"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="@Url.Action("Detail", "Orders", new { area = "Admin", id = order.Id })" class="dropdown-item"><i class="feather-eye"></i>Xem chi tiết</a>
-                                                    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="dropdown-item"><i class="feather-edit"></i>Chỉnh sửa</a>
-                                                </div>
-                                            </div>
+                                        <td colspan="6" class="text-center py-5">
+                                            <i class="feather-inbox fs-1 text-muted mb-3 d-block"></i>
+                                            <p class="text-muted mb-0">Chưa có đơn hàng nào</p>
                                         </td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="6" class="text-center py-5">
-                                        <i class="feather-inbox fs-1 text-muted mb-3 d-block"></i>
-                                        <p class="text-muted mb-0">Chưa có đơn hàng nào</p>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            @if (recentOrders.Any())
-            {
-                <div class="card-footer">
-                    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="fs-13 fw-semibold text-dark">Xem tất cả đơn hàng <i class="feather-arrow-right ms-1"></i></a>
-                </div>
-            }
         </div>
-    </div>
-    <!-- [Đơn hàng gần đây] end -->
-    <!-- [Sản phẩm & Bài viết gần đây] start -->
-    <div class="col-xxl-4">
-        <div class="card stretch stretch-full mb-4">
-            <div class="card-header">
-                <h5 class="card-title">Sản phẩm gần đây</h5>
-                <div class="card-header-action">
+
+        <!-- Recent Products & Posts -->
+        <div class="col-lg-4">
+            <!-- Recent Products -->
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Sản phẩm gần đây</h5>
                     <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="btn btn-sm btn-light-primary">
                         <i class="feather-arrow-right"></i>
                     </a>
                 </div>
-            </div>
-            <div class="card-body">
-                @if (recentProducts.Any())
-                {
-                    <div class="list-group list-group-flush">
-                        @foreach (var product in recentProducts.Take(5))
-                        {
-                            <div class="list-group-item px-0 py-3 border-0 border-bottom">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar-image avatar-md">
-                                        @if (!string.IsNullOrEmpty(product.ImageUrl))
-                                        {
-                                            <img src="@product.ImageUrl" alt="@product.Name" class="img-fluid rounded" />
-                                        }
-                                        else
-                                        {
-                                            <div class="avatar-text avatar-md bg-gray-200">
-                                                <i class="feather-image"></i>
-                                            </div>
-                                        }
+                <div class="card-body">
+                    @if (recentProducts.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var product in recentProducts.Take(5))
+                            {
+                                <div class="list-group-item px-0 py-2 border-0 border-bottom">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar-image avatar-sm">
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img src="@product.ImageUrl" alt="@product.Name" class="img-fluid rounded" />
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-text avatar-sm bg-gray-200">
+                                                    <i class="feather-image"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="flex-fill">
+                                            <a href="@Url.Action("Edit", "Products", new { area = "Admin", id = product.Id })" class="d-block fw-semibold text-dark text-truncate">@product.Name</a>
+                                            <small class="text-muted">@((product.SalePrice ?? product.Price).ToString("N0"))₫</small>
+                                        </div>
                                     </div>
-                                    <div class="flex-fill">
-                                        <a href="@Url.Action("Edit", "Products", new { area = "Admin", id = product.Id })" class="d-block fw-semibold text-dark">@product.Name</a>
-                                        <span class="fs-12 text-muted">@product.Category?.Name · @((product.SalePrice ?? product.Price).ToString("N0"))₫</span>
-                                    </div>
-                                    @if (product.IsActive)
-                                    {
-                                        <span class="badge bg-soft-success text-success">Hiển thị</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-soft-secondary text-secondary">Ẩn</span>
-                                    }
                                 </div>
-                            </div>
-                        }
-                    </div>
-                    <div class="text-center mt-3">
-                        <a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="fs-12 fw-semibold text-primary">Xem tất cả <i class="feather-arrow-right ms-1"></i></a>
-                    </div>
-                }
-                else
-                {
-                    <div class="text-center py-5">
-                        <i class="feather-package fs-1 text-muted mb-3 d-block"></i>
-                        <p class="text-muted mb-3">Chưa có sản phẩm nào</p>
-                        <a href="@Url.Action("Create", "Products", new { area = "Admin" })" class="btn btn-sm btn-primary">Thêm sản phẩm</a>
-                    </div>
-                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="feather-package text-muted mb-2 d-block"></i>
+                            <p class="text-muted mb-0 small">Chưa có sản phẩm</p>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-        <div class="card stretch stretch-full">
-            <div class="card-header">
-                <h5 class="card-title">Bài viết gần đây</h5>
-                <div class="card-header-action">
+
+            <!-- Recent Posts -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Bài viết gần đây</h5>
                     <a href="@Url.Action("Index", "Posts", new { area = "Admin" })" class="btn btn-sm btn-light-primary">
                         <i class="feather-arrow-right"></i>
                     </a>
                 </div>
-            </div>
-            <div class="card-body">
-                @if (recentPosts.Any())
-                {
-                    <div class="list-group list-group-flush">
-                        @foreach (var post in recentPosts.Take(5))
-                        {
-                            <div class="list-group-item px-0 py-3 border-0 border-bottom">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar-image avatar-md">
-                                        @if (!string.IsNullOrEmpty(post.ImageUrl))
-                                        {
-                                            <img src="@post.ImageUrl" alt="@post.Title" class="img-fluid rounded" />
-                                        }
-                                        else
-                                        {
-                                            <div class="avatar-text avatar-md bg-gray-200">
-                                                <i class="feather-file-text"></i>
-                                            </div>
-                                        }
+                <div class="card-body">
+                    @if (recentPosts.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var post in recentPosts.Take(5))
+                            {
+                                <div class="list-group-item px-0 py-2 border-0 border-bottom">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar-text avatar-sm bg-info bg-opacity-10">
+                                            <i class="feather-file-text text-info"></i>
+                                        </div>
+                                        <div class="flex-fill">
+                                            <a href="@Url.Action("Edit", "Posts", new { area = "Admin", id = post.Id })" class="d-block fw-semibold text-dark text-truncate">@post.Title</a>
+                                            <small class="text-muted">@(post.PublishedAt?.ToString("dd/MM/yyyy") ?? post.CreatedAt.ToString("dd/MM/yyyy"))</small>
+                                        </div>
                                     </div>
-                                    <div class="flex-fill">
-                                        <a href="@Url.Action("Edit", "Posts", new { area = "Admin", id = post.Id })" class="d-block fw-semibold text-dark">@post.Title</a>
-                                        <span class="fs-12 text-muted">@(post.PublishedAt?.ToString("dd/MM/yyyy") ?? post.CreatedAt.ToString("dd/MM/yyyy"))</span>
-                                    </div>
-                                    @if (post.IsActive)
-                                    {
-                                        <span class="badge bg-soft-success text-success">Hiển thị</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-soft-secondary text-secondary">Ẩn</span>
-                                    }
                                 </div>
-                            </div>
-                        }
-                    </div>
-                    <div class="text-center mt-3">
-                        <a href="@Url.Action("Index", "Posts", new { area = "Admin" })" class="fs-12 fw-semibold text-primary">Xem tất cả <i class="feather-arrow-right ms-1"></i></a>
-                    </div>
-                }
-                else
-                {
-                    <div class="text-center py-5">
-                        <i class="feather-file-text fs-1 text-muted mb-3 d-block"></i>
-                        <p class="text-muted mb-3">Chưa có bài viết nào</p>
-                        <a href="@Url.Action("Create", "Posts", new { area = "Admin" })" class="btn btn-sm btn-primary">Thêm bài viết</a>
-                    </div>
-                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="feather-file-text text-muted mb-2 d-block"></i>
+                            <p class="text-muted mb-0 small">Chưa có bài viết</p>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-    <!-- [Sản phẩm & Bài viết gần đây] end -->
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
-        // Counter animation
         document.addEventListener('DOMContentLoaded', function() {
+            // Counter animation
             const counters = document.querySelectorAll('.counter');
             counters.forEach(counter => {
-                const target = parseInt(counter.textContent);
+                const target = parseInt(counter.textContent) || 0;
                 let current = 0;
                 const increment = target / 50;
                 const timer = setInterval(() => {
@@ -547,6 +404,57 @@
                     }
                 }, 20);
             });
+
+            // Sales Chart (Line Chart)
+            const salesChartOptions = {
+                series: [{
+                    name: 'Đơn hàng',
+                    data: [@pendingOrders, @completedOrders, @(orderCount - pendingOrders - completedOrders), @orderCount]
+                }],
+                chart: {
+                    type: 'line',
+                    height: 300,
+                    toolbar: { show: false }
+                },
+                colors: ['#2196f3'],
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                xaxis: {
+                    categories: ['Đang chờ', 'Hoàn thành', 'Đã hủy', 'Tổng']
+                },
+                yaxis: {
+                    min: 0
+                },
+                tooltip: {
+                    theme: 'light'
+                }
+            };
+            const salesChart = new ApexCharts(document.querySelector("#sales-chart"), salesChartOptions);
+            salesChart.render();
+
+            // Revenue Chart (Donut Chart)
+            const revenueChartOptions = {
+                series: [@pendingOrders, @completedOrders, @(orderCount - pendingOrders - completedOrders)],
+                chart: {
+                    type: 'donut',
+                    height: 300
+                },
+                labels: ['Đang chờ', 'Hoàn thành', 'Đã hủy'],
+                colors: ['#ff9800', '#4caf50', '#f44336'],
+                legend: {
+                    position: 'bottom'
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function(val) {
+                        return val.toFixed(1) + "%";
+                    }
+                }
+            };
+            const revenueChart = new ApexCharts(document.querySelector("#revenue-chart"), revenueChartOptions);
+            revenueChart.render();
         });
     </script>
 }

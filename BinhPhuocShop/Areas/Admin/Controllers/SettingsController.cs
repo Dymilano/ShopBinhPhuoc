@@ -83,7 +83,7 @@ public class SettingsController : Controller
             _db.SiteSettings.Add(new SiteSetting { Key = newKey.Trim(), Value = newValue });
         }
         await _db.SaveChangesAsync();
-        TempData["Message"] = "Đã lưu cài đặt.";
+        TempData["Success"] = "Đã lưu cài đặt thành công.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -93,7 +93,7 @@ public class SettingsController : Controller
     {
         if (bannerFile == null || bannerFile.Length == 0)
         {
-            TempData["Message"] = "Vui lòng chọn file để tải lên.";
+            TempData["Error"] = "Vui lòng chọn file để tải lên.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -140,7 +140,7 @@ public class SettingsController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Message"] = "Đã tải lên banner thành công.";
+        TempData["Success"] = "Đã tải lên banner thành công.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -160,7 +160,7 @@ public class SettingsController : Controller
             
             _db.SiteSettings.Remove(setting);
             await _db.SaveChangesAsync();
-            TempData["Message"] = "Đã xóa banner.";
+            TempData["Success"] = "Đã xóa banner thành công.";
         }
 
         return RedirectToAction(nameof(Index));
@@ -172,18 +172,18 @@ public class SettingsController : Controller
     {
         if (string.IsNullOrWhiteSpace(imagePath) || !System.IO.File.Exists(imagePath))
         {
-            TempData["Message"] = "File không tồn tại.";
+            TempData["Error"] = "File không tồn tại.";
             return RedirectToAction(nameof(Index));
         }
 
         try
         {
             System.IO.File.Delete(imagePath);
-            TempData["Message"] = "Đã xóa ảnh thành công.";
+            TempData["Success"] = "Đã xóa ảnh thành công.";
         }
         catch
         {
-            TempData["Message"] = "Lỗi khi xóa ảnh.";
+            TempData["Error"] = "Lỗi khi xóa ảnh.";
         }
 
         return RedirectToAction(nameof(Index));
@@ -199,10 +199,10 @@ public class SettingsController : Controller
         var bannerGiayNu = await _db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerGiayNu");
         var bannerDepNam = await _db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerDepNam");
         
-        ViewBag.HeroBackground = heroBg?.Value ?? "/store/images/slide-01.jpg";
-        ViewBag.BannerGiayNam = bannerGiayNam?.Value ?? "/store/images/banner-01.jpg";
-        ViewBag.BannerGiayNu = bannerGiayNu?.Value ?? "/store/images/banner-02.jpg";
-        ViewBag.BannerDepNam = bannerDepNam?.Value ?? "/store/images/banner-03.jpg";
+        ViewBag.HeroBackground = heroBg?.Value ?? "/hexashop/assets/images/left-banner-image.jpg";
+        ViewBag.BannerGiayNam = bannerGiayNam?.Value ?? "/hexashop/assets/images/baner-right-image-01.jpg";
+        ViewBag.BannerGiayNu = bannerGiayNu?.Value ?? "/hexashop/assets/images/baner-right-image-02.jpg";
+        ViewBag.BannerDepNam = bannerDepNam?.Value ?? "/hexashop/assets/images/baner-right-image-03.jpg";
         
         return View();
     }
@@ -213,8 +213,8 @@ public class SettingsController : Controller
     {
         if (imageFile == null || imageFile.Length == 0)
         {
-            TempData["Message"] = "Vui lòng chọn file ảnh.";
-            return RedirectToAction(nameof(ManageHomeImages));
+            TempData["Error"] = "Vui lòng chọn file ảnh.";
+            return RedirectToAction(nameof(Index));
         }
 
         var uploadsPath = Path.Combine(_env.WebRootPath, "uploads", "home-images");
@@ -224,7 +224,7 @@ public class SettingsController : Controller
         var ext = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
         if (!new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" }.Contains(ext))
         {
-            TempData["Message"] = "Chỉ chấp nhận file ảnh (JPG, PNG, GIF, WEBP).";
+            TempData["Error"] = "Chỉ chấp nhận file ảnh (JPG, PNG, GIF, WEBP).";
             return RedirectToAction(nameof(Index));
         }
 
@@ -259,8 +259,8 @@ public class SettingsController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Message"] = $"Đã cập nhật ảnh {GetImageTypeName(imageType)} thành công.";
-        return RedirectToAction(nameof(ManageHomeImages));
+        TempData["Success"] = $"Đã cập nhật ảnh {GetImageTypeName(imageType)} thành công.";
+        return RedirectToAction(nameof(Index));
     }
 
     private string GetImageTypeName(string imageType)

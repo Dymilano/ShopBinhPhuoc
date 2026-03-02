@@ -1,39 +1,35 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Chính sách đổi hàng";
+    var hexashop = "/hexashop";
 }
-<!-- Title page -->
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/store/images/bg-01.jpg'); background-color: #f5f5f5;">
-    <h2 class="ltext-105 cl0 txt-center">Chính sách đổi hàng</h2>
-</section>
 
-<!-- Content -->
-<section class="bg0 p-t-62 p-b-60">
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
-            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
-            <span class="stext-109 cl4">Chính sách đổi hàng</span>
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Chính sách đổi hàng</h2>
         </div>
+    </div>
+</div>
+
+<!-- ***** About Area Starts ***** -->
+<div class="about-us">
+    <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-12 p-b-50 order-md-2">
-                <div class="p-l-20 p-l-0-lg">
-                    <h4 class="mtext-112 cl2 p-b-20 stext-113">Liên kết</h4>
-                    <partial name="_PagesSidebar" />
-                </div>
-            </div>
-            <div class="col-md-9 col-sm-12">
-                <div class="p-r-45 p-r-0-lg">
-                    <h1 class="ltext-103 cl5 p-b-20">CHÍNH SÁCH ĐỔI HÀNG CỦA BÌNH PHƯỚC SHOP</h1>
-                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+            <div class="col-lg-12">
+                <div class="right-content">
+                    <h1>CHÍNH SÁCH ĐỔI HÀNG CỦA BÌNH PHƯỚC SHOP</h1>
+                    <p style="text-align: justify;">
                         Bình Phước Shop cam kết đảm bảo quyền lợi của khách hàng với chính sách đổi hàng linh hoạt, 
                         minh bạch. Chúng tôi luôn sẵn sàng hỗ trợ bạn đổi sản phẩm trong các trường hợp hợp lệ.
                     </p>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">1. ĐIỀU KIỆN ĐỔI HÀNG</h2>
-                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                    <h4 class="mt-4">1. ĐIỀU KIỆN ĐỔI HÀNG</h4>
+                    <p style="text-align: justify;">
                         Khách hàng được đổi sản phẩm trong vòng <strong>15 ngày</strong> kể từ ngày nhận hàng trong các trường hợp sau:
                     </p>
-                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <div style="line-height: 2;">
                         <p class="mb-3"><strong>a) Sản phẩm không đúng với mô tả:</strong></p>
                         <ul style="margin-left: 20px;">
                             <li>Sản phẩm khác với hình ảnh hoặc mô tả trên website</li>
@@ -58,11 +54,11 @@
                         </ul>
                     </div>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">2. YÊU CẦU ĐỐI VỚI SẢN PHẨM ĐỔI</h2>
-                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                    <h4 class="mt-4">2. YÊU CẦU ĐỐI VỚI SẢN PHẨM ĐỔI</h4>
+                    <p style="text-align: justify;">
                         Để được đổi hàng, sản phẩm cần đáp ứng các điều kiện sau:
                     </p>
-                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <ul style="line-height: 2;">
                         <li><strong>Còn hóa đơn mua hàng:</strong> Hóa đơn gốc hoặc email xác nhận đơn hàng</li>
                         <li><strong>Thông tin khách hàng:</strong> Tên và số điện thoại trên hóa đơn phải khớp</li>
                         <li><strong>Chưa qua sử dụng:</strong> Sản phẩm chưa được mang, còn nguyên vẹn</li>
@@ -78,8 +74,8 @@
                         </li>
                     </ul>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">3. QUY ĐỊNH VỀ SẢN PHẨM ĐỔI MỚI</h2>
-                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <h4 class="mt-4">3. QUY ĐỊNH VỀ SẢN PHẨM ĐỔI MỚI</h4>
+                    <div style="line-height: 2;">
                         <p class="mb-3"><strong>Giá trị sản phẩm đổi:</strong></p>
                         <ul style="margin-left: 20px;">
                             <li>Sản phẩm đổi mới phải có <strong>giá trị bằng hoặc cao hơn</strong> sản phẩm đã mua</li>
@@ -95,8 +91,8 @@
                         </ul>
                     </div>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">4. CÁCH THỨC ĐỔI HÀNG</h2>
-                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <h4 class="mt-4">4. CÁCH THỨC ĐỔI HÀNG</h4>
+                    <div style="line-height: 2;">
                         <p class="mb-3"><strong>A. Đối với khách hàng mua tại cửa hàng:</strong></p>
                         <ul style="margin-left: 20px;">
                             <li>Mang sản phẩm cần đổi trực tiếp đến cửa hàng Bình Phước Shop</li>
@@ -108,8 +104,8 @@
                         <ul style="margin-left: 20px;">
                             <li><strong>Bước 1:</strong> Liên hệ với bộ phận chăm sóc khách hàng:
                                 <ul style="margin-left: 20px; margin-top: 10px;">
-                                    <li>Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a></li>
-                                    <li>Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a></li>
+                                    <li>Hotline: <a href="tel:0984843218">0984 843 218</a></li>
+                                    <li>Email: <a href="mailto:contact@binhphuocshop.vn">contact@binhphuocshop.vn</a></li>
                                     <li>Fanpage Facebook hoặc Zalo</li>
                                 </ul>
                             </li>
@@ -138,8 +134,8 @@
                         </ul>
                     </div>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">5. CHI PHÍ ĐỔI HÀNG</h2>
-                    <div class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <h4 class="mt-4">5. CHI PHÍ ĐỔI HÀNG</h4>
+                    <div style="line-height: 2;">
                         <p class="mb-3"><strong>Miễn phí đổi hàng:</strong></p>
                         <ul style="margin-left: 20px;">
                             <li>Sản phẩm bị lỗi từ nhà sản xuất</li>
@@ -155,19 +151,19 @@
                         </ul>
                     </div>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">6. THỜI GIAN XỬ LÝ ĐỔI HÀNG</h2>
-                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <h4 class="mt-4">6. THỜI GIAN XỬ LÝ ĐỔI HÀNG</h4>
+                    <ul style="line-height: 2;">
                         <li><strong>Tiếp nhận yêu cầu:</strong> Trong vòng 24 giờ (trừ ngày Lễ, Tết)</li>
                         <li><strong>Kiểm tra sản phẩm:</strong> 3-7 ngày làm việc sau khi nhận được hàng trả về</li>
                         <li><strong>Gửi hàng đổi:</strong> 1-2 ngày làm việc sau khi xác nhận đủ điều kiện đổi</li>
                         <li><strong>Tổng thời gian:</strong> Khoảng 7-14 ngày làm việc từ khi gửi hàng về đến khi nhận được hàng đổi</li>
                     </ul>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">7. CÁC TRƯỜNG HỢP KHÔNG ĐƯỢC ĐỔI HÀNG</h2>
-                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                    <h4 class="mt-4">7. CÁC TRƯỜNG HỢP KHÔNG ĐƯỢC ĐỔI HÀNG</h4>
+                    <p style="text-align: justify;">
                         Sản phẩm sẽ không được đổi trong các trường hợp sau:
                     </p>
-                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <ul style="line-height: 2;">
                         <li>Quá thời hạn 15 ngày kể từ ngày nhận hàng</li>
                         <li>Đã qua sử dụng, có dấu hiệu mài mòn, bẩn</li>
                         <li>Mất hóa đơn mua hàng hoặc thông tin không khớp</li>
@@ -178,11 +174,11 @@
                         <li>Sản phẩm đã được tùy chỉnh theo yêu cầu riêng</li>
                     </ul>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">8. HOÀN TIỀN</h2>
-                    <p class="stext-117 cl6 p-b-20" style="text-align: justify;">
+                    <h4 class="mt-4">8. HOÀN TIỀN</h4>
+                    <p style="text-align: justify;">
                         Trong một số trường hợp đặc biệt, chúng tôi có thể xem xét hoàn tiền:
                     </p>
-                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <ul style="line-height: 2;">
                         <li>Sản phẩm bị lỗi nghiêm trọng và không còn hàng để đổi</li>
                         <li>Khách hàng không tìm được sản phẩm phù hợp để đổi</li>
                         <li>Thời gian xử lý đổi hàng quá lâu do lỗi của cửa hàng</li>
@@ -190,8 +186,8 @@
                         <li>Phương thức hoàn tiền: Chuyển khoản về tài khoản hoặc số điện thoại đã đăng ký</li>
                     </ul>
 
-                    <h2 class="ltext-101 cl5 p-b-16 mt-4">9. CAM KẾT CỦA BÌNH PHƯỚC SHOP</h2>
-                    <ul class="stext-117 cl6 p-b-20" style="line-height: 2;">
+                    <h4 class="mt-4">9. CAM KẾT CỦA BÌNH PHƯỚC SHOP</h4>
+                    <ul style="line-height: 2;">
                         <li>Xử lý đổi hàng nhanh chóng, công bằng, minh bạch</li>
                         <li>Luôn lắng nghe và giải quyết thỏa đáng mọi khiếu nại của khách hàng</li>
                         <li>Đảm bảo sản phẩm đổi mới là hàng chính hãng, chất lượng tốt</li>
@@ -199,19 +195,20 @@
                         <li>Bảo vệ quyền lợi khách hàng theo đúng quy định pháp luật</li>
                     </ul>
 
-                    <hr class="p-t-20 p-b-20" />
-                    <h2 class="ltext-101 cl5 p-b-16">THÔNG TIN LIÊN HỆ</h2>
-                    <p class="stext-117 cl6 p-b-20">
+                    <hr class="mt-4 mb-4" />
+                    <h4>THÔNG TIN LIÊN HỆ</h4>
+                    <p>
                         <strong>Bình Phước Shop</strong><br />
-                        Hotline: <a href="tel:0984843218" class="hov-cl1">0984 843 218</a><br />
-                        Email: <a href="mailto:contact@binhphuocshop.vn" class="hov-cl1">contact@binhphuocshop.vn</a><br />
+                        Hotline: <a href="tel:0984843218">0984 843 218</a><br />
+                        Email: <a href="mailto:contact@binhphuocshop.vn">contact@binhphuocshop.vn</a><br />
                         Thời gian làm việc: 8h00 - 22h00 hàng ngày
                     </p>
-                    <p class="stext-117 cl6 p-t-20">
+                    <p class="mt-4">
                         <strong>Chúng tôi cam kết mang đến cho bạn trải nghiệm mua sắm tốt nhất và luôn sẵn sàng hỗ trợ bạn trong mọi trường hợp!</strong>
                     </p>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+<!-- ***** About Area Ends ***** -->

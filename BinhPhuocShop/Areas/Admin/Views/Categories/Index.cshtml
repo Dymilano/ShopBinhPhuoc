@@ -3,119 +3,198 @@
     ViewData["Title"] = "Danh mục";
 }
 
-@section PageHeaderRight {
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="feather-plus me-2"></i>
-        <span>Thêm danh mục</span>
-    </a>
-}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">Quản lý danh mục sản phẩm</h4>
+        <div>
+            <button type="button" class="btn btn-danger me-2" id="btnDeleteSelected" disabled>
+                <i class="bi bi-trash me-2"></i>Xóa đã chọn
+            </button>
+            <button type="button" class="btn btn-warning me-2" id="btnDeleteAll" onclick="confirmDeleteAll()">
+                <i class="bi bi-trash3 me-2"></i>Xóa tất cả
+            </button>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Thêm danh mục
+            </a>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card stretch stretch-full">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="wd-30">
-                                    <div class="custom-control custom-checkbox ms-1">
-                                        <input type="checkbox" class="custom-control-input" id="checkAll">
-                                        <label class="custom-control-label" for="checkAll"></label>
-                                    </div>
-                                </th>
-                                <th>STT</th>
-                                <th>Tên</th>
-                                <th>Slug</th>
-                                <th>Danh mục cha</th>
-                                <th>Thứ tự</th>
-                                <th>Trạng thái</th>
-                                <th class="text-end">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.Any())
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAll">
+                                    <label class="form-check-label" for="checkAll"></label>
+                                </div>
+                            </th>
+                            <th>STT</th>
+                            <th>Tên</th>
+                            <th>Slug</th>
+                            <th>Danh mục cha</th>
+                            <th>Số sản phẩm</th>
+                            <th>Thứ tự</th>
+                            <th>Trạng thái</th>
+                            <th class="text-end">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int stt = 1;
+                            @foreach (var c in Model)
                             {
-                                @foreach (var c in Model)
-                                {
-                                    <tr class="single-item">
-                                        <td>
-                                            <div class="custom-control custom-checkbox ms-1">
-                                                <input type="checkbox" class="custom-control-input checkbox" id="checkBox_@c.Id">
-                                                <label class="custom-control-label" for="checkBox_@c.Id"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-soft-primary text-primary">@c.Id</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-semibold d-block" style="max-width: 150px;">@c.Name</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-muted fs-12 text-truncate d-block" style="max-width: 150px;">@c.Slug</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-soft-info text-info">@(c.Parent?.Name ?? "—")</span>
-                                        </td>
-                                        <td>@c.DisplayOrder</td>
-                                        <td>
-                                            @if (c.IsActive)
-                                            {
-                                                <span class="badge bg-soft-success text-success">Hiển thị</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-soft-secondary text-secondary">Ẩn</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <a asp-action="Edit" asp-route-id="@c.Id" class="avatar-text avatar-md" data-bs-toggle="tooltip" title="Sửa">
-                                                    <i class="feather-edit-3"></i>
-                                                </a>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                        <i class="feather-more-horizontal"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@c.Id">
-                                                                <i class="feather-edit-3 me-3"></i>
-                                                                <span>Sửa</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li>
-                                                            <form asp-action="Delete" asp-route-id="@c.Id" method="post" class="m-0">
-                                                                @Html.AntiForgeryToken()
-                                                                <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Xóa danh mục này?');">
-                                                                    <i class="feather-trash-2 me-3"></i>
-                                                                    <span>Xóa</span>
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
+                                var productCount = ViewBag.ProductCounts != null && ViewBag.ProductCounts.ContainsKey(c.Id) 
+                                    ? ViewBag.ProductCounts[c.Id] 
+                                    : 0;
                                 <tr>
-                                    <td colspan="8" class="text-center py-5">
-                                        <p class="text-muted mb-0">Chưa có danh mục nào.</p>
-                                        <a asp-action="Create" class="btn btn-sm btn-primary mt-2">
-                                            <i class="feather-plus me-2"></i>Thêm danh mục đầu tiên
-                                        </a>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input category-checkbox" type="checkbox" value="@c.Id" id="check_@c.Id" data-category-id="@c.Id">
+                                            <label class="form-check-label" for="check_@c.Id"></label>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark">@stt</span></td>
+                                    <td>
+                                        <span class="fw-semibold">@c.Name</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted small">@c.Slug</span>
+                                    </td>
+                                    <td>
+                                        @if (c.Parent != null)
+                                        {
+                                            <span class="badge bg-info">@c.Parent.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">@productCount</span>
+                                    </td>
+                                    <td>@c.DisplayOrder</td>
+                                    <td>
+                                        @if (c.IsActive)
+                                        {
+                                            <span class="badge bg-success">Hiển thị</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Ẩn</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary" title="Sửa">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteCategoryProducts(@c.Id, '@c.Name')" title="Xóa sản phẩm theo danh mục">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                            <form asp-action="Delete" asp-route-id="@c.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Xóa danh mục">
+                                                    <i class="bi bi-x-circle"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
+                                stt++;
                             }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center py-5">
+                                    <i class="bi bi-folder-x fs-1 text-muted mb-3 d-block"></i>
+                                    <p class="text-muted mb-0">Chưa có danh mục nào.</p>
+                                    <a asp-action="Create" class="btn btn-primary mt-3">
+                                        <i class="bi bi-plus-circle me-2"></i>Thêm danh mục đầu tiên
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+<form id="deleteSelectedForm" asp-action="DeleteSelected" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ids" id="selectedIds" />
+</form>
+
+<form id="deleteAllForm" asp-action="DeleteAll" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<form id="deleteCategoryProductsForm" asp-action="DeleteCategoryProducts" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="categoryId" id="deleteCategoryId" />
+</form>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkAll = document.getElementById('checkAll');
+    const checkboxes = document.querySelectorAll('.category-checkbox');
+    const btnDeleteSelected = document.getElementById('btnDeleteSelected');
+    
+    // Check all functionality
+    if (checkAll) {
+        checkAll.addEventListener('change', function() {
+            checkboxes.forEach(cb => {
+                cb.checked = this.checked;
+            });
+            updateDeleteButton();
+        });
+    }
+    
+    // Update delete button state
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateDeleteButton);
+    });
+    
+    function updateDeleteButton() {
+        const checked = document.querySelectorAll('.category-checkbox:checked');
+        btnDeleteSelected.disabled = checked.length === 0;
+    }
+    
+    // Delete selected
+    btnDeleteSelected.addEventListener('click', function() {
+        const checked = document.querySelectorAll('.category-checkbox:checked');
+        const ids = Array.from(checked).map(cb => cb.value).join(',');
+        
+        if (ids && confirm('Bạn có chắc muốn xóa ' + checked.length + ' danh mục đã chọn?')) {
+            document.getElementById('selectedIds').value = ids;
+            document.getElementById('deleteSelectedForm').submit();
+        }
+    });
+});
+
+function confirmDeleteAll() {
+    if (confirm('BẠN CÓ CHẮC MUỐN XÓA TẤT CẢ DANH MỤC? Hành động này không thể hoàn tác!')) {
+        if (confirm('Xác nhận lần cuối: Xóa TẤT CẢ danh mục?')) {
+            document.getElementById('deleteAllForm').submit();
+        }
+    }
+}
+
+function deleteCategoryProducts(categoryId, categoryName) {
+    if (confirm('Bạn có chắc muốn xóa TẤT CẢ sản phẩm thuộc danh mục "' + categoryName + '"? Hành động này không thể hoàn tác!')) {
+        if (confirm('Xác nhận lần cuối: Xóa tất cả sản phẩm trong danh mục này?')) {
+            document.getElementById('deleteCategoryId').value = categoryId;
+            document.getElementById('deleteCategoryProductsForm').submit();
+        }
+    }
+}
+</script>
+}

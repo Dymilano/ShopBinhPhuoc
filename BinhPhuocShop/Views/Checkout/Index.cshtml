@@ -1,6 +1,7 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Thanh toán";
+    var hexashop = "/hexashop";
     var items = ViewBag.CartItems as IEnumerable<BinhPhuocShop.Models.CartItem> ?? new List<BinhPhuocShop.Models.CartItem>();
     var total = (decimal)(ViewBag.CartTotal ?? 0);
     var error = ViewBag.Error as string;
@@ -10,69 +11,83 @@
     var customerAddress = ViewBag.CustomerAddress as string ?? "";
 }
 
-<div class="bg0 p-t-23 p-b-140">
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-b-30 p-lr-0-lg">
-            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
-            <a asp-controller="Cart" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Giỏ hàng<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i></a>
-            <span class="stext-109 cl4">Thanh toán</span>
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Thanh toán</h2>
         </div>
+    </div>
+</div>
 
-        <h2 class="ltext-103 cl5 p-b-30">Thông tin thanh toán</h2>
+<section class="section">
+    <div class="container">
         @if (!string.IsNullOrEmpty(error))
         {
-            <div class="alert alert-danger stext-107 p-lr-15 p-tb-10 m-b-20">@error</div>
+            <div class="alert alert-danger">@error</div>
         }
         <form asp-controller="Checkout" asp-action="Index" method="post">
             @Html.AntiForgeryToken()
             <div class="row">
-                <div class="col-lg-8 p-b-30">
-                    <div class="p-lr-40 p-t-30 p-b-40 bor10 bg0">
-                        <h3 class="stext-101 cl2 p-b-20">Thông tin giao hàng</h3>
-                        <div class="bor8 m-b-20">
-                            <input type="text" name="customerName" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Họ và tên *" value="@customerName" required />
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Thông tin giao hàng</h4>
                         </div>
-                        <div class="bor8 m-b-20">
-                            <input type="tel" name="phone" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Số điện thoại *" value="@customerPhone" required />
-                        </div>
-                        <div class="bor8 m-b-20">
-                            <input type="email" name="email" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" placeholder="Email" value="@customerEmail" />
-                        </div>
-                        <div class="bor8 m-b-20">
-                            <textarea name="address" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" rows="3" placeholder="Địa chỉ giao hàng *" required>@customerAddress</textarea>
-                        </div>
-                        <div class="bor8 m-b-20">
-                            <textarea name="note" class="stext-111 cl2 plh3 size-116 p-lr-20 p-tb-16" rows="2" placeholder="Ghi chú về đơn hàng..."></textarea>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên *</label>
+                                <input type="text" name="customerName" class="form-control" value="@customerName" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại *</label>
+                                <input type="tel" name="phone" class="form-control" value="@customerPhone" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" value="@customerEmail" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ giao hàng *</label>
+                                <textarea name="address" class="form-control" rows="3" required>@customerAddress</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="note" class="form-control" rows="2" placeholder="Ghi chú về đơn hàng..."></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 p-b-30">
-                    <div class="p-lr-40 p-t-30 p-b-40 bor10 bg0">
-                        <h3 class="stext-101 cl2 p-b-20">Đơn hàng của bạn</h3>
-                        <div class="flex-w flex-t p-b-20">
-                            <ul class="flex-col w-full">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Đơn hàng của bạn</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-3">
                                 @foreach (var item in items)
                                 {
-                                    <li class="flex-w flex-sb-m p-b-12 stext-107 cl6">
+                                    <li class="d-flex justify-content-between mb-2">
                                         <span>@item.ProductName @(string.IsNullOrEmpty(item.Size) ? "" : "- Size " + item.Size) x @item.Quantity</span>
                                         <span>@item.Amount.ToString("N0")₫</span>
                                     </li>
                                 }
                             </ul>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Tổng cộng:</strong>
+                                <strong>@total.ToString("N0")₫</strong>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100">
+                                <i class="fa fa-check"></i> Đặt hàng
+                            </button>
+                            <p class="text-muted mt-3 small">
+                                <i class="fa fa-info-circle"></i> Chúng tôi sẽ liên hệ xác nhận đơn hàng trong thời gian sớm nhất.
+                            </p>
                         </div>
-                        <div class="flex-w flex-t p-t-20 p-b-20 bor12 stext-101 cl2">
-                            <span class="m-r-15">Tổng cộng:</span>
-                            <span class="fw-bold">@total.ToString("N0")₫</span>
-                        </div>
-                        <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor1 hov-btn3 p-lr-15 trans-04 w-full">
-                            <i class="fa fa-check m-r-10"></i> Đặt hàng
-                        </button>
-                        <p class="stext-107 cl6 p-t-20">
-                            <i class="fa fa-info-circle m-r-5"></i> Chúng tôi sẽ liên hệ xác nhận đơn hàng trong thời gian sớm nhất.
-                        </p>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-</div>
+</section>

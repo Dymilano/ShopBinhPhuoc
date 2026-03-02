@@ -20,7 +20,7 @@ public class HomeController : StoreControllerBase
         {
             var childIds = await Db.Categories.Where(c2 => c2.ParentId == c.Id).Select(c2 => c2.Id).ToListAsync();
             var ids = new List<int> { c.Id }.Union(childIds).ToList();
-            var count = await Db.Products.CountAsync(p => ids.Contains(p.CategoryId));
+            var count = await Db.Products.CountAsync(p => p.CategoryId.HasValue && ids.Contains(p.CategoryId.Value));
             productCountByCategory[c.Id] = count;
         }
         ViewBag.Categories = categories;
@@ -51,7 +51,7 @@ public class HomeController : StoreControllerBase
         var homeBlocks = new List<HomeCategoryBlockViewModel>();
         foreach (var c in categories.Take(2))
         {
-            var products = await Db.Products.Include(p => p.Category).Where(p => p.IsActive && (p.CategoryId == c.Id || (p.Category != null && p.Category.ParentId == c.Id))).OrderByDescending(p => p.CreatedAt).Take(8).ToListAsync();
+            var products = await Db.Products.Include(p => p.Category).Where(p => p.IsActive && p.CategoryId.HasValue && (p.CategoryId.Value == c.Id || (p.Category != null && p.Category.ParentId == c.Id))).OrderByDescending(p => p.CreatedAt).Take(8).ToListAsync();
             homeBlocks.Add(new HomeCategoryBlockViewModel { Category = c, Products = products });
         }
         ViewBag.HomeCategoryBlocks = homeBlocks;
@@ -62,10 +62,10 @@ public class HomeController : StoreControllerBase
         var bannerGiayNu = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerGiayNu");
         var bannerDepNam = await Db.SiteSettings.FirstOrDefaultAsync(s => s.Key == "BannerDepNam");
         
-        ViewBag.HeroBackground = heroBg?.Value ?? "/store/images/slide-01.jpg";
-        ViewBag.BannerGiayNam = bannerGiayNam?.Value ?? "/store/images/banner-01.jpg";
-        ViewBag.BannerGiayNu = bannerGiayNu?.Value ?? "/store/images/banner-02.jpg";
-        ViewBag.BannerDepNam = bannerDepNam?.Value ?? "/store/images/banner-03.jpg";
+        ViewBag.HeroBackground = heroBg?.Value ?? "/hexashop/assets/images/left-banner-image.jpg";
+        ViewBag.BannerGiayNam = bannerGiayNam?.Value ?? "/hexashop/assets/images/baner-right-image-01.jpg";
+        ViewBag.BannerGiayNu = bannerGiayNu?.Value ?? "/hexashop/assets/images/baner-right-image-02.jpg";
+        ViewBag.BannerDepNam = bannerDepNam?.Value ?? "/hexashop/assets/images/baner-right-image-03.jpg";
         
         return View();
     }

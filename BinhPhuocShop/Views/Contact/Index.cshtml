@@ -1,69 +1,76 @@
-@model ContactMessage
+@model BinhPhuocShop.Models.ContactMessage
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Liên hệ";
-    var store = "/store";
+    var hexashop = "/hexashop";
 }
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('@(store)/images/bg-01.jpg'); background-color: #f5f5f5;">
-    <h2 class="ltext-105 cl0 txt-center">Liên hệ</h2>
-</section>
 
-<section class="bg0 p-t-104 p-b-116">
+<!-- ***** Contact Area Starts ***** -->
+<section class="section" id="contact">
     <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-b-30 p-lr-0-lg">
-            <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">Trang chủ <i class="fa fa-angle-right m-l-9 m-r-10"></i></a>
-            <span class="stext-109 cl4">Liên hệ</span>
-        </div>
-        <div class="flex-w flex-tr">
-            <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-                <form asp-action="Index" method="post">
-                    @Html.AntiForgeryToken()
-                    <h4 class="mtext-105 cl2 txt-center p-b-30">Gửi tin nhắn cho chúng tôi</h4>
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="stext-107 cl6 p-b-20" style="color:#28a745;">@TempData["Success"]</div>
-                    }
-                    <div class="bor8 m-b-20 how-pos4-parent">
-                        <input asp-for="Name" class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" placeholder="Họ và tên *" required />
-                    </div>
-                    <div class="bor8 m-b-20 how-pos4-parent">
-                        <input asp-for="Phone" class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" placeholder="Số điện thoại *" required />
-                    </div>
-                    <div class="bor8 m-b-20 how-pos4-parent">
-                        <input asp-for="Email" type="email" class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" placeholder="Email *" required />
-                    </div>
-                    <div class="bor8 m-b-30">
-                        <textarea asp-for="Message" class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" placeholder="Nội dung tin nhắn *" required></textarea>
-                    </div>
-                    <button type="submit" class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">Gửi liên hệ</button>
-                </form>
-            </div>
-            <div class="size-210 bor10 flex-w flex-col-m p-lr-93 p-tb-30 p-lr-15-lg w-full-md">
-                <div class="flex-w w-full p-b-42">
-                    <span class="fs-18 cl5 txt-center size-211"><span class="lnr lnr-map-marker"></span></span>
-                    <div class="size-212 p-t-2">
-                        <span class="mtext-110 cl2">Địa chỉ</span>
-                        <p class="stext-115 cl6 size-213 p-t-18">@(ViewBag.Address ?? "Hà Nội")</p>
-                    </div>
-                </div>
-                <div class="flex-w w-full p-b-42">
-                    <span class="fs-18 cl5 txt-center size-211"><span class="lnr lnr-phone-handset"></span></span>
-                    <div class="size-212 p-t-2">
-                        <span class="mtext-110 cl2">Điện thoại</span>
-                        <p class="stext-115 cl1 size-213 p-t-18"><a href="tel:@(ViewBag.Phone ?? "0984843218")">@(ViewBag.Phone ?? "0984843218")</a></p>
-                    </div>
-                </div>
-                <div class="flex-w w-full">
-                    <span class="fs-18 cl5 txt-center size-211"><span class="lnr lnr-envelope"></span></span>
-                    <div class="size-212 p-t-2">
-                        <span class="mtext-110 cl2">Email</span>
-                        <p class="stext-115 cl1 size-213 p-t-18"><a href="mailto:@(ViewBag.Email ?? "contact@binhphuocshop.vn")">@(ViewBag.Email ?? "contact@binhphuocshop.vn")</a></p>
-                    </div>
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="contact-form">
+                    <form asp-action="Index" method="post">
+                        @Html.AntiForgeryToken()
+                        <h4 class="mb-4 fw-bold">Gửi tin nhắn cho chúng tôi</h4>
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success">
+                                <i class="fa fa-check-circle me-2"></i>@TempData["Success"]
+                            </div>
+                        }
+                        <div class="mb-3">
+                            <label class="form-label">Họ và tên *</label>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập họ và tên của bạn" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại *</label>
+                            <input asp-for="Phone" class="form-control" placeholder="Nhập số điện thoại" required />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Nhập địa chỉ email" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Nội dung tin nhắn *</label>
+                            <textarea asp-for="Message" class="form-control" rows="5" placeholder="Nhập nội dung tin nhắn của bạn" required></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">
+                            <i class="fa fa-paper-plane me-2"></i>Gửi liên hệ
+                        </button>
+                    </form>
                 </div>
             </div>
-        </div>
-        <div class="p-t-50">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.5400238871257!2d105.84948329999999!3d21.011067699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab94acc75ef5%3A0x90571614e5e0c1b2!2sMULGATI!5e0!3m2!1svi!2s!4v1670226856071" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="col-lg-6">
+                <div class="contact-info">
+                    <h4 class="mb-4 fw-bold">Thông tin liên hệ</h4>
+                    <div class="mb-4">
+                        <h6 class="mb-2"><i class="fa fa-map-marker me-2" style="color: #667eea;"></i>Địa chỉ</h6>
+                        <p class="ms-4">@(ViewBag.SiteAddress ?? ViewBag.Address ?? "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh")</p>
+                    </div>
+                    <div class="mb-4">
+                        <h6 class="mb-2"><i class="fa fa-phone me-2" style="color: #667eea;"></i>Điện thoại</h6>
+                        <p class="ms-4"><a href="tel:@(ViewBag.SitePhone ?? ViewBag.Phone ?? "0984843218")" style="color: #667eea; text-decoration: none;">@(ViewBag.SitePhone ?? ViewBag.Phone ?? "0984843218")</a></p>
+                    </div>
+                    <div class="mb-4">
+                        <h6 class="mb-2"><i class="fa fa-envelope me-2" style="color: #667eea;"></i>Email</h6>
+                        <p class="ms-4"><a href="mailto:@(ViewBag.SiteEmail ?? ViewBag.Email ?? "contact@binhphuocshop.vn")" style="color: #667eea; text-decoration: none;">@(ViewBag.SiteEmail ?? ViewBag.Email ?? "contact@binhphuocshop.vn")</a></p>
+                    </div>
+                    <div class="mb-4">
+                        <h6 class="mb-2"><i class="fa fa-clock-o me-2" style="color: #667eea;"></i>Giờ làm việc</h6>
+                        <p class="ms-4">8:00 AM - 10:00 PM Hàng ngày</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.5400238871257!2d105.84948329999999!3d21.011067699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab94acc75ef5%3A0x90571614e5e0c1b2!2sMULGATI!5e0!3m2!1svi!2s!4v1670226856071" width="100%" height="300" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+<!-- ***** Contact Area Ends ***** -->

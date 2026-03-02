@@ -1,28 +1,55 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Đặt hàng thành công";
-    var orderCode = ViewBag.OrderCode as string;
+    var orderCode = ViewBag.OrderCode as string ?? TempData["OrderCode"] as string;
+    if (string.IsNullOrEmpty(orderCode))
+    {
+        orderCode = Context.Session.GetString("LastOrderCode");
+    }
 }
 
-<div class="section section-success-mulgati">
-    <div class="container">
-        <div class="success-card bp-reveal">
-            <div class="success-icon"><i class="fa fa-check-circle"></i></div>
-            <h1 class="success-title">Đặt hàng thành công!</h1>
-            <p class="success-desc">Cảm ơn bạn đã mua sắm tại @(ViewBag.SiteName ?? "Bình Phước Shop").</p>
-            @if (!string.IsNullOrEmpty(orderCode))
-            {
-                <p class="success-code">Mã đơn hàng: <strong>@orderCode</strong></p>
-                <p class="success-note">Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận đơn hàng.</p>
-            }
-            <div class="success-actions mt-4">
-                <a asp-controller="Products" asp-action="Index" class="btn-mulgati btn-mulgati-primary">
-                    <i class="fa fa-shopping-bag"></i> Tiếp tục mua sắm
-                </a>
-                <a asp-controller="Home" asp-action="Index" class="btn-mulgati btn-mulgati-outline">
-                    <i class="fa fa-home"></i> Về trang chủ
-                </a>
-            </div>
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Đặt hàng thành công!</h2>
         </div>
     </div>
 </div>
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card text-center">
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <i class="fa fa-check-circle" style="font-size: 64px; color: #28a745;"></i>
+                        </div>
+                        <h2 class="mb-3">Đặt hàng thành công!</h2>
+                        <p class="text-muted mb-4">Cảm ơn bạn đã mua sắm tại @(ViewBag.SiteName ?? "Bình Phước Shop")</p>
+                        @if (!string.IsNullOrEmpty(orderCode))
+                        {
+                            <div class="alert alert-info">
+                                <strong>Mã đơn hàng:</strong> @orderCode
+                            </div>
+                            <p class="text-muted">Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận đơn hàng.</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Đơn hàng của bạn đã được tiếp nhận. Chúng tôi sẽ liên hệ với bạn sớm nhất.</p>
+                        }
+                        <div class="mt-4">
+                            <a asp-controller="Products" asp-action="Index" class="btn btn-dark me-2">
+                                <i class="fa fa-shopping-bag"></i> Tiếp tục mua sắm
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark">
+                                <i class="fa fa-home"></i> Về trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,21 +1,26 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
+    ViewData["Title"] = "Điều khoản dịch vụ";
+    var hexashop = "/hexashop";
 }
-<section class="section pd-top-30">
+
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Điều khoản dịch vụ</h2>
+        </div>
+    </div>
+</div>
+
+<!-- ***** About Area Starts ***** -->
+<div class="about-us">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                <li class="breadcrumb-item active">Điều khoản dịch vụ</li>
-            </ol>
-        </nav>
         <div class="row">
-            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
-                <partial name="_PagesSidebar" />
-            </aside>
-            <div class="col-md-9 col-sm-12">
-                <h1 class="h3 mb-4">Điều khoản dịch vụ</h1>
-                <div class="page-content content-entry" style="line-height:1.8;">
+            <div class="col-lg-12">
+                <div class="right-content">
+                    <h4>Điều khoản dịch vụ</h4>
+                    <div style="line-height:1.8;">
                     <h2 class="h5 mt-4"><strong>Điều khoản dịch vụ</strong></h2>
                     <p>Xin vui lòng đọc kỹ phần này vì nó có các điều khoản và các điều kiện pháp lý mà quý khách phải chấp thuận khi sử dụng trang web này.</p>
                     <h2 class="h5 mt-4"><strong>Người điều hành</strong></h2>
@@ -34,10 +39,12 @@
                     <p>Đối với phạm vi đầy đủ nhất được cho phép bởi luật, tất cả sự bảo đảm (biểu hiện hoặc ẩn ý) đối với trang này, nội dung và việc sử dụng của bạn sẽ bị loại trừ.</p>
                     <h2 class="h5 mt-4"><strong>Sự sửa đổi những điều khoản</strong></h2>
                     <p>Chúng tôi bảo lưu quyền sửa đổi các điều khoản này mà không cần thông báo với bạn mọi lúc. Việc sửa đổi sẽ có hiệu lực mỗi khi các điều khoản chỉnh sửa đã được đăng trên trang web.</p>
-                    <h2 class="h5 mt-4"><strong>Luật áp dụng</strong></h2>
-                    <p>Các Điều khoản này bị chi phối và sẽ được hiểu theo quy định của pháp luật Việt Nam. Mọi tranh chấp phát sinh hoặc liên quan đến các Điều khoản và Điều kiện này sẽ chịu sự xét xử của Tòa án Việt Nam.</p>
+                        <h4 class="mt-4"><strong>Luật áp dụng</strong></h4>
+                        <p>Các Điều khoản này bị chi phối và sẽ được hiểu theo quy định của pháp luật Việt Nam. Mọi tranh chấp phát sinh hoặc liên quan đến các Điều khoản và Điều kiện này sẽ chịu sự xét xử của Tòa án Việt Nam.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+<!-- ***** About Area Ends ***** -->

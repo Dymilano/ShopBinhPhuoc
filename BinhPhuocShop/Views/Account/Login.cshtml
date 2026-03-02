@@ -1,41 +1,42 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Đăng nhập";
     var returnUrl = ViewBag.ReturnUrl as string ?? "/";
     var error = ViewBag.Error as string;
 }
 
-<div class="section" style="padding: 60px 0;">
+<section class="section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
-                <div class="card" style="border-radius: 8px; border: 1px solid #e5e5e5;">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Đăng nhập</h2>
-                        <p class="text-center text-muted mb-4">Nhận nhiều ưu đãi hơn khi đăng nhập</p>
-                        @if (!string.IsNullOrEmpty(error))
-                        {
-                            <div class="alert alert-danger">@error</div>
-                        }
-                        <form asp-action="Login" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="returnUrl" value="@returnUrl" />
-                            <div class="form-group mb-3">
-                                <label>Email</label>
-                                <input type="email" name="email" class="form-control" required placeholder="email@example.com" />
-                            </div>
-                            <div class="form-group mb-4">
-                                <label>Mật khẩu</label>
-                                <input type="password" name="password" class="form-control" required />
-                            </div>
-                            <button type="submit" class="btn btn-dark btn-block w-100 mb-3">Đăng nhập</button>
-                            <p class="text-center mb-0">
-                                Chưa có tài khoản? <a asp-action="Register">Đăng ký ngay</a>
-                            </p>
-                        </form>
-                    </div>
+                <div class="login-card">
+                    <h2 class="text-center mb-4">Đăng nhập</h2>
+                    @if (!string.IsNullOrEmpty(error))
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-circle me-2"></i>@error
+                        </div>
+                    }
+                    <form asp-action="Login" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" required placeholder="Nhập địa chỉ email của bạn" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Mật khẩu</label>
+                            <input type="password" name="password" class="form-control" required placeholder="Nhập mật khẩu" />
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 mb-3">
+                            <i class="fa fa-sign-in me-2"></i>Đăng nhập
+                        </button>
+                        <p class="text-center mb-0">
+                            Chưa có tài khoản? <a asp-action="Register" style="color: #667eea; font-weight: 600;">Đăng ký ngay</a>
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>

@@ -22,6 +22,9 @@ public class StoreControllerBase : Controller
         var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
         ViewBag.SiteName = settings.GetValueOrDefault("SiteName", "Bình Phước Shop");
         ViewBag.SiteDescription = settings.GetValueOrDefault("SiteDescription", "Giày dép chính hãng - Bình Phước Shop");
+        ViewBag.SitePhone = settings.GetValueOrDefault("Phone", "0984843218");
+        ViewBag.SiteEmail = settings.GetValueOrDefault("Email", "contact@binhphuocshop.vn");
+        ViewBag.SiteAddress = settings.GetValueOrDefault("Address", "123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh");
         ViewBag.Phone = settings.GetValueOrDefault("Phone", "0984843218");
         ViewBag.Email = settings.GetValueOrDefault("Email", "contact@binhphuocshop.vn");
         ViewBag.Address = settings.GetValueOrDefault("Address", "Hà Nội");

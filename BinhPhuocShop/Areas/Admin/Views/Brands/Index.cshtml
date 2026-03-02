@@ -75,34 +75,17 @@
                                                 <span class="badge bg-soft-secondary text-secondary">Ẩn</span>
                                             }
                                         </td>
-                                        <td>
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <a asp-action="Edit" asp-route-id="@b.Id" class="avatar-text avatar-md" data-bs-toggle="tooltip" title="Sửa">
-                                                    <i class="feather-edit-3"></i>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Edit" asp-route-id="@b.Id" class="btn btn-sm btn-outline-primary" title="Sửa">
+                                                    <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0)" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                        <i class="feather-more-horizontal"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@b.Id">
-                                                                <i class="feather-edit-3 me-3"></i>
-                                                                <span>Sửa</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li>
-                                                            <form asp-action="Delete" asp-route-id="@b.Id" method="post" class="m-0">
-                                                                @Html.AntiForgeryToken()
-                                                                <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Xóa thương hiệu này?');">
-                                                                    <i class="feather-trash-2 me-3"></i>
-                                                                    <span>Xóa</span>
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <form asp-action="Delete" asp-route-id="@b.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa thương hiệu này?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

@@ -102,9 +102,14 @@
                             {
                                 <tr>
                                     <td>
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@item.ProductId" class="fw-semibold">
-                                            @item.ProductName
-                                        </a>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@item.ProductId" class="fw-semibold">
+                                                @item.ProductName
+                                            </a>
+                                            <a href="@Url.Action("Detail", "Products", new { area = "", id = item.ProductId })" target="_blank" class="text-primary" title="Xem trên trang web">
+                                                <i class="feather-external-link" style="font-size: 12px;"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                     <td>
                                         <span class="badge bg-light-brand">@(item.Size ?? "-")</span>

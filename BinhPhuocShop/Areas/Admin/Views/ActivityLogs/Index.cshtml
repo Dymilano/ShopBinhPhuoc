@@ -8,77 +8,141 @@
     var entityFilter = ViewBag.EntityFilter as string ?? "";
 }
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h5 class="mb-0">Lịch sử hoạt động</h5>
-        <form method="get" class="d-flex gap-2 flex-wrap">
-            <select name="action" class="form-select form-select-sm" style="width: auto;">
-                <option value="">-- Hành động --</option>
-                <option value="Login" selected="@(actionFilter == "Login")">Đăng nhập</option>
-                <option value="Logout" selected="@(actionFilter == "Logout")">Đăng xuất</option>
-                <option value="Register" selected="@(actionFilter == "Register")">Đăng ký</option>
-                <option value="Create" selected="@(actionFilter == "Create")">Thêm mới</option>
-                <option value="Update" selected="@(actionFilter == "Update")">Cập nhật</option>
-                <option value="Delete" selected="@(actionFilter == "Delete")">Xóa</option>
-            </select>
-            <select name="entityType" class="form-select form-select-sm" style="width: auto;">
-                <option value="">-- Loại --</option>
-                <option value="User" selected="@(entityFilter == "User")">User</option>
-                <option value="Product" selected="@(entityFilter == "Product")">Product</option>
-                <option value="Order" selected="@(entityFilter == "Order")">Order</option>
-                <option value="Category" selected="@(entityFilter == "Category")">Category</option>
-                <option value="Brand" selected="@(entityFilter == "Brand")">Brand</option>
-                <option value="Post" selected="@(entityFilter == "Post")">Post</option>
-            </select>
-            <button type="submit" class="btn btn-sm btn-outline-primary">Lọc</button>
-        </form>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">Lịch sử hoạt động</h4>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Thời gian</th>
-                        <th>Hành động</th>
-                        <th>Loại</th>
-                        <th>Người dùng</th>
-                        <th>Chi tiết</th>
-                        <th>IP</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var log in Model ?? Enumerable.Empty<BinhPhuocShop.Models.ActivityLog>())
-                    {
+
+    <!-- Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-lg-4">
+                    <label class="form-label">Lọc theo hành động</label>
+                    <select name="action" class="form-select">
+                        <option value="">Tất cả hành động</option>
+                        <option value="Login" selected="@(actionFilter == "Login")">Đăng nhập</option>
+                        <option value="Logout" selected="@(actionFilter == "Logout")">Đăng xuất</option>
+                        <option value="Register" selected="@(actionFilter == "Register")">Đăng ký</option>
+                        <option value="Create" selected="@(actionFilter == "Create")">Thêm mới</option>
+                        <option value="Update" selected="@(actionFilter == "Update")">Cập nhật</option>
+                        <option value="Delete" selected="@(actionFilter == "Delete")">Xóa</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label">Lọc theo loại</label>
+                    <select name="entityType" class="form-select">
+                        <option value="">Tất cả loại</option>
+                        <option value="User" selected="@(entityFilter == "User")">User</option>
+                        <option value="Product" selected="@(entityFilter == "Product")">Product</option>
+                        <option value="Order" selected="@(entityFilter == "Order")">Order</option>
+                        <option value="Category" selected="@(entityFilter == "Category")">Category</option>
+                        <option value="Brand" selected="@(entityFilter == "Brand")">Brand</option>
+                        <option value="Post" selected="@(entityFilter == "Post")">Post</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="feather-filter me-2"></i>Lọc
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Activity Logs Table -->
+    <div class="card shadow-sm">
+        <div class="card-header fw-semibold">
+            Danh sách hoạt động (@total bản ghi)
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
                         <tr>
-                            <td class="text-nowrap">@log.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td><span class="badge bg-@(log.Action == "Login" || log.Action == "Register" ? "success" : log.Action == "Delete" ? "danger" : "primary")">@log.Action</span></td>
-                            <td>@log.EntityType</td>
-                            <td>@(log.UserName ?? "Guest") <small class="text-muted">@log.UserEmail</small></td>
-                            <td>@log.Details</td>
-                            <td><small>@log.IpAddress</small></td>
+                            <th>Thời gian</th>
+                            <th>Hành động</th>
+                            <th>Loại</th>
+                            <th>Người dùng</th>
+                            <th>Chi tiết</th>
+                            <th>IP</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var log in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <small class="text-muted">@log.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</small>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var badgeClass = log.Action switch
+                                            {
+                                                "Login" or "Register" => "bg-success",
+                                                "Delete" => "bg-danger",
+                                                "Update" => "bg-warning",
+                                                _ => "bg-primary"
+                                            };
+                                        }
+                                        <span class="badge @badgeClass">@log.Action</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark">@log.EntityType</span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">@(log.UserName ?? "Guest")</div>
+                                            @if (!string.IsNullOrEmpty(log.UserEmail))
+                                            {
+                                                <small class="text-muted">@log.UserEmail</small>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">@log.Details</span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@log.IpAddress</small>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="feather-activity fs-1 text-muted mb-3 d-block"></i>
+                                    <p class="text-muted mb-0">Chưa có hoạt động nào.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
         @if (totalPages > 1)
         {
-            <nav class="mt-3">
-                <ul class="pagination pagination-sm justify-content-center mb-0">
-                    <li class="page-item @(page <= 1 ? "disabled" : "")">
-                        <a class="page-link" href="?page=@(page - 1)&action=@actionFilter&entityType=@entityFilter">Trước</a>
-                    </li>
-                    @for (var p = 1; p <= Math.Min(totalPages, 10); p++)
-                    {
-                        <li class="page-item @(p == page ? "active" : "")">
-                            <a class="page-link" href="?page=@p&action=@actionFilter&entityType=@entityFilter">@p</a>
+            <div class="card-footer">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(page <= 1 ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(page - 1)&action=@actionFilter&entityType=@entityFilter">Trước</a>
                         </li>
-                    }
-                    <li class="page-item @(page >= totalPages ? "disabled" : "")">
-                        <a class="page-link" href="?page=@(page + 1)&action=@actionFilter&entityType=@entityFilter">Sau</a>
-                    </li>
-                </ul>
-            </nav>
+                        @for (var p = Math.Max(1, page - 2); p <= Math.Min(totalPages, page + 2); p++)
+                        {
+                            <li class="page-item @(p == page ? "active" : "")">
+                                <a class="page-link" href="?page=@p&action=@actionFilter&entityType=@entityFilter">@p</a>
+                            </li>
+                        }
+                        <li class="page-item @(page >= totalPages ? "disabled" : "")">
+                            <a class="page-link" href="?page=@(page + 1)&action=@actionFilter&entityType=@entityFilter">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         }
     </div>
 </div>

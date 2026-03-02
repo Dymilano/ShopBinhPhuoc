@@ -30,7 +30,8 @@ public class AppDbContext : DbContext
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull)
+            .IsRequired(false);
 
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Brand)

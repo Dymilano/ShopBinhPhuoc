@@ -11,7 +11,7 @@ public class CollectionsController : ProductsController
     public CollectionsController(BinhPhuocShop.Data.AppDbContext db, BinhPhuocShop.Services.CartService cart) : base(db, cart) { }
 
     [HttpGet("{slug}")]
-    public async Task<IActionResult> Index(string slug, int? brandId, string? q, string sort = "newest", int page = 1, int pageSize = 12)
+    public async Task<IActionResult> Index(string slug, int? brandId, string? q, string sort = "newest", int page = 1, int pageSize = 16)
     {
         return await base.Index(null, brandId, slug, q, sort, page, pageSize);
     }

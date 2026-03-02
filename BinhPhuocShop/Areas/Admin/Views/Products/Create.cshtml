@@ -3,178 +3,162 @@
     ViewData["Title"] = "Thêm sản phẩm";
 }
 
-@section PageHeaderRight {
-    <a asp-action="Index" class="btn btn-light-brand">
-        <i class="feather-arrow-left me-2"></i>
-        <span>Quay lại</span>
-    </a>
-    <button type="submit" form="productForm" class="btn btn-primary">
-        <i class="feather-save me-2"></i>
-        <span>Lưu sản phẩm</span>
-    </button>
-}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">Thêm sản phẩm</h4>
+        <div>
+            <a asp-action="Index" class="btn btn-light me-2">
+                <i class="feather-arrow-left me-2"></i>Quay lại
+            </a>
+            <button type="submit" form="productForm" class="btn btn-primary">
+                <i class="feather-save me-2"></i>Lưu sản phẩm
+            </button>
+        </div>
+    </div>
 
-<form id="productForm" asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card border-top-0">
-                <div class="card-header p-0">
-                    <ul class="nav nav-tabs flex-wrap w-100 text-center" id="productTabs" role="tablist">
-                        <li class="nav-item flex-fill border-top" role="presentation">
-                            <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#basicTab" role="tab">Thông tin cơ bản</a>
-                        </li>
-                        <li class="nav-item flex-fill border-top" role="presentation">
-                            <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#imagesTab" role="tab">Hình ảnh</a>
-                        </li>
-                        <li class="nav-item flex-fill border-top" role="presentation">
-                            <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#pricingTab" role="tab">Giá & Tồn kho</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="basicTab" role="tabpanel">
-                        <div class="card-body admin-form-card">
-                            <div asp-validation-summary="All" class="alert alert-danger"></div>
-                            <div class="form-row">
-                                <label asp-for="Name">Tên sản phẩm <span class="text-danger">*</span></label>
-                                <input asp-for="Name" placeholder="Tên sản phẩm" required>
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="Slug">Slug</label>
-                                <input asp-for="Slug" placeholder="Tự động nếu để trống">
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="ShortDescription">Mô tả ngắn</label>
-                                <textarea asp-for="ShortDescription" rows="2" placeholder="Mô tả ngắn về sản phẩm"></textarea>
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="Description">Mô tả chi tiết (HTML)</label>
-                                <textarea id="Description" name="Description" rows="6" placeholder="Mô tả chi tiết sản phẩm">@Model.Description</textarea>
-                            </div>
-                            <div class="form-row">
-                                <label></label>
-                                <div class="mt-2 p-2 border border-gray-2 rounded bg-gray-1">
-                                    <label class="fs-11 fw-semibold mb-1 d-block">Chèn ảnh vào mô tả:</label>
-                                    <div class="input-group input-group-sm">
-                                        <input type="file" id="descImageFile" accept="image/*" class="form-control form-control-sm">
-                                        <button type="button" class="btn btn-sm btn-light-brand" id="btnUploadDescImage">Tải lên và chèn</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="CategoryId">Danh mục <span class="text-danger">*</span></label>
-                                <select asp-for="CategoryId" asp-items="ViewBag.Categories" required>
-                                    <option value="">-- Chọn danh mục --</option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="BrandId">Thương hiệu</label>
-                                <select asp-for="BrandId" asp-items="ViewBag.Brands">
-                                    <option value="">-- Chọn thương hiệu --</option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <label asp-for="DisplayOrder">Thứ tự hiển thị</label>
-                                <input asp-for="DisplayOrder" type="number" value="0" style="max-width: 150px;">
-                            </div>
-                            <div class="form-row">
-                                <label>Trạng thái</label>
-                                <div class="d-flex gap-3">
-                                    <div class="form-check form-switch form-switch-sm">
-                                        <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
-                                        <label class="form-check-label" for="IsActive">Hiển thị</label>
-                                    </div>
-                                    <div class="form-check form-switch form-switch-sm">
-                                        <input asp-for="IsFeatured" class="form-check-input" type="checkbox">
-                                        <label class="form-check-label" for="IsFeatured">Nổi bật</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <form id="productForm" asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+        
+        <div class="row">
+            <!-- CỘT TRÁI -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold">
+                        Thông tin sản phẩm
                     </div>
-                    <div class="tab-pane fade" id="imagesTab" role="tabpanel">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <p class="fs-12 text-muted mb-3">Tối đa 5 ảnh (ảnh 1 = ảnh chính). Kích thước khuyến nghị: 600x400px</p>
-                                    <div class="row g-3">
-                                        @for (int i = 1; i <= 5; i++)
-                                        {
-                                            <div class="col-lg-4 col-md-6">
-                                                <label class="fs-12 fw-semibold mb-2 d-block">Ảnh @i @(i == 1 ? "(chính)" : "")</label>
-                                                <input type="file" name="@(i == 1 ? "imageFile" : "imageFile" + i)" accept="image/*" class="form-control form-control-sm">
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Tên sản phẩm">
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="pricingTab" role="tabpanel">
-                        <div class="card-body">
-                            <div class="row mb-3 align-items-center">
-                                <div class="col-lg-3">
-                                    <label asp-for="Price" class="fw-semibold mb-0">Giá: <span class="text-danger">*</span></label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group input-group-sm" style="max-width: 300px;">
-                                        <div class="input-group-text"><i class="feather-dollar-sign"></i></div>
-                                        <input asp-for="Price" type="number" step="1000" class="form-control" placeholder="Giá sản phẩm" required>
-                                        <div class="input-group-text">₫</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3 align-items-center">
-                                <div class="col-lg-3">
-                                    <label asp-for="SalePrice" class="fw-semibold mb-0">Giá khuyến mãi: </label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group input-group-sm" style="max-width: 300px;">
-                                        <div class="input-group-text"><i class="feather-tag"></i></div>
-                                        <input asp-for="SalePrice" type="number" step="1000" class="form-control" placeholder="Giá khuyến mãi">
-                                        <div class="input-group-text">₫</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3 align-items-center">
-                                <div class="col-lg-3">
-                                    <label asp-for="Sku" class="fw-semibold mb-0">Mã SKU: </label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group input-group-sm" style="max-width: 300px;">
-                                        <div class="input-group-text"><i class="feather-hash"></i></div>
-                                        <input asp-for="Sku" class="form-control" placeholder="Mã SKU">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3 align-items-center">
-                                <div class="col-lg-3">
-                                    <label asp-for="Stock" class="fw-semibold mb-0">Tồn kho: </label>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group input-group-sm" style="max-width: 200px;">
-                                        <div class="input-group-text"><i class="feather-box"></i></div>
-                                        <input asp-for="Stock" type="number" class="form-control" placeholder="Số lượng" value="0">
-                                    </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label">Slug</label>
+                            <input asp-for="Slug" type="text" class="form-control" placeholder="Để trống sẽ tự động tạo">
+                            <small class="text-muted">Để trống sẽ tự động tạo</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ShortDescription" class="form-label">Mô tả ngắn</label>
+                            <textarea asp-for="ShortDescription" class="form-control" rows="3" placeholder="Mô tả ngắn về sản phẩm"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Mô tả chi tiết</label>
+                            <textarea id="Description" name="Description" class="form-control" rows="6" placeholder="Mô tả chi tiết sản phẩm">@Model.Description</textarea>
+                            <div class="mt-2 p-2 border rounded bg-light">
+                                <label class="fs-11 fw-semibold mb-1 d-block">Chèn ảnh vào mô tả:</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="file" id="descImageFile" accept="image/*" class="form-control">
+                                    <button type="button" class="btn btn-sm btn-primary" id="btnUploadDescImage">Tải lên và chèn</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer border-top d-flex justify-content-end gap-2">
-                    <a asp-action="Index" class="btn btn-light-brand">
-                        <i class="feather-x me-2"></i>
-                        <span>Hủy</span>
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="feather-save me-2"></i>
-                        <span>Lưu sản phẩm</span>
-                    </button>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold">
+                        Hình ảnh sản phẩm
+                    </div>
+                    <div class="card-body">
+                        <p class="fs-12 text-muted mb-3">Tối đa 5 ảnh (ảnh 1 = ảnh chính). Kích thước khuyến nghị: 600x400px</p>
+                        <div class="row g-3">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="col-lg-4 col-md-6">
+                                    <label class="form-label">Ảnh @i @(i == 1 ? "(chính)" : "")</label>
+                                    <input type="file" name="@(i == 1 ? "imageFile" : "imageFile" + i)" accept="image/*" class="form-control form-control-sm">
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Giá & Tồn kho
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label">Giá <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input asp-for="Price" type="number" step="1000" class="form-control" placeholder="Giá sản phẩm">
+                                    <span class="input-group-text">₫</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="SalePrice" class="form-label">Giá khuyến mãi</label>
+                                <div class="input-group">
+                                    <input asp-for="SalePrice" type="number" step="1000" class="form-control" placeholder="Giá khuyến mãi">
+                                    <span class="input-group-text">₫</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label asp-for="Sku" class="form-label">Mã SKU</label>
+                                <input asp-for="Sku" type="text" class="form-control" placeholder="Mã SKU">
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Stock" class="form-label">Tồn kho</label>
+                                <input asp-for="Stock" type="number" class="form-control" placeholder="Số lượng" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header fw-semibold">
+                        Phân loại
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="CategoryId" class="form-label">Danh mục</label>
+                            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                                <option value="">Chọn danh mục (không bắt buộc)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BrandId" class="form-label">Thương hiệu</label>
+                            <select asp-for="BrandId" asp-items="ViewBag.Brands" class="form-select">
+                                <option value="">Chọn thương hiệu</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">
+                        Trạng thái
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="DisplayOrder" class="form-label">Thứ tự hiển thị</label>
+                            <input asp-for="DisplayOrder" type="number" class="form-control" value="0">
+                        </div>
+
+                        <div class="form-check form-switch mb-2">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                            <label class="form-check-label" asp-for="IsActive">Hiển thị</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input asp-for="IsFeatured" class="form-check-input" type="checkbox">
+                            <label class="form-check-label" asp-for="IsFeatured">Nổi bật</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 @section Scripts {
 <script>

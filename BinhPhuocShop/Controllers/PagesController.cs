@@ -1,6 +1,7 @@
 using BinhPhuocShop.Data;
 using BinhPhuocShop.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BinhPhuocShop.Controllers;
 
@@ -8,9 +9,31 @@ public class PagesController : StoreControllerBase
 {
     public PagesController(AppDbContext db, CartService cart) : base(db, cart) { }
 
-    public IActionResult GioiThieu()
+    public async Task<IActionResult> GioiThieu()
     {
         ViewData["Title"] = "Giới thiệu";
+        
+        // Lấy thông tin các danh mục sản phẩm chính
+        var productCategories = await Db.Categories
+            .Where(c => c.IsActive && c.Slug != null && 
+                (c.Slug == "giay-nam" || c.Slug == "giay-nu" || c.Slug == "dep-nam" || c.Slug == "dep-nu"))
+            .OrderBy(c => c.DisplayOrder)
+            .ThenBy(c => c.Name)
+            .ToListAsync();
+        
+        // Đếm số sản phẩm theo từng danh mục
+        var categoryProductCounts = new Dictionary<string, int>();
+        foreach (var cat in productCategories)
+        {
+            var childIds = await Db.Categories.Where(c => c.ParentId == cat.Id).Select(c => c.Id).ToListAsync();
+            var ids = new List<int> { cat.Id }.Union(childIds).ToList();
+            var count = await Db.Products.CountAsync(p => p.CategoryId.HasValue && ids.Contains(p.CategoryId.Value) && p.IsActive);
+            categoryProductCounts[cat.Slug ?? ""] = count;
+        }
+        
+        ViewBag.ProductCategories = productCategories;
+        ViewBag.CategoryProductCounts = categoryProductCounts;
+        
         return View();
     }
 

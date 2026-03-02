@@ -1,48 +1,52 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
+    ViewData["Title"] = "Chính sách bảo hành";
+    var hexashop = "/hexashop";
 }
-<section class="section pd-top-30">
+
+<!-- Page Title -->
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="fw-bold" style="color: #2a2a2a; font-size: 2rem;">Chính sách bảo hành</h2>
+        </div>
+    </div>
+</div>
+
+<!-- ***** About Area Starts ***** -->
+<div class="about-us">
     <div class="container">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
-                <li class="breadcrumb-item active">Chính sách bảo hành</li>
-            </ol>
-        </nav>
         <div class="row">
-            <aside class="col-md-3 col-sm-12 order-md-2 mb-4">
-                <partial name="_PagesSidebar" />
-            </aside>
-            <div class="col-md-9 col-sm-12">
-                <h1 class="h3 mb-4">CHÍNH SÁCH BẢO HÀNH</h1>
-                <div class="page-content content-entry" style="line-height:1.8;">
-                    <p><strong>CHÍNH SÁCH BẢO HÀNH</strong></p>
-                    <p><strong>MULGATI CAM KẾT VỚI QUÝ KHÁCH HÀNG VỀ CHÍNH SÁCH BẢO HÀNH VÀ BẢO TRÌ SẢN PHẨM NHƯ SAU:</strong></p>
-                    <ul>
+            <div class="col-lg-12">
+                <div class="right-content">
+                    <h4>CHÍNH SÁCH BẢO HÀNH</h4>
+                    <p><strong>BÌNH PHƯỚC SHOP CAM KẾT VỚI QUÝ KHÁCH HÀNG VỀ CHÍNH SÁCH BẢO HÀNH VÀ BẢO TRÌ SẢN PHẨM NHƯ SAU:</strong></p>
+                    <ul style="line-height: 2;">
                         <li>Bảo hành miễn phí 6 tháng kể từ ngày mua hàng được ghi trên hoá đơn. (<strong>Lưu ý: Không áp dụng với hàng sale 50% trở lên</strong>)</li>
                     </ul>
-                    <p><strong>QUY ĐỊNH CHUNG VỀ BẢO HÀNH</strong></p>
-                    <ul>
+                    <h4 class="mt-4">QUY ĐỊNH CHUNG VỀ BẢO HÀNH</h4>
+                    <ul style="line-height: 2;">
                         <li>Khắc phục những lỗi hỏng do nhà sản xuất như: nở da, bong tróc, bung đế...</li>
                         <li>Khách tiếp nhận bảo hành chính thức: <a href="https://zalo.me/3671076266973569140" target="_blank">OA Zalo Mulgati</a>.</li>
                         <li>Mỗi số điện thoại khách hàng đăng ký tương ứng một mã bảo hành hợp lệ.</li>
                     </ul>
-                    <p><strong>NHỮNG TRƯỜNG HỢP KHÔNG ĐƯỢC BẢO HÀNH</strong></p>
-                    <ul>
+                    <h4 class="mt-4">NHỮNG TRƯỜNG HỢP KHÔNG ĐƯỢC BẢO HÀNH</h4>
+                    <ul style="line-height: 2;">
                         <li>Không nhận các sản phẩm quá cũ (đế và da bị lão hoá, không có độ bám dính của keo hoặc không có phụ kiện để thay).</li>
                         <li>Những sản phẩm bị hư, hỏng do hoả hoạn, tác động ngoại lực hoặc do lỗi từ người dùng (va quệt, cào kéo, bảo quản không đúng cách, tự ý thay đổi kết cấu, màu sắc của sản phẩm...).</li>
                     </ul>
-                    <p><strong>QUY TRÌNH BẢO HÀNH</strong></p>
-                    <ul>
+                    <h4 class="mt-4">QUY TRÌNH BẢO HÀNH</h4>
+                    <ul style="line-height: 2;">
                         <li>Liên hệ cho kênh <a href="https://zalo.me/3671076266973569140" target="_blank">OA Zalo Mulgati</a>.</li>
                         <li>Nếu lỗi nằm trong hạng mục bảo hành, khách hàng sẽ gửi sản phẩm về Trung tâm bảo hành theo hướng dẫn của nhân viên CKSH.</li>
                         <li>Sau khi nhận được sản phẩm cần bảo hành, Bộ phận Bảo hành của Mulgati sẽ tiến hành kiểm tra, đánh giá và xác định nguyên nhân lỗi. Sau đó, thông báo cho khách hàng về hạng mục bảo hành và dự trù chi phí sửa chữa (nếu có).</li>
                         <li>Đối với những sản phẩm đã qua sử dụng, Mulgati sẽ tiến hành bảo hành trong vòng từ 7 - 10 ngày làm việc (không bao gồm các ngày nghỉ lễ, tết).</li>
                         <li>Sau khi đã sửa chữa xong, Mulgati sẽ liên hệ lại với quý khách, đặt lịch hẹn trả sản phẩm và thông báo về chi phí sửa chữa (nếu có).</li>
                     </ul>
-                    <p><strong>Hotline: 1900 4510</strong></p>
+                    <p class="mt-4"><strong>Hotline: 1900 4510</strong></p>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+<!-- ***** About Area Ends ***** -->

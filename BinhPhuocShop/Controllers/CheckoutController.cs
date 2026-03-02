@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using BinhPhuocShop.Data;
 using BinhPhuocShop.Models;
 using BinhPhuocShop.Services;
@@ -20,7 +21,11 @@ public class CheckoutController : StoreControllerBase
     public async Task<IActionResult> Index()
     {
         var items = _cart.GetCart();
-        if (!items.Any()) return RedirectToAction("Index", "Cart");
+        if (!items.Any())
+        {
+            TempData["Error"] = "Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.";
+            return RedirectToAction("Index", "Cart");
+        }
         ViewData["Title"] = "Thanh toán";
         ViewBag.CartItems = items;
         ViewBag.CartTotal = _cart.GetTotal();
@@ -61,6 +66,35 @@ public class CheckoutController : StoreControllerBase
             ViewBag.CustomerAddress = address;
             return View();
         }
+        
+        // Validate phone format
+        phone = phone.Trim();
+        if (!Regex.IsMatch(phone, @"^[0-9]{10,11}$"))
+        {
+            ViewData["Title"] = "Thanh toán";
+            ViewBag.CartItems = items;
+            ViewBag.CartTotal = _cart.GetTotal();
+            ViewBag.Error = "Số điện thoại phải có 10-11 chữ số.";
+            ViewBag.CustomerName = customerName;
+            ViewBag.CustomerEmail = email;
+            ViewBag.CustomerPhone = phone;
+            ViewBag.CustomerAddress = address;
+            return View();
+        }
+        
+        // Validate email format (nếu có)
+        if (!string.IsNullOrWhiteSpace(email) && !Regex.IsMatch(email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            ViewData["Title"] = "Thanh toán";
+            ViewBag.CartItems = items;
+            ViewBag.CartTotal = _cart.GetTotal();
+            ViewBag.Error = "Email không hợp lệ. Vui lòng nhập đúng định dạng email.";
+            ViewBag.CustomerName = customerName;
+            ViewBag.CustomerEmail = email;
+            ViewBag.CustomerPhone = phone;
+            ViewBag.CustomerAddress = address;
+            return View();
+        }
         var userIdStr = HttpContext.Session.GetString("UserId");
         int? userId = !string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out var uid) ? uid : null;
         var orderCode = "BP" + DateTime.UtcNow.ToString("yyMMddHHmmss");
@@ -92,14 +126,20 @@ public class CheckoutController : StoreControllerBase
         _db.Orders.Add(order);
         await _db.SaveChangesAsync();
         _cart.Clear();
+        
+        // Đảm bảo OrderCode được lưu trong cả session và TempData
+        HttpContext.Session.SetString("LastOrderCode", orderCode);
         TempData["OrderCode"] = orderCode;
+        TempData["Success"] = "Đặt hàng thành công! Mã đơn hàng của bạn: " + orderCode;
         return RedirectToAction(nameof(Success));
     }
 
     public IActionResult Success()
     {
         ViewData["Title"] = "Đặt hàng thành công";
-        ViewBag.OrderCode = TempData["OrderCode"];
+        // Đọc OrderCode từ TempData hoặc Session (fallback)
+        var orderCode = TempData["OrderCode"] as string ?? HttpContext.Session.GetString("LastOrderCode");
+        ViewBag.OrderCode = orderCode;
         return View();
     }
 }

@@ -54,6 +54,7 @@ public class AccountController : Controller
         HttpContext.Session.SetString("UserRole", user.Role);
         HttpContext.Session.SetString("IsAdmin", user.Role == "Admin" ? "true" : "false");
         await _activityLog.LogAsync("Login", "User", user.Id, user.Email, $"Admin đăng nhập - {user.Role}");
+        TempData["Success"] = "Đăng nhập thành công!";
         return Redirect(returnUrl ?? Url.Action("Index", "Dashboard") ?? "/Admin");
     }
 

@@ -29,8 +29,56 @@
     </a>
 }
 
+@{
+    var categories = ViewBag.Categories as IEnumerable<BinhPhuocShop.Models.Category> ?? new List<BinhPhuocShop.Models.Category>();
+}
+
+@Html.AntiForgeryToken()
+
 <div class="row">
     <div class="col-lg-12">
+        <!-- Toolbar xóa hàng loạt -->
+        <div class="card mb-3">
+            <div class="card-body py-2">
+                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                    <button type="button" id="btnDeleteSelected" class="btn btn-sm btn-danger" style="display: none; white-space: nowrap;">
+                        <i class="bi bi-trash me-1"></i>
+                        <span>Xóa đã chọn (<span id="selectedCount">0</span>)</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" style="white-space: nowrap;">
+                            <i class="bi bi-folder-x me-1"></i>
+                            Xóa theo danh mục
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var cat in categories)
+                            {
+                                var categoryName = cat.Name;
+                                <li>
+                                    <form asp-action="DeleteByCategory" method="post" class="d-inline delete-category-form" data-category-name="@categoryName">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="categoryId" value="@cat.Id" />
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="bi bi-folder me-2"></i>@cat.Name
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    
+                    <form asp-action="DeleteAll" method="post" class="d-inline flex-shrink-0" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc muốn xóa TẤT CẢ sản phẩm? Hành động này không thể hoàn tác!');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" style="white-space: nowrap;">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            Xóa tất cả
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
         <div class="card stretch stretch-full">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -62,7 +110,7 @@
                                         <td>
                                             <div class="item-checkbox ms-1">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input checkbox" id="checkBox_@product.Id">
+                                                    <input type="checkbox" class="custom-control-input checkbox" id="checkBox_@product.Id" value="@product.Id" data-product-id="@product.Id">
                                                     <label class="custom-control-label" for="checkBox_@product.Id"></label>
                                                 </div>
                                             </div>
@@ -114,28 +162,19 @@
                                             }
                                         </td>
                                         <td class="text-end">
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">
-                                                    <i class="feather-more-vertical"></i>
+                                            <div class="btn-group" role="group">
+                                                <a href="@Url.Action("Edit", new { id = product.Id })" class="btn btn-sm btn-outline-primary" title="Sửa">
+                                                    <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="@Url.Action("Edit", new { id = product.Id })" class="dropdown-item">
-                                                        <i class="feather-edit me-2"></i>
-                                                        <span>Chỉnh sửa</span>
-                                                    </a>
-                                                    <a href="javascript:void(0);" class="dropdown-item" onclick="viewProduct('@product.Id')">
-                                                        <i class="feather-eye me-2"></i>
-                                                        <span>Xem chi tiết</span>
-                                                    </a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <form asp-action="Delete" asp-route-id="@product.Id" method="post" class="m-0" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                                                        @Html.AntiForgeryToken()
-                                                        <button type="submit" class="dropdown-item text-danger">
-                                                            <i class="feather-trash-2 me-2"></i>
-                                                            <span>Xóa</span>
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                <a href="@Url.Action("Detail", "Products", new { area = "", id = product.Id })" target="_blank" class="btn btn-sm btn-outline-info" title="Xem trên trang web">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <form asp-action="Delete" asp-route-id="@product.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -165,13 +204,97 @@
 @section Scripts {
     <script>
         // Check all functionality
-        document.getElementById('checkAllProduct')?.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('#productList tbody .checkbox');
+        const checkAll = document.getElementById('checkAllProduct');
+        const checkboxes = document.querySelectorAll('#productList tbody .checkbox');
+        const btnDeleteSelected = document.getElementById('btnDeleteSelected');
+        const selectedCountSpan = document.getElementById('selectedCount');
+
+        function updateDeleteButton() {
+            const selected = Array.from(checkboxes).filter(cb => cb.checked);
+            const count = selected.length;
+            
+            if (count > 0) {
+                btnDeleteSelected.style.display = 'inline-block';
+                selectedCountSpan.textContent = count;
+            } else {
+                btnDeleteSelected.style.display = 'none';
+                selectedCountSpan.textContent = '0';
+            }
+            
+            // Update check all checkbox
+            if (checkAll) {
+                checkAll.checked = count === checkboxes.length && count > 0;
+                checkAll.indeterminate = count > 0 && count < checkboxes.length;
+            }
+        }
+
+        checkAll?.addEventListener('change', function() {
             checkboxes.forEach(cb => cb.checked = this.checked);
+            updateDeleteButton();
+        });
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateDeleteButton);
+        });
+
+        // Xóa đã chọn
+        btnDeleteSelected?.addEventListener('click', function() {
+            const selected = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            
+            if (selected.length === 0) {
+                alert('Vui lòng chọn ít nhất một sản phẩm để xóa.');
+                return;
+            }
+            
+            if (!confirm(`Bạn có chắc muốn xóa ${selected.length} sản phẩm đã chọn? Hành động này không thể hoàn tác!`)) {
+                return;
+            }
+            
+            // Tạo form và submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("DeleteSelected")';
+            
+            // Anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Thêm các ID đã chọn
+            selected.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'selectedIds';
+                input.value = id;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
         });
 
         function viewProduct(id) {
             window.location.href = '@Url.Action("Edit")?id=' + id;
         }
+
+        // Xóa theo danh mục - xử lý confirm với tên danh mục
+        document.querySelectorAll('.delete-category-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const categoryName = this.getAttribute('data-category-name');
+                if (!confirm(`Bạn có chắc muốn xóa TẤT CẢ sản phẩm trong danh mục "${categoryName}"? Hành động này không thể hoàn tác!`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Initialize
+        updateDeleteButton();
     </script>
 }

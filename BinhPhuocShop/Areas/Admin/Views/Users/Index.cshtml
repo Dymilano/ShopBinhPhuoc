@@ -4,205 +4,266 @@
     var users = ViewBag.Users as IEnumerable<User> ?? Model;
     var total = ViewBag.Total as int? ?? 0;
     var page = ViewBag.Page as int? ?? 1;
-    var pageSize = ViewBag.PageSize as int? ?? 20;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
     var role = ViewBag.Role as string ?? "all";
     var search = ViewBag.Search as string ?? "";
+    
+    var totalUsers = ViewBag.TotalUsers as int? ?? 0;
+    var totalAdmins = ViewBag.TotalAdmins as int? ?? 0;
+    var totalManagers = ViewBag.TotalManagers as int? ?? 0;
+    var totalCustomers = ViewBag.TotalCustomers as int? ?? 0;
+    var activeUsers = ViewBag.ActiveUsers as int? ?? 0;
+    var inactiveUsers = ViewBag.InactiveUsers as int? ?? 0;
 }
 
-@section PageHeaderRight {
-    <div class="dropdown">
-        <a class="btn btn-icon btn-light-brand" data-bs-toggle="dropdown" data-bs-offset="0, 10" data-bs-auto-close="outside">
-            <i class="feather-filter"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-end">
-            <a href="@Url.Action("Index", new { role = "all", search = search })" class="dropdown-item @(role == "all" ? "active" : "")">
-                <i class="feather-users me-3"></i>
-                <span>Tất cả</span>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">Quản lý người dùng</h4>
+        <div>
+            <a asp-action="Create" asp-route-role="Admin" class="btn btn-danger me-2">
+                <i class="feather-user-plus me-2"></i>Cấp tài khoản Admin
             </a>
-            <a href="@Url.Action("Index", new { role = "Admin", search = search })" class="dropdown-item @(role == "Admin" ? "active" : "")">
-                <i class="feather-shield me-3"></i>
-                <span>Quản trị viên</span>
-            </a>
-            <a href="@Url.Action("Index", new { role = "Manager", search = search })" class="dropdown-item @(role == "Manager" ? "active" : "")">
-                <i class="feather-user-check me-3"></i>
-                <span>Quản lý</span>
-            </a>
-            <a href="@Url.Action("Index", new { role = "Customer", search = search })" class="dropdown-item @(role == "Customer" ? "active" : "")">
-                <i class="feather-user me-3"></i>
-                <span>Khách hàng</span>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="feather-plus me-2"></i>Thêm người dùng
             </a>
         </div>
     </div>
-    <a asp-action="Create" asp-route-role="Admin" class="btn btn-danger">
-        <i class="feather-user-plus me-2"></i>
-        <span>Cấp tài khoản Admin</span>
-    </a>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="feather-plus me-2"></i>
-        <span>Thêm người dùng</span>
-    </a>
-}
 
-<div class="row mb-3">
-    <div class="col-lg-12">
-        <form method="get" class="d-flex gap-2">
-            <input type="hidden" name="role" value="@role" />
-            <input type="text" name="search" value="@search" class="form-control form-control-sm" placeholder="Tìm kiếm theo tên hoặc email..." style="max-width: 300px;">
-            <button type="submit" class="btn btn-sm btn-light-brand">
-                <i class="feather-search me-2"></i>
-                <span>Tìm kiếm</span>
-            </button>
-            @if (!string.IsNullOrEmpty(search))
-            {
-                <a href="@Url.Action("Index", new { role = role })" class="btn btn-sm btn-light">
-                    <i class="feather-x"></i>
-                </a>
-            }
-        </form>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card stretch stretch-full">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="wd-30">
-                                    <div class="custom-control custom-checkbox ms-1">
-                                        <input type="checkbox" class="custom-control-input" id="checkAll">
-                                        <label class="custom-control-label" for="checkAll"></label>
-                                    </div>
-                                </th>
-                                <th>ID</th>
-                                <th>Họ tên</th>
-                                <th>Email</th>
-                                <th>Điện thoại</th>
-                                <th>Vai trò</th>
-                                <th>Ngày tạo</th>
-                                <th>Trạng thái</th>
-                                <th class="text-end">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (users.Any())
-                            {
-                                @foreach (var u in users)
-                                {
-                                    <tr class="single-item">
-                                        <td>
-                                            <div class="custom-control custom-checkbox ms-1">
-                                                <input type="checkbox" class="custom-control-input checkbox" id="checkBox_@u.Id">
-                                                <label class="custom-control-label" for="checkBox_@u.Id"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-soft-primary text-primary">@u.Id</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-semibold d-block" style="max-width: 150px;">@u.Name</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-muted fs-12 text-truncate d-block" style="max-width: 200px;">@u.Email</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-muted fs-12">@(u.Phone ?? "—")</span>
-                                        </td>
-                                        <td>
-                                            @switch (u.Role)
-                                            {
-                                                case "Admin":
-                                                    <span class="badge bg-soft-danger text-danger">Quản trị viên</span>
-                                                    break;
-                                                case "Manager":
-                                                    <span class="badge bg-soft-warning text-warning">Quản lý</span>
-                                                    break;
-                                                default:
-                                                    <span class="badge bg-soft-info text-info">Khách hàng</span>
-                                                    break;
-                                            }
-                                        </td>
-                                        <td>
-                                            <span class="text-muted fs-12">@u.CreatedAt.ToString("dd/MM/yyyy")</span>
-                                        </td>
-                                        <td>
-                                            @if (u.IsActive)
-                                            {
-                                                <span class="badge bg-soft-success text-success">Hoạt động</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-soft-secondary text-secondary">Khóa</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <a asp-action="Edit" asp-route-id="@u.Id" class="avatar-text avatar-sm" data-bs-toggle="tooltip" title="Sửa">
-                                                    <i class="feather-edit-3"></i>
-                                                </a>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0)" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="0,21">
-                                                        <i class="feather-more-horizontal"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@u.Id">
-                                                                <i class="feather-edit-3 me-3"></i>
-                                                                <span>Sửa</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li>
-                                                            <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="m-0">
-                                                                @Html.AntiForgeryToken()
-                                                                <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Xóa người dùng này?');">
-                                                                    <i class="feather-trash-2 me-3"></i>
-                                                                    <span>Xóa</span>
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="9" class="text-center py-5">
-                                        <p class="text-muted mb-0">Chưa có người dùng nào.</p>
-                                        <a asp-action="Create" class="btn btn-sm btn-primary mt-2">
-                                            <i class="feather-plus me-2"></i>Thêm người dùng đầu tiên
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-primary">@totalUsers</div>
+                    <div class="text-muted small">Tổng người dùng</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-danger">@totalAdmins</div>
+                    <div class="text-muted small">Quản trị viên</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-warning">@totalManagers</div>
+                    <div class="text-muted small">Quản lý</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-info">@totalCustomers</div>
+                    <div class="text-muted small">Khách hàng</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-success">@activeUsers</div>
+                    <div class="text-muted small">Đang hoạt động</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="fs-2 fw-bold text-secondary">@inactiveUsers</div>
+                    <div class="text-muted small">Đã khóa</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-@if (total > pageSize)
-{
-    <div class="row mt-3">
-        <div class="col-lg-12">
-            <nav>
-                <ul class="pagination justify-content-center">
-                    @for (int i = 1; i <= (total + pageSize - 1) / pageSize; i++)
-                    {
-                        <li class="page-item @(i == page ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { role = role, search = search, page = i, pageSize = pageSize })">@i</a>
-                        </li>
-                    }
-                </ul>
-            </nav>
+    <!-- Filters -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-3">
+                    <label class="form-label">Lọc theo vai trò</label>
+                    <div class="btn-group w-100" role="group">
+                        <a href="@Url.Action("Index", new { role = "all", search = search })" class="btn btn-sm @(role == "all" ? "btn-primary" : "btn-outline-primary")">Tất cả</a>
+                        <a href="@Url.Action("Index", new { role = "Admin", search = search })" class="btn btn-sm @(role == "Admin" ? "btn-danger" : "btn-outline-danger")">Admin</a>
+                        <a href="@Url.Action("Index", new { role = "Manager", search = search })" class="btn btn-sm @(role == "Manager" ? "btn-warning" : "btn-outline-warning")">Quản lý</a>
+                        <a href="@Url.Action("Index", new { role = "Customer", search = search })" class="btn btn-sm @(role == "Customer" ? "btn-info" : "btn-outline-info")">Khách hàng</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <form method="get" class="d-flex gap-2">
+                        <input type="hidden" name="role" value="@role" />
+                        <label class="form-label w-100 mb-0">
+                            <span class="visually-hidden">Tìm kiếm</span>
+                            <input type="text" name="search" value="@search" class="form-control" placeholder="Tìm kiếm theo tên hoặc email...">
+                        </label>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="feather-search me-2"></i>Tìm kiếm
+                        </button>
+                        @if (!string.IsNullOrEmpty(search))
+                        {
+                            <a href="@Url.Action("Index", new { role = role })" class="btn btn-light">
+                                <i class="feather-x"></i>
+                            </a>
+                        }
+                    </form>
+                </div>
+                <div class="col-lg-3 text-end">
+                    <div class="text-muted small">
+                        Hiển thị <strong>@((page - 1) * 20 + 1)</strong> - <strong>@(Math.Min(page * 20, total))</strong> / <strong>@total</strong>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Users Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAll">
+                                    <label class="form-check-label" for="checkAll"></label>
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Điện thoại</th>
+                            <th>Vai trò</th>
+                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th class="text-end">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (users.Any())
+                        {
+                            @foreach (var u in users)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="@u.Id" id="check_@u.Id">
+                                            <label class="form-check-label" for="check_@u.Id"></label>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark">@u.Id</span></td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="avatar-text avatar-sm bg-primary bg-opacity-10">
+                                                <i class="feather-user text-primary"></i>
+                                            </div>
+                                            <span class="fw-semibold">@u.Name</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:@u.Email" class="text-decoration-none">@u.Email</a>
+                                    </td>
+                                    <td>@(u.Phone ?? "—")</td>
+                                    <td>
+                                        @switch (u.Role)
+                                        {
+                                            case "Admin":
+                                                <span class="badge bg-danger">Quản trị viên</span>
+                                                break;
+                                            case "Manager":
+                                                <span class="badge bg-warning">Quản lý</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-info">Khách hàng</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@u.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                    </td>
+                                    <td>
+                                        @if (u.IsActive)
+                                        {
+                                            <span class="badge bg-success">Hoạt động</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Khóa</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-sm btn-outline-primary" title="Sửa">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form asp-action="ToggleStatus" asp-route-id="@u.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm @(u.IsActive ? "btn-outline-warning" : "btn-outline-success")" title="@(u.IsActive ? "Khóa tài khoản" : "Mở khóa tài khoản")">
+                                                    <i class="bi bi-@(u.IsActive ? "lock" : "unlock")"></i>
+                                                </button>
+                                            </form>
+                                            <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center py-5">
+                                    <i class="feather-users fs-1 text-muted mb-3 d-block"></i>
+                                    <p class="text-muted mb-0">Chưa có người dùng nào.</p>
+                                    <a asp-action="Create" class="btn btn-primary mt-3">
+                                        <i class="feather-plus me-2"></i>Thêm người dùng đầu tiên
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (totalPages > 1)
+        {
+            <div class="card-footer">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mb-0">
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == page ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { role = role, search = search, page = i, pageSize = 20 })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check all functionality
+    const checkAll = document.getElementById('checkAll');
+    const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+    
+    if (checkAll) {
+        checkAll.addEventListener('change', function() {
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+    }
+});
+</script>
 }

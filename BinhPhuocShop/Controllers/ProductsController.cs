@@ -8,7 +8,7 @@ public class ProductsController : StoreControllerBase
 {
     public ProductsController(AppDbContext db, BinhPhuocShop.Services.CartService cart) : base(db, cart) { }
 
-    public async Task<IActionResult> Index(int? categoryId, int? brandId, string? categorySlug, string? q, string sort = "newest", int page = 1, int pageSize = 12)
+    public async Task<IActionResult> Index(int? categoryId, int? brandId, string? categorySlug, string? q, string sort = "newest", int page = 1, int pageSize = 16)
     {
         var query = Db.Products.Include(p => p.Category).Include(p => p.Brand).Where(p => p.IsActive);
 
@@ -29,7 +29,7 @@ public class ProductsController : StoreControllerBase
             var allCategoryIds = new List<int> { categoryId.Value };
             allCategoryIds.AddRange(childCategoryIds);
             
-            query = query.Where(p => allCategoryIds.Contains(p.CategoryId));
+            query = query.Where(p => p.CategoryId.HasValue && allCategoryIds.Contains(p.CategoryId.Value));
         }
         if (brandId.HasValue)
             query = query.Where(p => p.BrandId == brandId);
@@ -75,7 +75,7 @@ public class ProductsController : StoreControllerBase
         var product = await Db.Products.Include(p => p.Category).Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
         if (product == null) return NotFound();
         ViewData["Title"] = product.Name;
-        ViewBag.Related = await Db.Products.Include(p => p.Category).Where(p => p.IsActive && p.CategoryId == product.CategoryId && p.Id != id).Take(4).ToListAsync();
+        ViewBag.Related = await Db.Products.Include(p => p.Category).Where(p => p.IsActive && p.CategoryId.HasValue && product.CategoryId.HasValue && p.CategoryId.Value == product.CategoryId.Value && p.Id != id).Take(4).ToListAsync();
         return View(product);
     }
 }

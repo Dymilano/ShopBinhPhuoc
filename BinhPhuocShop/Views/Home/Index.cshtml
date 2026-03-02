@@ -1,210 +1,319 @@
 @{
-    Layout = "_StoreLayout";
+    Layout = "_HexashopLayout";
     ViewData["Title"] = "Trang chủ";
-    var categories = ViewBag.Categories as IEnumerable<dynamic>;
-    var catList = categories?.ToList() ?? new List<dynamic>();
-    var categoryProductCount = ViewBag.CategoryProductCount as Dictionary<int, int>;
-    var productCountAll = (int)(ViewBag.ProductCountAll ?? 0);
+    var hexashop = "/hexashop";
+    var categories = ViewBag.Categories as IEnumerable<dynamic> ?? new List<dynamic>();
     var featured = ViewBag.FeaturedProducts as IEnumerable<dynamic> ?? new List<dynamic>();
     var bestSelling = ViewBag.BestSellingProducts as IEnumerable<dynamic> ?? new List<dynamic>();
     var latest = ViewBag.LatestProducts as IEnumerable<dynamic> ?? new List<dynamic>();
     var homeBlocks = ViewBag.HomeCategoryBlocks as IEnumerable<BinhPhuocShop.Models.HomeCategoryBlockViewModel> ?? new List<BinhPhuocShop.Models.HomeCategoryBlockViewModel>();
     var siteName = ViewBag.SiteName ?? "Bình Phước Shop";
-    var siteDesc = ViewBag.SiteDescription ?? "Giày dép chính hãng - Chất lượng cao.";
-    var store = "/store";
+    var siteDesc = ViewBag.SiteDescription ?? "Thương hiệu chuyên kinh doanh, phân phối giày da nam. Chất lượng cao, nhiều bộ sưu tập độc đáo.";
 }
 
-<section class="section-slide hero-section">
-    <div class="wrap-slick1">
-        <div class="slick1">
-            <div class="item-slick1" style="background-image: url(@(ViewBag.HeroBackground ?? store + "/images/slide-01.jpg")); background-size: cover; background-position: center;">
-                <div class="container h-full">
-                    <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5 hero-content">
-                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="fadeInDown" data-delay="0">
-                            <span class="ltext-101 cl2 respon2" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">@siteName</span>
+<!-- ***** Main Banner Area Start ***** -->
+<div class="main-banner" id="top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="left-content">
+                    <div class="thumb">
+                        <div class="inner-content">
+                            <h4>Chào mừng đến @siteName</h4>
+                            <span>@siteDesc</span>
+                            <div class="main-border-button">
+                                <a asp-controller="Products" asp-action="Index">Mua sắm ngay!</a>
+                            </div>
                         </div>
-                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="fadeInUp" data-delay="800">
-                            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">GIÀY DÉP CHÍNH HÃNG</h2>
-                        </div>
-                        <div class="layer-slick1 animated visible-false reveal-on-scroll" data-appear="zoomIn" data-delay="1600">
-                            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 glow-btn magnetic-btn ripple-btn" style="box-shadow: 0 0 20px rgba(113, 127, 224, 0.5);">Mua sắm ngay</a>
-                        </div>
+                            <img src="@(ViewBag.HeroBackground ?? hexashop + "/assets/images/left-banner-image.jpg")" alt="@siteName" style="width: 100%; height: auto; object-fit: cover;">
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<div class="sec-banner bg0 p-t-80 p-b-50">
-    <div class="container">
-        <div class="row">
-            @{
-                var catSlugs = new[] { ("giay-nam", "Giày nam"), ("giay-nu", "Giày nữ"), ("dep-nam", "Dép nam"), ("dep-nu", "Dép nữ"), ("phu-kien", "Phụ kiện") };
-                var idx = 0;
-            }
-            @foreach (var (slug, label) in catSlugs)
-            {
-                if (idx >= 3) { break; }
-                var bannerImage = idx == 0 ? (ViewBag.BannerGiayNam ?? store + "/images/banner-01.jpg") :
-                                   idx == 1 ? (ViewBag.BannerGiayNu ?? store + "/images/banner-02.jpg") :
-                                   (ViewBag.BannerDepNam ?? store + "/images/banner-03.jpg");
-                <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-                    <div class="block1 wrap-pic-w">
-                        <img src="@bannerImage" alt="@label">
-                        <a asp-controller="Collections" asp-action="Index" asp-route-slug="@slug" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                            <div class="block1-txt-child1 flex-col-l">
-                                <span class="block1-name ltext-102 trans-04 p-b-8">@label</span>
-                                <span class="block1-info stext-102 trans-04">Xem sản phẩm</span>
-                            </div>
-                            <div class="block1-txt-child2 p-b-4 trans-05">
-                                <div class="block1-link stext-101 cl0 trans-09">Mua ngay</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                idx++;
-            }
-        </div>
-    </div>
-</div>
-
-<section class="bg0 p-t-23 p-b-140">
-    <div class="container">
-        <div class="p-b-10">
-            <h3 class="ltext-103 cl5">Sản phẩm nổi bật</h3>
-        </div>
-        @{
-            var showProducts = featured.Any() ? featured : (bestSelling.Any() ? bestSelling : latest);
-        }
-        <div class="row isotope-grid">
-            @if (showProducts != null && showProducts.Any())
-            {
-                var prodIdx = 0;
-                @foreach (var p in showProducts.Take(12))
-                {
-                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-                                <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
-                                <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem</a>
-                            </div>
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">@p.Name</a>
-                                    <span class="stext-105 cl3">
-                                        @((p.SalePrice ?? p.Price).ToString("N0"))₫
-                                        @if (p.SalePrice != null && (decimal)p.SalePrice < (decimal)p.Price)
-                                        {
-                                            <del class="stext-106 cl6">@(((decimal)p.Price).ToString("N0"))₫</del>
-                                        }
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    prodIdx++;
-                }
-            }
-            else
-            {
-                @for (var i = 1; i <= 8; i++)
-                {
-                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-                                <img src="@(store)/images/product-0@(Math.Min(i, 9)).jpg" alt="Sản phẩm @i">
-                                <a asp-controller="Products" asp-action="Index" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem sản phẩm</a>
-                            </div>
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a asp-controller="Products" asp-action="Index" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">Sản phẩm @i</a>
-                                    <span class="stext-105 cl3">Liên hệ</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-        <div class="flex-c-m flex-w w-full p-t-45">
-            <a asp-controller="Products" asp-action="Index" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">Xem tất cả sản phẩm</a>
-        </div>
-    </div>
-</section>
-
-@if (homeBlocks != null && homeBlocks.Any())
-{
-    @foreach (var block in homeBlocks)
-    {
-        var cat = block.Category;
-        if (block.Products == null || !block.Products.Any()) { continue; }
-        <section class="bg0 p-t-23 p-b-70">
-            <div class="container">
-                <div class="p-b-10">
-                    <h3 class="ltext-103 cl5">@cat.Name</h3>
-                </div>
-                <div class="row isotope-grid">
-                    @{
-                        var blockIdx = 0;
-                    }
-                    @foreach (var p in block.Products.Take(4))
-                    {
-                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-                            <div class="block2">
-                                <div class="block2-pic hov-img0">
-                                    <img src="@(p.ImageUrl ?? store + "/images/product-01.jpg")" alt="@p.Name">
-                                    <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">Xem</a>
-                                </div>
-                                <div class="block2-txt flex-w flex-t p-t-14">
-                                    <div class="block2-txt-child1 flex-col-l">
-                                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@p.Id" class="stext-104 cl4 hov-cl1 trans-04 p-b-6">@p.Name</a>
-                                        <span class="stext-105 cl3">@((p.SalePrice ?? p.Price).ToString("N0"))₫</span>
+            <div class="col-lg-6">
+                <div class="right-content">
+                    <div class="row">
+                        @{
+                            var mainCategories = categories.Take(4).ToList();
+                            var bannerImages = new[] { 
+                                ViewBag.BannerGiayNam ?? hexashop + "/assets/images/baner-right-image-01.jpg",
+                                ViewBag.BannerGiayNu ?? hexashop + "/assets/images/baner-right-image-02.jpg",
+                                ViewBag.BannerDepNam ?? hexashop + "/assets/images/baner-right-image-03.jpg",
+                                hexashop + "/assets/images/baner-right-image-04.jpg"
+                            };
+                            var bannerTitles = new[] { "Giày Nam", "Giày Nữ", "Dép Nam", "Phụ Kiện" };
+                            var bannerDescs = new[] { "Sản phẩm Giày Nam", "Sản phẩm Giày Nữ", "Sản phẩm Dép Nam", "Sản phẩm Phụ Kiện" };
+                        }
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            var cat = i < mainCategories.Count ? mainCategories[i] : null;
+                            <div class="col-lg-6">
+                                <div class="right-first-image">
+                                    <div class="thumb">
+                                        <div class="inner-content">
+                                            <h4>@(cat?.Name ?? bannerTitles[i])</h4>
+                                            <span>@(cat != null ? $"Sản phẩm {cat.Name}" : bannerDescs[i])</span>
+                                        </div>
+                                        <div class="hover-content">
+                                            <div class="inner">
+                                                <h4>@(cat?.Name ?? bannerTitles[i])</h4>
+                                                <p>Khám phá bộ sưu tập @(cat?.Name ?? bannerTitles[i]) mới nhất</p>
+                                                <div class="main-border-button">
+                                                    @if (cat != null)
+                                                    {
+                                                        <a asp-controller="Collections" asp-action="Index" asp-route-slug="@(cat.Slug ?? "")">Xem thêm</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-controller="Products" asp-action="Index">Xem thêm</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img src="@bannerImages[i]" alt="@(cat?.Name ?? bannerTitles[i])" style="width: 100%; height: auto; object-fit: cover;">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        blockIdx++;
-                    }
-                </div>
-                <div class="flex-c-m flex-w w-full p-t-20">
-                    <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@cat.Id" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">Xem tất cả @cat.Name</a>
+                        }
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</div>
+<!-- ***** Main Banner Area End ***** -->
+
+@{
+    var categorySections = new List<dynamic>();
+    var homeBlocksList = homeBlocks as IEnumerable<dynamic> ?? new List<dynamic>();
+    var categoriesList = categories as IEnumerable<dynamic> ?? new List<dynamic>();
+    var featuredList = featured as IEnumerable<dynamic> ?? new List<dynamic>();
+    var latestList = latest as IEnumerable<dynamic> ?? new List<dynamic>();
+    
+    if (homeBlocksList != null && homeBlocksList.Count() > 0)
+    {
+        foreach (var block in homeBlocksList)
+        {
+            categorySections.Add(new { Category = block.Category, Products = block.Products });
+        }
+    }
+    else if (categoriesList != null && categoriesList.Count() > 0)
+    {
+        foreach (var cat in categoriesList.Take(3))
+        {
+            var catId = cat.Id;
+            var catProducts = featuredList.Where(p => p.CategoryId.HasValue && p.CategoryId.Value == catId).Take(4).ToList();
+            if (catProducts == null || catProducts.Count == 0) 
+            {
+                catProducts = latestList.Where(p => p.CategoryId.HasValue && p.CategoryId.Value == catId).Take(4).ToList();
+            }
+            categorySections.Add(new { Category = cat, Products = catProducts });
+        }
     }
 }
 
-<section class="bg6 p-t-40 p-b-30">
+@foreach (var section in categorySections)
+{
+    var sectionId = section.Category.Slug?.Replace("-", "") ?? "section" + section.Category.Id;
+    <!-- ***** @(section.Category.Name) Area Starts ***** -->
+    <section class="section product-section fade-in-section" id="@sectionId">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-heading text-center">
+                        <h2 class="section-title">@(section.Category.Name) Mới Nhất</h2>
+                        <span class="section-subtitle">Khám phá bộ sưu tập @(section.Category.Name) đa dạng và chất lượng cao</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="men-item-carousel">
+                        <div class="owl-men-item owl-carousel">
+                            @{
+                                var productsList = section.Products as IEnumerable<dynamic> ?? new List<dynamic>();
+                                var hasProducts = productsList != null && productsList.Count() > 0;
+                            }
+                            @if (hasProducts)
+                            {
+                                @foreach (var product in productsList)
+                                {
+                                    var price = product.SalePrice ?? product.Price;
+                                    var hasSalePrice = product.SalePrice != null && product.SalePrice != product.Price;
+                                    var oldPrice = hasSalePrice ? product.Price : (decimal?)null;
+                                    <div class="item product-item">
+                                        <div class="thumb">
+                                            <div class="hover-content">
+                                                <ul>
+                                                    <li><a asp-controller="Products" asp-action="Detail" asp-route-id="@product.Id"><i class="fa fa-eye"></i></a></li>
+                                                    <li><a href="#" onclick="addToCart(@product.Id); return false;"><i class="fa fa-shopping-cart"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <img src="@(product.ImageUrl ?? hexashop + "/assets/images/men-01.jpg")" alt="@product.Name" style="width: 100%; height: auto;">
+                                        </div>
+                                        <div class="down-content">
+                                            <h4>@product.Name</h4>
+                                            <div class="price-wrapper">
+                                                <span class="current-price">@price.ToString("N0")₫</span>
+                                                @if (hasSalePrice && oldPrice != null)
+                                                {
+                                                    <span class="old-price">@((decimal)oldPrice).ToString("N0")₫</span>
+                                                }
+                                            </div>
+                                            <ul class="stars">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    <li><i class="fa fa-star"></i></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-12 text-center p-5">
+                                    <p>Chưa có sản phẩm nào trong danh mục này.</p>
+                                    <a asp-controller="Products" asp-action="Index" class="btn btn-dark mt-3">Xem tất cả sản phẩm</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ***** @(section.Category.Name) Area Ends ***** -->
+}
+
+<!-- ***** Explore Area Starts ***** -->
+<section class="section fade-in-section" id="explore">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 p-b-30">
-                <div class="flex-w flex-sb-m">
-                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-truck"></i></span>
-                    <div>
-                        <h5 class="stext-101 cl0">Miễn phí vận chuyển</h5>
-                        <p class="stext-107 cl6">Đơn hàng trên 1.000.000₫</p>
+            <div class="col-lg-6">
+                <div class="left-content">
+                    <h2>Khám Phá Sản Phẩm Của Chúng Tôi</h2>
+                    <span>@siteDesc</span>
+                    <div class="quote">
+                        <i class="fa fa-quote-left"></i><p>Chúng tôi cam kết mang đến những sản phẩm chất lượng cao với giá cả hợp lý nhất.</p>
+                    </div>
+                    <p>Với nhiều năm kinh nghiệm trong ngành giày dép, chúng tôi tự hào là địa chỉ tin cậy cho mọi khách hàng.</p>
+                    <p>Hãy đến với chúng tôi để trải nghiệm dịch vụ tốt nhất và sản phẩm chất lượng cao.</p>
+                    <div class="main-border-button">
+                        <a asp-controller="Products" asp-action="Index">Khám phá thêm</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 p-b-30">
-                <div class="flex-w flex-sb-m">
-                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-shield"></i></span>
-                    <div>
-                        <h5 class="stext-101 cl0">Chính hãng</h5>
-                        <p class="stext-107 cl6">Bảo hành chất lượng</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 p-b-30">
-                <div class="flex-w flex-sb-m">
-                    <span class="fs-18 cl5 m-r-20"><i class="fa fa-refresh"></i></span>
-                    <div>
-                        <h5 class="stext-101 cl0">Đổi trả linh hoạt</h5>
-                        <p class="stext-107 cl6">Theo chính sách cửa hàng</p>
+            <div class="col-lg-6">
+                <div class="right-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="leather">
+                                <h4>Giày Da</h4>
+                                <span>Bộ sưu tập mới nhất</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="first-image">
+                                <img src="@(hexashop)/assets/images/explore-image-01.jpg" alt="Giày da" style="width: 100%; height: auto; object-fit: cover;">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="second-image">
+                                <img src="@(hexashop)/assets/images/explore-image-02.jpg" alt="Dép" style="width: 100%; height: auto; object-fit: cover;">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="types">
+                                <h4>Nhiều Loại</h4>
+                                <span>Hơn @(ViewBag.ProductCountAll ?? 0) Sản phẩm</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<!-- ***** Explore Area Ends ***** -->
+
+<!-- Flower/Snowfall Effect Container -->
+<div id="flower-container"></div>
+
+@section Scripts {
+    <script src="@(hexashop)/assets/js/home-effects.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo carousel cho các section sản phẩm với smooth transitions
+            if ($('.owl-men-item').length > 0) {
+                $('.owl-men-item').each(function() {
+                    $(this).owlCarousel({
+                        items: 4,
+                        loop: true,
+                        margin: 30,
+                        nav: true,
+                        dots: false,
+                        autoplay: true,
+                        autoplayTimeout: 4000,
+                        autoplayHoverPause: true,
+                        smartSpeed: 800,
+                        animateOut: 'fadeOut',
+                        animateIn: 'fadeIn',
+                        responsive: {
+                            0: { items: 1 },
+                            480: { items: 2 },
+                            768: { items: 3 },
+                            992: { items: 4 }
+                        }
+                    });
+                });
+            }
+
+            // Initialize fade-in animations
+            initFadeInAnimations();
+        });
+
+        function addToCart(productId) {
+            $.ajax({
+                url: '@Url.Action("Add", "Cart")',
+                method: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: 1,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.ok) {
+                        alert(response.msg || 'Đã thêm vào giỏ hàng');
+                        location.reload();
+                    } else {
+                        alert(response.msg || 'Có lỗi xảy ra');
+                    }
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+                }
+            });
+        }
+
+        function initFadeInAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+    </script>
+}

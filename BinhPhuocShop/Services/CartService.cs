@@ -29,6 +29,9 @@ public class CartService
 
     public void Add(int productId, string productName, string? imageUrl, string? size, decimal price, int quantity = 1)
     {
+        if (price <= 0) throw new ArgumentException("Giá sản phẩm phải lớn hơn 0.");
+        if (quantity <= 0) throw new ArgumentException("Số lượng phải lớn hơn 0.");
+        
         var items = GetItems();
         var key = size != null ? $"{productId}:{size}" : productId.ToString();
         var existing = items.FirstOrDefault(i => i.ProductId == productId && i.Size == size);
@@ -41,10 +44,12 @@ public class CartService
 
     public void Update(int productId, string? size, int quantity)
     {
+        if (quantity < 0) throw new ArgumentException("Số lượng không được âm.");
+        
         var items = GetItems();
         var item = items.FirstOrDefault(i => i.ProductId == productId && i.Size == size);
         if (item == null) return;
-        if (quantity <= 0) { items.Remove(item); SaveItems(items); return; }
+        if (quantity == 0) { items.Remove(item); SaveItems(items); return; }
         item.Quantity = quantity;
         SaveItems(items);
     }
